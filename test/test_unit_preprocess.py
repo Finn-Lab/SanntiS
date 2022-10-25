@@ -6,9 +6,9 @@ import sanntis
 import tempfile
 import subprocess
 
-emrld_dir = os.path.dirname(os.path.abspath(sanntis.__file__))
+sanntis_dir = os.path.dirname(os.path.abspath(sanntis.__file__))
 test_files_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "files")
-modules_dir = os.path.join(emrld_dir, "modules")
+modules_dir = os.path.join(sanntis_dir, "modules")
 sys.path.append(modules_dir)
 
 from Preproc import Preprocess

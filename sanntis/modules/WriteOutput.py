@@ -108,9 +108,9 @@ class Outputs:
                 for ix, f in enumerate(self.annotation.contigsDct[contig]):
 
                     ID, (start, end) = f
-                    emrldProb = "{:.3f}".format(self.annotation.annResults[contig][ix])
+                    sanntisProb = "{:.3f}".format(self.annotation.annResults[contig][ix])
                     self.gff3.append(
-                        f"{contig}\tSanntiSv{__version__}\tCDS\t{start}\t{end}\t.\t.\t.\tID={ID};sanntis_probability={emrldProb}"
+                        f"{contig}\tSanntiSv{__version__}\tCDS\t{start}\t{end}\t.\t.\t.\tID={ID};sanntis_probability={sanntisProb}"
                     )
 
             ct = 1
@@ -126,7 +126,7 @@ class Outputs:
                 if k == 0:
                     continue
 
-                ID = f"{contig}_emrld_{ct}"
+                ID = f"{contig}_sanntis_{ct}"
                 ct += 1
 
                 gg = list(list(zip(*g))[0])

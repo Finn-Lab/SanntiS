@@ -1,10 +1,10 @@
-[![Docker Repository on Quay](https://quay.io/repository/microbiome-informatics/emerald-bgc/status "Docker Repository on Quay")](https://quay.io/repository/microbiome-informatics/emerald-bgc)
+[![Docker Repository on Quay](https://quay.io/repository/microbiome-informatics/sanntis/status "Docker Repository on Quay")](https://quay.io/repository/microbiome-informatics/sanntis)
 
-# emeraldBGC
+# SanntiS
 
-emeraldBGC - SMBGC detection tool -
+SanntiS - SMBGC detection tool -
 
-## How to use emeraldBGC?
+## How to use SanntiS?
 
 ### Conda
 
@@ -18,24 +18,24 @@ Requires:
 #### Installation
 
 ```bash
-conda create -n emeraldbgc emeraldbgc
-conda activate emeraldbgc
-conda install -c bioconda emeraldbgc
+conda create -n sanntis sanntis
+conda activate sanntis
+conda install -c bioconda sanntis
 ```
 
 #### Basic tests
 
 ```bash
-$ conda activate emeraldbgc
-$ emeraldbgc test/files/BGC0001472.fna
-$ conda deactivate emerald
+$ conda activate sanntis
+$ sanntis test/files/BGC0001472.fna
+$ conda deactivate sanntis
 ```
 
  Run with interproscan file:
 ```bash
-$ conda activate emeraldbgc
-$ emeraldbgc --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/files/BGC0001472.fna.prodigal.faa.gb
-$ conda deactivate emerald
+$ conda activate sanntis
+$ sanntis --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/files/BGC0001472.fna.prodigal.faa.gb
+$ conda deactivate sanntis
 ```
 
 ###  Docker:
@@ -47,17 +47,17 @@ $ bash ./get_ips_slim.sh
 ```
 
 #### Docker ready to use script:
-##### Only works if "data/" and emeraldbgc_container.py are in the same directory
+##### Only works if "data/" and sanntis_container.py are in the same directory
 ```bash
-$ emeraldbgc_container.py --help
-$ emeraldbgc_container.py [OPTIONS] ARGUMENTS
+$ sanntis_container.py --help
+$ sanntis_container.py [OPTIONS] ARGUMENTS
 ```
 
 #### Docker image shell:
 ```bash
-$ docker -it --entrypoint bash -v <path to emeraldBGC/docker>/data/:/opt/interproscan quay.io/repository/microbiome-informatics/emerald-bgc
-$ emeraldbgc --help
-$ emeraldbgc [OPTIONS] ARGUMENTS
+$ docker -it --entrypoint bash -v <path to SanntiS/docker>/data/:/opt/interproscan quay.io/repository/microbiome-informatics/sanntis
+$ sanntis --help
+$ sanntis [OPTIONS] ARGUMENTS
 ```
 
 
@@ -68,7 +68,7 @@ $ emeraldbgc [OPTIONS] ARGUMENTS
   The fields in this header are as follows:
 
     seqname: SeqID of contig, as in prodigal output.
-    source: emeraldbgc version.
+    source: sanntis version.
     feature: Feature type name, i.e. CLUSTER, CLUSTER_border, CDS.
     start: Start position of feature
     end: End position of feature
@@ -86,4 +86,4 @@ $ emeraldbgc [OPTIONS] ARGUMENTS
   Sample:
 
     ##gff-version 3
-    DS999642	EMERALDv0.9.0	CLUSTER	1	136970	.	.	.	ID=DS999642_emrld_1;nearest_MiBIG=BGC0001397;nearest_MiBIG_class=NRP Polyketide;nearest_MiBIG_diceDistance=0.561;partial=10
+    DS999642	SanntiSv0.9.0	CLUSTER	1	136970	.	.	.	ID=DS999642_sanntis_1;nearest_MiBIG=BGC0001397;nearest_MiBIG_class=NRP Polyketide;nearest_MiBIG_diceDistance=0.561;partial=10

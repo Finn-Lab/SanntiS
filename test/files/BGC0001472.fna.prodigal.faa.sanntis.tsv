@@ -6,8 +6,8 @@
 # Version:         3.3.2 (Nov 2020)
 # Pipeline mode:   SCAN
 # Query file:      /home/files/BGC0001472.fna.sanntis/BGC0001472.fna.prodigal.faa
-# Target file:     /opt/conda/envs/emrld/lib/python3.9/site-packages/sanntis/modules/../models/hmm_lib/sanntis.hmm
-# Option settings: hmmscan --domtblout /home/files/BGC0001472.fna.sanntis/BGC0001472.fna.prodigal.faa.sanntis.tsv --cut_ga --cpu 4 /opt/conda/envs/emrld/lib/python3.9/site-packages/sanntis/modules/../models/hmm_lib/sanntis.hmm /home/files/BGC0001472.fna.sanntis/BGC0001472.fna.prodigal.faa 
+# Target file:     /opt/conda/envs/sanntis/lib/python3.9/site-packages/sanntis/modules/../models/hmm_lib/sanntis.hmm
+# Option settings: hmmscan --domtblout /home/files/BGC0001472.fna.sanntis/BGC0001472.fna.prodigal.faa.sanntis.tsv --cut_ga --cpu 4 /opt/conda/envs/sanntis/lib/python3.9/site-packages/sanntis/modules/../models/hmm_lib/sanntis.hmm /home/files/BGC0001472.fna.sanntis/BGC0001472.fna.prodigal.faa 
 # Current dir:     /home/files
 # Date:            Fri Aug 13 09:15:01 2021
 # [ok]

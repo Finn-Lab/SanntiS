@@ -8,7 +8,7 @@ import json
 from setuptools import setup
 from setuptools.command.install import install
 
-with open('emeraldbgc/pkg_info.json') as h:
+with open('sanntis/pkg_info.json') as h:
     _info = json.load(h)
 
 with open('README.md') as h:
@@ -25,7 +25,7 @@ setup(
     long_description = readme,
     python_requires = ">=3.9",
     include_package_data = True,
-    package_data={'emeraldbgc': [
+    package_data={'sanntis': [
                             'models/hmm_lib/*',
                             'models/*',
                             'modules/*',
@@ -35,8 +35,8 @@ setup(
     },
     entry_points = {
             'console_scripts': [
-                                'emeraldbgc = emeraldbgc._cli:main',
-                                'emerald_build_gb = emeraldbgc.build_gb:main',
+                                'sanntis = sanntis._cli:main',
+                                'sanntis_build_gb = sanntis.build_gb:main',
                                 ]
     },
     packages = find_packages(exclude=('tests', 'docs')),
