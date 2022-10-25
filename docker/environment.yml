@@ -1,7 +1,0 @@
-name: bgc
-channels:
-  - conda-forge
-  - bioconda
-dependencies:
-  - emeraldbgc
-
