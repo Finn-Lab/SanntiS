@@ -1,0 +1,13 @@
+#                                                                            --- full sequence --- -------------- this domain -------------   hmm coord   ali coord   env coord
+# target name        accession   tlen query name           accession   qlen   E-value  score  bias   #  of  c-Evalue  i-Evalue  score  bias  from    to  from    to  from    to  acc description of target
+#------------------- ---------- ----- -------------------- ---------- ----- --------- ------ ----- --- --- --------- --------- ------ ----- ----- ----- ----- ----- ----- ----- ---- ---------------------
+#
+# Program:         hmmscan
+# Version:         3.3.2 (Nov 2020)
+# Pipeline mode:   SCAN
+# Query file:      /home/files/BGC0001472.fna.sanntis/BGC0001472.fna.prodigal.faa
+# Target file:     /opt/conda/envs/emrld/lib/python3.9/site-packages/sanntis/modules/../models/hmm_lib/sanntis.hmm
+# Option settings: hmmscan --domtblout /home/files/BGC0001472.fna.sanntis/BGC0001472.fna.prodigal.faa.sanntis.tsv --cut_ga --cpu 4 /opt/conda/envs/emrld/lib/python3.9/site-packages/sanntis/modules/../models/hmm_lib/sanntis.hmm /home/files/BGC0001472.fna.sanntis/BGC0001472.fna.prodigal.faa 
+# Current dir:     /home/files
+# Date:            Fri Aug 13 09:15:01 2021
+# [ok]

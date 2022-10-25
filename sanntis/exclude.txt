@@ -1,0 +1,9 @@
+interproscan-5.52-86.0/data/cdd
+interproscan-5.52-86.0/data/hamap
+interproscan-5.52-86.0/data/pirs*
+interproscan-5.52-86.0/data/sfld
+interproscan-5.52-86.0/data/superfamily
+interproscan-5.52-86.0/data/tmhmm
+interproscan-5.52-86.0/data/panther
+interproscan-5.52-86.0/data/phobius
+interproscan-5.52-86.0/data/smart
