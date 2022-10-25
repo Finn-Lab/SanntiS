@@ -2,7 +2,7 @@
 
 # SanntiS
 
-SanntiS - SMBGC detection tool -
+> SMBGC Annotation using Neural Networks Trained on Interpro Signatures
 
 ## How to use SanntiS?
 
