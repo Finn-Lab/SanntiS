@@ -20,7 +20,6 @@ Requires:
 ```bash
 conda create -n sanntis sanntis
 conda activate sanntis
-conda install -c bioconda sanntis
 ```
 
 #### Basic tests
