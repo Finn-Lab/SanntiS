@@ -63,9 +63,13 @@ class AnnotationFilesToEmerald:
                 if fmt == "tsv":
 
                     spl = l.split("\t")
-                    self.entriesDct.setdefault(spl[0], []).append(
-                        spl[11] if spl[11] != '-' else spl[4]
-                    )
+
+                    try:
+                        self.entriesDct.setdefault(spl[0], []).append(
+                            spl[11] if spl[11] != '-' else spl[4]
+                        )
+                    except IndexError:
+                        log.warning(f"WARNING. Incorrect number of fields in some lines of InterProScan TSV. check IPS version. FILE: {ipsFile} line: {line}.")
                 if fmt == "gff":
                     spl = l.split("\t")
                     if len(spl) > 3 and spl[2]=='protein_match':
