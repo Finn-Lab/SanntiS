@@ -108,7 +108,7 @@ class AnnotationFilesToEmerald:
 
                     self.contigsDct.setdefault(
                         "_".join(spl[0].split("_")[:-1])[1:], []
-                    ).append((spl[0][1:], (start, end)))
+                    ).append((spl[0][1:].strip(), (start, end)))
 
             elif f == "genbank":
 
@@ -125,9 +125,9 @@ class AnnotationFilesToEmerald:
 
                             self.contigsDct.setdefault(rec.id, []).append(
                                 (
-                                    f.qualifiers["protein_id"][0]
+                                    f.qualifiers["protein_id"][0].strip()
                                     if "protein_id" in f.qualifiers
-                                    else f.qualifiers["locus_tag"][0],
+                                    else f.qualifiers["locus_tag"][0].strip(),
                                     (start, end),
                                 )
                             )
