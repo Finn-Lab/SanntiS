@@ -129,9 +129,9 @@ class AnnotationFilesToEmerald:
 
                             self.contigsDct.setdefault(rec.id, []).append(
                                 (
-                                    f.qualifiers["protein_id"][0].strip()
+                                    f.qualifiers["protein_id"][0].strip().replace(' ','') # replace to avoid long id bug in gb files
                                     if "protein_id" in f.qualifiers
-                                    else f.qualifiers["locus_tag"][0].strip(),
+                                    else f.qualifiers["locus_tag"][0].strip().replace(' ',''),
                                     (start, end),
                                 )
                             )
