@@ -4,6 +4,10 @@
 
 > SMBGC Annotation using Neural Networks Trained on Interpro Signatures
 
+Tool for identifying biosynthetic gene clusters (BGCs) in genomic & metagenomic data
+
+[Expansion of novel biosynthetic gene clusters from diverse environments using SanntiS](https://www.biorxiv.org/content/10.1101/2023.05.23.540769v1)
+
 ## How to use SanntiS?
 
 ### Conda
