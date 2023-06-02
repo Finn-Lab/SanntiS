@@ -6,7 +6,6 @@
 
 Tool for identifying biosynthetic gene clusters (BGCs) in genomic & metagenomic data
 
-[Expansion of novel biosynthetic gene clusters from diverse environments using SanntiS](https://www.biorxiv.org/content/10.1101/2023.05.23.540769v1)
 
 ## How to use SanntiS?
 
@@ -90,3 +89,12 @@ $ sanntis [OPTIONS] ARGUMENTS
 
     ##gff-version 3
     DS999642	SanntiSv0.9.0	CLUSTER	1	136970	.	.	.	ID=DS999642_sanntis_1;nearest_MiBIG=BGC0001397;nearest_MiBIG_class=NRP Polyketide;nearest_MiBIG_diceDistance=0.561;partial=10
+    
+## Cite
+  If you use SanntiS make sure to cite the publication 
+[Expansion of novel biosynthetic gene clusters from diverse environments using SanntiS](https://www.biorxiv.org/content/10.1101/2023.05.23.540769v1)
+```
+Expansion of novel biosynthetic gene clusters from diverse environments using SanntiS
+Santiago Sanchez, Joel D. Rogers, Alexander B. Rogers, Maaly Nassar, Johanna McEntyre, Martin Welch, Florian Hollfelder, Robert D. Finn
+bioRxiv 2023.05.23.540769; doi: https://doi.org/10.1101/2023.05.23.540769
+```
