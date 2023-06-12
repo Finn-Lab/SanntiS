@@ -28,16 +28,16 @@ conda activate sanntis
 #### Basic tests
 
 ```bash
-$ conda activate sanntis
-$ sanntis test/files/BGC0001472.fna
-$ conda deactivate sanntis
+conda activate sanntis
+sanntis test/files/BGC0001472.fna
+conda deactivate sanntis
 ```
 
  Run with interproscan file:
 ```bash
-$ conda activate sanntis
-$ sanntis --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/files/BGC0001472.fna.prodigal.faa.gb
-$ conda deactivate sanntis
+conda activate sanntis
+sanntis --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/files/BGC0001472.fna.prodigal.faa.gb
+conda deactivate sanntis
 ```
 
 ###  Docker:
@@ -45,21 +45,21 @@ $ conda deactivate sanntis
 #### Get InterProsScan data:
 ##### The size of download file is ~24G, the final directory is 16G. Be sure to have enough space
 ```bash
-$ bash ./get_ips_slim.sh
+bash ./get_ips_slim.sh
 ```
 
 #### Docker ready to use script:
 ##### Only works if "data/" and sanntis_container.py are in the same directory
 ```bash
-$ sanntis_container.py --help
-$ sanntis_container.py [OPTIONS] ARGUMENTS
+sanntis_container.py --help
+sanntis_container.py [OPTIONS] ARGUMENTS
 ```
 
 #### Docker image shell:
 ```bash
-$ docker -it --entrypoint bash -v <path to SanntiS/docker>/data/:/opt/interproscan quay.io/repository/microbiome-informatics/sanntis
-$ sanntis --help
-$ sanntis [OPTIONS] ARGUMENTS
+docker -it --entrypoint bash -v <path to SanntiS/docker>/data/:/opt/interproscan quay.io/repository/microbiome-informatics/sanntis
+sanntis --help
+sanntis [OPTIONS] ARGUMENTS
 ```
 
 
@@ -89,7 +89,19 @@ $ sanntis [OPTIONS] ARGUMENTS
 
     ##gff-version 3
     DS999642	SanntiSv0.9.0	CLUSTER	1	136970	.	.	.	ID=DS999642_sanntis_1;nearest_MiBIG=BGC0001397;nearest_MiBIG_class=NRP Polyketide;nearest_MiBIG_diceDistance=0.561;partial=10
-    
+
+### antismash Compatibility
+
+SanntiS prioritises seamless integration with various downstream analysis tools, leveraging a GFF3 file output for broad compatibility. In addition, one of the key features in this regard is the ability to generate an output compatible with [antiSMASH](https://docs.antismash.secondarymetabolites.org/sideloading/), a widely used tool in the BGC analysis ecosystem.
+
+#### `--antismash_output` Option
+
+SanntiS has an `--antismash_output` option. This option allows you to create a JSON file formatted according to the specifications of [antiSMASH v6](https://docs.antismash.secondarymetabolites.org/sideloading/). 
+
+```bash
+sanntis --antismash_output True test/files/BGC0001472.fna
+```
+
 ## Cite
   If you use SanntiS make sure to cite the publication 
 [Expansion of novel biosynthetic gene clusters from diverse environments using SanntiS](https://www.biorxiv.org/content/10.1101/2023.05.23.540769v1)
