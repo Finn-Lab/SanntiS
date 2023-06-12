@@ -90,7 +90,7 @@ sanntis [OPTIONS] ARGUMENTS
     ##gff-version 3
     DS999642	SanntiSv0.9.0	CLUSTER	1	136970	.	.	.	ID=DS999642_sanntis_1;nearest_MiBIG=BGC0001397;nearest_MiBIG_class=NRP Polyketide;nearest_MiBIG_diceDistance=0.561;partial=10
 
-### antismash Compatibility
+### antiSMASH compatibility
 
 SanntiS prioritises seamless integration with various downstream analysis tools, leveraging a GFF3 file output for broad compatibility. In addition, one of the key features in this regard is the ability to generate an output compatible with [antiSMASH](https://docs.antismash.secondarymetabolites.org/sideloading/), a widely used tool in the BGC analysis ecosystem.
 
