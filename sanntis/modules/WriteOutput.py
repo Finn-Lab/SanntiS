@@ -49,9 +49,8 @@ class Outputs:
         self.asj["tool"]["version"] = __version__
         self.asj["tool"]["description"] = "{}: {}".format(_info["description"], _info["url"])
         self.asj["tool"]["configuration"] = {
-            "greediness":self.cli_args.greed,
+            "greediness":str(self.cli_args.greed),
             "meta":self.cli_args.meta,
-            "greediness":self.cli_args.greed,
         }
         
         ### records section
@@ -79,7 +78,7 @@ class Outputs:
                     "start":bgc["start"],
                     "end":bgc["end"],
                     "label":bgc["label"],
-                    "deteils":bgc["details"],
+                    "details":bgc["details"],
                     
                 })
             self.asj["records"].append(dct)
