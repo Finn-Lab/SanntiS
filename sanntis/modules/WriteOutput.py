@@ -67,7 +67,7 @@ class Outputs:
                 "label":annot.split(";")[2].split("=")[-1][:20],
                 "details":{
                     "score":annot.split(";")[4].split("=")[-1],
-                    "class":annot.split(";")[2].split("=")[-1]
+                    "class":annot.split(";")[2].split("=")[-1],
                     "ID":annot.split(";")[0].split("=")[-1]
                 }
             })
