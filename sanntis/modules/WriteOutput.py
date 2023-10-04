@@ -64,10 +64,11 @@ class Outputs:
             records.setdefault(spl[0],[]).append({
                 "start":int(start),
                 "end":int(end),
-                "label":annot.split(";")[0].split("=")[-1],
+                "label":annot.split(";")[2].split("=")[-1][:20],
                 "details":{
                     "score":annot.split(";")[4].split("=")[-1],
                     "class":annot.split(";")[2].split("=")[-1]
+                    "ID":annot.split(";")[0].split("=")[-1]
                 }
             })
         for contig,bgcs in records.items():
