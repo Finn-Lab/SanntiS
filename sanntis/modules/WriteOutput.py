@@ -85,7 +85,7 @@ class Outputs:
             self.asj["records"].append(dct)
             
         with open("{}.antismash.json".format(self.outfile), "w") as h:
-            json.dump(self.asj,h)
+            json.dump(self.asj,h,indent=4)
             
         
     def writeGff3(self):
