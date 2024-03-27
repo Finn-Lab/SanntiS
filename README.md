@@ -92,15 +92,16 @@ sanntis [OPTIONS] ARGUMENTS
 
 ### antiSMASH compatibility
 
-SanntiS prioritises seamless integration with various downstream analysis tools, leveraging a GFF3 file output for broad compatibility. In addition, one of the key features in this regard is the ability to generate an output compatible with [antiSMASH](https://docs.antismash.secondarymetabolites.org/sideloading/), a widely used tool in the BGC analysis ecosystem.
+SanntiS prioritises seamless integration with various downstream analysis tools, leveraging a GFF3 file output for broad compatibility. In addition, one of the key features in this regard is the ability to generate an output compatible with [antiSMASH](https://doi.org/10.1093/nar/gkad344), a widely used tool in the BGC analysis ecosystem.
 
 #### `--antismash_output` Option
 
-SanntiS has an `--antismash_output` option. This option allows you to create a JSON file formatted according to the specifications of [antiSMASH v6](https://docs.antismash.secondarymetabolites.org/sideloading/). 
+SanntiS has an `--antismash_output` option. This option allows you to create a JSON file formatted according to the specifications of [antiSMASH](https://docs.antismash.secondarymetabolites.org/sideloading/). 
 
 ```bash
 sanntis --antismash_output True test/files/BGC0001472.fna
 ```
+Executing the command above produces a file named with the suffix `antismash.json` facilitating its use in antiSMASH for enriched analysis. Specifically, this file can be uploaded to the [antiSMASH web server](https://antismash.secondarymetabolites.org) under 'Data input' > 'Upload extra annotations', allowing for an integrated analytical approach that leverages external annotation data.
 
 ## Cite
   If you use SanntiS make sure to cite the publication 
