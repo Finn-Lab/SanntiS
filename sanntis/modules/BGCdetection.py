@@ -97,17 +97,25 @@ class AnnotationFilesToEmerald:
 
         if not os.path.isfile(cdsPredFile):
             log.exception(f"{cdsPredFile} file not found")
+        
+        prodigal_formating_exception = False
 
         with open(cdsPredFile, "r") as h:
 
             if f == "fasta":
-
                 for l in h:
-
                     if l[0] != ">":
                         continue
 
                     spl = l.split()
+
+                    if len(spl) != 9:
+                        if not prodigal_formating_exception:
+                            prodigal_formating_exception = True
+                            log.warning(f"Some sequences in {cdsPredFile} do not follow the Prodigal header format. "
+                                "Expected 9 fields in the header, e.g., '>sequence_id # start # end # strand # etc.'")
+                        continue
+
                     start, end = int(spl[2]), int(spl[4])
 
                     self.contigsDct.setdefault(
@@ -160,7 +168,6 @@ class AnnotationFilesToEmerald:
                     self.vocab[x] for x in self.entriesDct[name] if x in self.vocab
                 ]
                 self.annDct[contig][ix][modiAnn] = 1
-
 
     def predictAnn(self, colapseFunc=max):
 

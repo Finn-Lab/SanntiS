@@ -35,8 +35,17 @@ def main(args=None):
     parser.add_argument(
         "seq_file",
         type=str,
-        help="input nucleotide sequence file. FASTA or GBK. mandatory",
+        help=(
+            "Input sequence file. Supported formats: nucleotide FASTA, GBK, or protein FASTA. "
+            "If the file is a protein FASTA, it must use Prodigal output headers and must be accompanied "
+            "by the --is_protein flag. Mandatory."
+        ),
         metavar="SEQUENCE_FILE",
+    )
+    parser.add_argument(
+        "--is_protein",
+        action="store_true",
+        help="Specify if the input SEQUENCE_FILE is a protein FASTA file. Will only process sequences with headers formatted like Prodigal protein outputs.",
     )
     parser.add_argument(
         "-v",
@@ -66,7 +75,7 @@ def main(args=None):
         dest="score",
         default=None,
         type=float,
-        help="validation filter threshold. overrides --greed",
+        help="Validation filter threshold. overrides --greed",
         metavar="FLOAT",
     )
     parser.add_argument(
@@ -74,7 +83,7 @@ def main(args=None):
         dest="meta",
         default="True",
         type=str,
-        help="prodigal option meta [default True]",
+        help="Prodigal option meta [default True]",
         metavar="True|False",
     )
     parser.add_argument(
@@ -82,14 +91,14 @@ def main(args=None):
         default=os.getcwd(),
         dest="outdir",
         type=str,
-        help="output directory [default $PWD/SEQUENCE_FILE.sanntis]",
+        help="Output directory [default $PWD/SEQUENCE_FILE.sanntis]",
         metavar="DIRECTORY",
     )
     parser.add_argument(
         "--outfile",
         dest="outfile",
         type=str,
-        help="output file [default outdir/SEQUENCE_FILE.sanntis.gff]",
+        help="Output file [default outdir/SEQUENCE_FILE.sanntis.gff]",
         metavar="FILE",
     )
     parser.add_argument(
@@ -97,7 +106,7 @@ def main(args=None):
         dest="minimal_out",
         default="True",
         type=str,
-        help="minimal output in a gff3 file [default True]",
+        help="Minimal output in a gff3 file [default True]",
         metavar="True|False",
     )
     parser.add_argument(
@@ -105,7 +114,7 @@ def main(args=None):
         dest="antismash_out",
         default="False",
         type=str,
-        help="write results in antiSMASH 6.0 JSON specification output [default False]",
+        help="Write results in antiSMASH 6.0 JSON specification output [default False]",
         metavar="True|False",
     )
     parser.add_argument(
@@ -113,7 +122,7 @@ def main(args=None):
         dest="ref_b",
         default="False",
         type=str,
-        help="annotate high probability borders [default False]",
+        help="Annotate high probability borders [default False]",
         metavar="True|False",
     )
     parser.add_argument(
@@ -121,7 +130,7 @@ def main(args=None):
         dest="cpu",
         default=1,
         type=int,
-        help="cpus for INTERPROSCAN and HMMSCAN",
+        help="Cpus for INTERPROSCAN and HMMSCAN",
         metavar="INT",
     )
 
@@ -153,6 +162,7 @@ def main(args=None):
     log.info("preprocessing files")
     preprocess = Preprocess(
             os.path.abspath(args.seq_file), 
+            args.is_protein,
             args.ip_file, 
             args.meta, 
             args.cpu, 
