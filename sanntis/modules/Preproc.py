@@ -25,10 +25,10 @@ from distutils.spawn import find_executable
 class Preprocess:
     """External tools needed for sanntis bgc detection"""
 
-    def __init__(self, seq_file, protein_seqs, ip_file, meta, cpus, outdir):
+    def __init__(self, seq_file, seqfile_is_proteins, ip_file, meta, cpus, outdir):
 
         self.seq_file = seq_file
-        self.protein_seqs = protein_seqs
+        self.seqfile_is_proteins = seqfile_is_proteins
         self.ip_file = ip_file
         self.meta = meta
         self.cpus = int(cpus)
@@ -133,7 +133,7 @@ class Preprocess:
         self.check_fmt()
         
         if self.fmt == "fasta":
-            self.outFaa = self.seq_file if self.protein_seqs else self.runProdigal()
+            self.outFaa = self.seq_file if self.seqfile_is_proteins else self.runProdigal()
         elif self.fmt == "genbank":
             self.outFaa = self.gbkToProdigal()
         else:
