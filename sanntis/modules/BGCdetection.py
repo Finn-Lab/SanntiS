@@ -109,6 +109,7 @@ class AnnotationFilesToEmerald:
 
                     spl = l.split()
 
+                    # sanity check for prodigal predicted proteins
                     if len(spl) != 9:
                         if not prodigal_formating_exception:
                             prodigal_formating_exception = True
