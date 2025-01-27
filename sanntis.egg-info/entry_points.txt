@@ -1,3 +1,0 @@
-[console_scripts]
-sanntis = sanntis._cli:main
-sanntis_build_gb = sanntis.build_gb:main
