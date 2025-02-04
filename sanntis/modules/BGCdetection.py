@@ -18,6 +18,7 @@ import re
 import pickle
 from itertools import groupby
 
+from Bio import SeqIO
 import numpy as np
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
@@ -93,57 +94,45 @@ class AnnotationFilesToEmerald:
                 spl = l.split()
                 self.entriesDct.setdefault(spl[3], []).append(spl[0])
 
-    def transformCDSpredToCDScontigs(self, cdsPredFile, f):
+    def transformCDSpredToCDScontigs(self, cdsPredFile, file_format):
 
         if not os.path.isfile(cdsPredFile):
             log.exception(f"{cdsPredFile} file not found")
         
-        prodigal_formating_exception = False
+        recs = list(SeqIO.parse(open(cdsPredFile, "r"), file_format))
 
-        with open(cdsPredFile, "r") as h:
+        if file_format == "fasta":
+            
+            _prodigal_pattern = re.compile(
+                r"_\d+\s#\s(\d+)\s#\s(\d+)\s#\s(-?1)\s#\sID=(\d+_\d+);partial=(\d{2});start_type="
+                r"(\w+);rbs_motif=(.+);rbs_spacer=(\S+);gc_cont=(\d+\.\d+)"
+            )
+            
+            for record in recs:
+                header = record.description
+                prodigal_match = _prodigal_pattern.search(header)
+                if not prodigal_match:
+                    logger.warning(
+                        f"Protein {record.id} does not follow the Prodigal header format. "
+                    )
+                    continue
+                start = int(prodigal_match.group(1))
+                end = int(prodigal_match.group(2))
+                protein_id = record.id
 
-            if f == "fasta":
-                for l in h:
-                    if l[0] != ">":
-                        continue
+                self.contigsDct.setdefault(
+                    "_".join(record.id.split("_")[:-1]), []
+                ).append((record.id, (start, end)))
 
-                    spl = l.split()
+        elif file_format == "genbank":
+            
+            for record in recs:
+                for f in record.features:
+                    if f.type == "CDS":
+                        start, end = int(f.location.start) + 1, int(f.location.end)
+                        protein_id = f.qualifiers["protein_id"][0].strip().replace(' ','') if "protein_id" in f.qualifiers else f.qualifiers["locus_tag"][0].strip().replace(' ','') 
 
-                    # sanity check for prodigal predicted proteins
-                    if len(spl) != 9:
-                        if not prodigal_formating_exception:
-                            prodigal_formating_exception = True
-                            log.warning(f"Some sequences in {cdsPredFile} do not follow the Prodigal header format. "
-                                "Expected 9 fields in the header, e.g., '>sequence_id # start # end # strand # etc.'")
-                        continue
-
-                    start, end = int(spl[2]), int(spl[4])
-
-                    self.contigsDct.setdefault(
-                        "_".join(spl[0].split("_")[:-1])[1:], []
-                    ).append((spl[0][1:].strip(), (start, end)))
-
-            elif f == "genbank":
-
-                from Bio import SeqIO
-
-                recs = list(SeqIO.parse(open(cdsPredFile, "r"), "gb"))
-
-                for rec in recs:
-                    for f in rec.features:
-                        if f.type == "CDS":
-
-
-                            start, end = int(f.location.start) + 1, int(f.location.end)
-
-                            self.contigsDct.setdefault(rec.id, []).append(
-                                (
-                                    f.qualifiers["protein_id"][0].strip().replace(' ','') # replace to avoid long id bug in gb files
-                                    if "protein_id" in f.qualifiers
-                                    else f.qualifiers["locus_tag"][0].strip().replace(' ',''),
-                                    (start, end),
-                                )
-                            )
+                        self.contigsDct.setdefault(record.id, []).append( (protein_id,(start, end)))
 
     def buildMatrices(self):
 
