@@ -112,7 +112,7 @@ class AnnotationFilesToEmerald:
                 header = record.description
                 prodigal_match = _prodigal_pattern.search(header)
                 if not prodigal_match:
-                    logger.warning(
+                    log.warning(
                         f"Protein {record.id} does not follow the Prodigal header format. "
                     )
                     continue

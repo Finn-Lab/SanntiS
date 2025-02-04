@@ -33,10 +33,19 @@ sanntis test/files/BGC0001472.fna
 conda deactivate sanntis
 ```
 
-SanntiS can be executed using preprocessed InterProScan outputs along with a GenBank (GBK) file specifying the coding sequences (CDSs). This integration facilitates a streamlined analysis pipeline for bioinformatics applications, allowing for enhanced functionality and user flexibility.
+### Support of preprocessed InterProScan outputs
+
+SanntiS can be executed using preprocessed InterProScan outputs along with a GenBank (GBK) file specifying the coding sequences (CDSs). This integration increases user flexibility.
 ```bash
 conda activate sanntis
 sanntis --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/files/BGC0001472.fna.prodigal.faa.gb
+conda deactivate sanntis
+```
+
+Additionally, the --ip-file option can be provided with a protein FASTA file containing headers formatted according to Prodigal's convention. In this case, the --is_protein flag must be included to indicate that the sequence file is a proteins FASTA. 
+```bash
+conda activate sanntis
+sanntis --is_protein --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/files/BGC0001472.fna.prodigal.faa
 conda deactivate sanntis
 ```
 
