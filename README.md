@@ -33,7 +33,7 @@ sanntis test/files/BGC0001472.fna
 conda deactivate sanntis
 ```
 
-### Support of preprocessed InterProScan outputs
+#### Support of preprocessed InterProScan outputs
 
 SanntiS can be executed using preprocessed InterProScan outputs along with a GenBank (GBK) file specifying the coding sequences (CDSs). This integration increases user flexibility.
 ```bash

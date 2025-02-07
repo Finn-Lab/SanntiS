@@ -99,8 +99,6 @@ class AnnotationFilesToEmerald:
         if not os.path.isfile(cdsPredFile):
             log.exception(f"{cdsPredFile} file not found")
         
-        recs = list(SeqIO.parse(open(cdsPredFile, "r"), file_format))
-
         if file_format == "fasta":
             
             _prodigal_pattern = re.compile(
@@ -108,7 +106,7 @@ class AnnotationFilesToEmerald:
                 r"(\w+);rbs_motif=(.+);rbs_spacer=(\S+);gc_cont=(\d+\.\d+)"
             )
             
-            for record in recs:
+            for record in SeqIO.parse(open(cdsPredFile, "r"), file_format):
                 header = record.description
                 prodigal_match = _prodigal_pattern.search(header)
                 if not prodigal_match:
@@ -126,7 +124,7 @@ class AnnotationFilesToEmerald:
 
         elif file_format == "genbank":
             
-            for record in recs:
+            for record in SeqIO.parse(open(cdsPredFile, "r"), file_format):
                 for f in record.features:
                     if f.type == "CDS":
                         start, end = int(f.location.start) + 1, int(f.location.end)
