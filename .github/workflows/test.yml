@@ -1,0 +1,48 @@
+name: SanntiS basic test with preprocessed files
+
+on: [push, pull_request] 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: test-env 
+          python-version: 3.9  
+          auto-activate-base: false
+
+      - name: Install dependencies
+        shell: bash -l {0}  
+        run: |
+          conda install -y -c bioconda sanntis
+
+      - name: Run SanntiS test with preprocessed files
+        shell: bash -l {0}
+        run: |
+          sanntis --is_protein --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/files/BGC0001472.fna.prodigal.faa
+          
+      - name: Verify GFF output files
+        shell: bash -l {0}
+        run: |
+          # Find a .gff file in the output directory
+          GFF_FILE=$(find BGC0001472.fna.prodigal.faa.sanntis -name "*.gff" | head -n 1)
+
+          if [ -z "$GFF_FILE" ]; then
+            echo "No sanntis GFF file found in the output directory"
+            exit 1
+          fi
+
+          echo "GFF file found: $GFF_FILE"
+
+          # Check if the BGC where detected by looking for the string "CLUSTER"
+          if ! grep -q "CLUSTER" "$GFF_FILE"; then
+            echo "GFF file does NOT contains BGCs!"
+            exit 1
+          fi
+
+          echo "GFF file contains BGCs."
