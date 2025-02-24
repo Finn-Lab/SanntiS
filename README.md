@@ -38,7 +38,7 @@ Verify installation using preprocessed InterProScan outputs (supported on macOS 
 pytest --tag sanntis_with_preprocessed_files
 ```
 
-Verify installation and ensure InterProScan is set up correctly:
+Verify installation and ensure InterProScan is set up correctly (supported on Linux).
 
 ```bash
 pytest --tag sanntis_full_dependencies
