@@ -18,22 +18,34 @@ Requires:
       Non Linux OS can't run InterProScan. InterProScan output must be provided in TSV or GFF3 format sing "--ip-file" and a GBK as SEQUENCE
 * Bioconda: https://bioconda.github.io
 
-#### Installation
+### Installation
 
 ```bash
 conda create -n sanntis sanntis
 conda activate sanntis
 ```
 
-#### Basic tests
+#### Installation testing
 
+Tests require [pytest-workflow](https://pypi.org/project/pytest-workflow/).
 ```bash
-conda activate sanntis
-sanntis test/files/BGC0001472.fna
-conda deactivate sanntis
+pip install pytest-workflow 
 ```
 
-#### Support of preprocessed InterProScan outputs
+Verify installation using preprocessed InterProScan outputs (supported on macOS and Linux).
+
+```bash
+pytest --tag sanntis_with_preprocessed_files
+```
+
+Verify installation and ensure InterProScan is set up correctly (supported on Linux).
+
+```bash
+pytest --tag sanntis_full_dependencies
+```
+
+
+### Support of preprocessed InterProScan outputs
 
 SanntiS can be executed using preprocessed InterProScan outputs along with a GenBank (GBK) file specifying the coding sequences (CDSs). This integration increases user flexibility.
 ```bash
