@@ -1,0 +1,13 @@
+# Biosynthetic Gene Cluster (BGC) class descriptions
+# Classification is based on the structural features of the natural products they encode
+# References
+# 1. Hanson, J.R. (2003). *Natural Products: The Secondary Metabolites* (Vol. 17). Royal Society of Chemistry.
+# 2. Kautsar, S.A. et al. (2020). MIBiG 2.0: A repository for biosynthetic gene clusters of known function. *Nucleic Acids Research*, 48(D1), D454–D458.
+MIBiG_class	Description	Reference
+Polyketide	Built from iterative condensation of acetate units derived from acetyl-CoA	1
+Terpene	Composed of isoprene (C5) units derived from isopentenyl pyrophosphate	1
+Alkaloid	Nitrogen-containing compounds derived from amino acids (e.g., ornithine, lysine, tyrosine, tryptophan)	1
+RiPP	Ribosomally synthesised and Post-translationally modified Peptide	2
+NRP	Nonribosomal Peptide	2
+Saccharide	Carbohydrate-based natural products (e.g., aminoglycoside antibiotics)	1
+Other	Catch-all class for clusters encoding metabolites outside main classes (e.g. cyclitols, indolocarbazoles, and phosphonates)	2
