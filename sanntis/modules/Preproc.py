@@ -85,7 +85,8 @@ class Preprocess:
         log.info("write gbk as faa")
         from Bio import SeqIO
 
-        recs = list(SeqIO.parse(open(self.seq_file, "r"), "gb"))
+        with open(self.seq_file, "r") as h:
+            recs = list(SeqIO.parse(h, "gb"))
 
         base = os.path.basename(self.seq_file)
 
@@ -118,11 +119,11 @@ class Preprocess:
     def check_fmt(self):
         """ Evaluate if input format is FNA or GBK"""
         for fmt in ["fasta","genbank"]:
-            seqFile = SeqIO.parse(open(self.seq_file),fmt)
-            if any(seqFile):
-                self.fmt = fmt
-                log.info(f"{fmt} sequence file detected")
-                return
+            with open(self.seq_file) as h:
+                if any(SeqIO.parse(h, fmt)):
+                    self.fmt = fmt
+                    log.info(f"{fmt} sequence file detected")
+                    return
         log.exception(f"sequence file {self.seq_file} not in fasta or genbank format")
         raise SystemExit(f"sequence file {self.seq_file} not in fasta or genbank format")
 

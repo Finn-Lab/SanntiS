@@ -52,8 +52,10 @@ def main(args=None):
     
     args = parser.parse_args(args)
 
-    fna = {rec.id:rec.seq for rec in SeqIO.parse(open(args.nuc_f),'fasta')}
-    faa = list(SeqIO.parse(open(args.pro_f),'fasta'))
+    with open(args.nuc_f) as h:
+        fna = {rec.id: rec.seq for rec in SeqIO.parse(h, 'fasta')}
+    with open(args.pro_f) as h:
+        faa = list(SeqIO.parse(h, 'fasta'))
 
     feats = {}
 

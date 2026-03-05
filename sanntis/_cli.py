@@ -186,18 +186,9 @@ def main(args=None):
             prodigal_file if preprocess.fmt == "fasta" else args.seq_file,
             preprocess.fmt)
     
-    log.info("transform dicts to np matrices")
-    annotate.buildMatrices()
-
-    log.info("predict bgc regions")
-    annotate.predictAnn()
-
-    log.info("define clusters")
+    log.info("predict bgc regions, define clusters and classify types")
     log.info(f"score: {args.score} greed: {args.greed}")
-    annotate.defineLooseClusters(score=args.score, g=args.greed)
-
-    log.info("post-processing filters and type classification")
-    annotate.predictType()
+    annotate.predictAndClassify(score=args.score, g=args.greed)
 
     log.info("write output file file")
     outp = Outputs(

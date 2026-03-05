@@ -37,7 +37,6 @@ class AnnotationFilesToEmerald:
 
         self.entriesDct = {}
         self.contigsDct = {}
-        self.annDct = {}
         self.typeDct = {}
         self.annResults = {}
         post_file = os.path.join(
@@ -100,76 +99,115 @@ class AnnotationFilesToEmerald:
             log.exception(f"{cdsPredFile} file not found")
         
         if file_format == "fasta":
-            
+
             _prodigal_pattern = re.compile(
                 r"_\d+\s#\s(\d+)\s#\s(\d+)\s#\s(-?1)\s#\sID=(\d+_\d+);partial=(\d{2});start_type="
                 r"(\w+);rbs_motif=(.+);rbs_spacer=(\S+);gc_cont=(\d+\.\d+)"
             )
-            
-            for record in SeqIO.parse(open(cdsPredFile, "r"), file_format):
-                header = record.description
-                prodigal_match = _prodigal_pattern.search(header)
-                if not prodigal_match:
-                    log.warning(
-                        f"Protein {record.id} does not follow the Prodigal header format. "
-                    )
-                    continue
-                start = int(prodigal_match.group(1))
-                end = int(prodigal_match.group(2))
-                protein_id = record.id
 
-                self.contigsDct.setdefault(
-                    "_".join(record.id.split("_")[:-1]), []
-                ).append((record.id, (start, end)))
+            with open(cdsPredFile, "r") as h:
+                for record in SeqIO.parse(h, file_format):
+                    header = record.description
+                    prodigal_match = _prodigal_pattern.search(header)
+                    if not prodigal_match:
+                        log.warning(
+                            f"Protein {record.id} does not follow the Prodigal header format. "
+                        )
+                        continue
+                    start = int(prodigal_match.group(1))
+                    end = int(prodigal_match.group(2))
+
+                    self.contigsDct.setdefault(
+                        "_".join(record.id.split("_")[:-1]), []
+                    ).append((record.id, (start, end)))
 
         elif file_format == "genbank":
-            
-            for record in SeqIO.parse(open(cdsPredFile, "r"), file_format):
-                for f in record.features:
-                    if f.type == "CDS":
-                        start, end = int(f.location.start) + 1, int(f.location.end)
-                        protein_id = f.qualifiers["protein_id"][0].strip().replace(' ','') if "protein_id" in f.qualifiers else f.qualifiers["locus_tag"][0].strip().replace(' ','') 
 
-                        self.contigsDct.setdefault(record.id, []).append( (protein_id,(start, end)))
+            with open(cdsPredFile, "r") as h:
+                for record in SeqIO.parse(h, file_format):
+                    for f in record.features:
+                        if f.type == "CDS":
+                            start, end = int(f.location.start) + 1, int(f.location.end)
+                            protein_id = f.qualifiers["protein_id"][0].strip().replace(' ', '') if "protein_id" in f.qualifiers else f.qualifiers["locus_tag"][0].strip().replace(' ', '')
 
-    def buildMatrices(self):
+                            self.contigsDct.setdefault(record.id, []).append((protein_id, (start, end)))
 
-        for contig in self.contigsDct:
+    def _iter_matrices(self):
+        """Yield ``(contig, mat)`` one at a time without storing all matrices in memory.
 
-            cdss = self.contigsDct[contig]
+        Builds the annotation matrix for each contig on demand so that each matrix
+        exists only while it is being processed by the caller.  ``entriesDct`` is
+        cleared once all contigs have been yielded, since the domain lookups are no
+        longer needed after that point.
 
+        :yields: Tuple of ``(contig_id, mat)`` where *mat* is a ``uint8`` numpy array
+            of shape ``(n_windows, vocab_size)``.
+        :rtype: Iterator[tuple[str, numpy.ndarray]]
+        """
+        for contig, cdss in self.contigsDct.items():
             samps = (
                 len(cdss)
                 if not _params["shape"]
                 else ((len(cdss) // _params["shape"]) + 1) * _params["shape"]
             )
-
-            self.annDct[contig] = np.zeros((samps, len(self.vocab)))
-
-            for ix, cds in enumerate(cdss):
-
-                name = cds[0]
+            mat = np.zeros((samps, len(self.vocab)), dtype=np.uint8)
+            for ix, (name, _) in enumerate(cdss):
                 if name not in self.entriesDct:
                     continue
-
                 modiAnn = [
                     self.vocab[x] for x in self.entriesDct[name] if x in self.vocab
                 ]
-                self.annDct[contig][ix][modiAnn] = 1
+                mat[ix][modiAnn] = 1
+            yield contig, mat
 
-    def predictAnn(self, colapseFunc=max):
+        self.entriesDct.clear()
 
+    def predictAndClassify(self, score, g, colapseFunc=max):
+        """Run TF prediction, cluster definition and type classification in a single
+        per-contig pass.
+
+        Consumes :meth:`_iter_matrices` so each annotation matrix is built, used and
+        released within the same loop iteration.  Peak memory is proportional to the
+        largest single contig rather than to the entire dataset.
+
+        :param score: Validation filter threshold; overrides greediness level when
+            not ``None``.
+        :type score: float or None
+        :param g: Greediness level (0, 1 or 2) used when *score* is ``None``.
+        :type g: int
+        :param colapseFunc: Function used to collapse per-window predictions into a
+            per-CDS score. Defaults to ``max``.
+        :type colapseFunc: callable
+        """
         log.info("Predict BGC probability w/ TensorFlow")
         model_BGC_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "..", "models", "sanntis.h5"
         )
-
         model = tf.keras.models.load_model(
             model_BGC_file, custom_objects={"robustLoss": {}}
         )
 
-        for contig in self.annDct:
-            mat = self.annDct[contig]
+        self.bridged, self.looseClst, self.borderClst, self.typesClst = {}, {}, {}, {}
+        self.annResults = {}
+        self.score = _params["greed"][str(g)] if score is None else score
+
+        type_score = self.scoreFunc(self.score, _params["score_b"], _params["score_m"])
+        log.info(f"Positive class model threshold: {type_score}")
+        log.info(f"type:{type_score} score {self.score}")
+
+        claa = [
+            "Alkaloid",
+            "NRP",
+            "Polyketide",
+            "RiPP",
+            "Saccharide",
+            "Terpene",
+            "Other",
+        ]
+
+        for contig, mat in self._iter_matrices():
+
+            # --- TF prediction ---
             xva_, vaIx = self.transformMat(mat)
             vaS = (xva_.shape[0] // _params["shape"]) * _params["shape"]
             xva1 = xva_[:vaS].reshape(vaS // _params["shape"], _params["shape"])
@@ -178,10 +216,58 @@ class AnnotationFilesToEmerald:
                 [list(xva_[vaS:]) + [0] * (_params["shape"] - (vaIx.shape[0] - vaS))],
                 axis=0,
             )
-            self.predict_ = model.predict(xva)
-            predict = self.predict_.reshape(vaS + _params["shape"])
+            predict_ = model.predict(xva, verbose=0)
+            predict = predict_.reshape(vaS + _params["shape"])
             predict_str_, nix = self.partialReStrMat(vaIx, predict, func=colapseFunc)
             self.annResults[contig] = self.projectRes(predict_str_, nix, mat.shape[0])
+
+            # --- Cluster definition ---
+            self.looseClst[contig] = np.array(
+                self.rmLessThan(
+                    self.fillGap(
+                        np.where(self.annResults[contig] < self.score, 0, 1),
+                        _params["fill"],
+                    ),
+                    _params["rmless"],
+                )
+            )
+            self.borderClst[contig] = np.where(
+                self.annResults[contig] < _params["thBorder"], 0, 1
+            )
+            self.typesClst[contig] = np.empty(
+                len(self.annResults[contig]), dtype=object
+            )
+
+            # --- Type classification ---
+            locations, matrix = [], []
+            for k, grp in groupby(
+                enumerate(self.looseClst[contig]), key=lambda x: x[1]
+            ):
+                if k == 0:
+                    continue
+                gg = list(list(zip(*grp))[0])
+                tmat_ = np.sum(mat[gg], axis=0)
+                matrix.append(np.where(tmat_ > 0, 1, 0))
+                locations.append(gg)
+
+            if matrix:
+                pred = np.empty((len(matrix), len(claa)))
+                for nc, cla in enumerate(claa):
+                    pred[:, nc] = self.typeModel[cla].predict_proba(matrix)[:, 1]
+
+                for ix, p in enumerate(pred):
+                    gg = locations[ix]
+                    if not (np.max(p) >= type_score):
+                        self.looseClst[contig][gg] = 0
+                        self.borderClst[contig][gg] = 0
+                    else:
+                        nearest_ = self.near_classifer(
+                            set(np.where(matrix[ix] == 1)[0])
+                        )
+                        nearest = "nearest_MiBIG={};nearest_MiBIG_class={};nearest_MiBIG_diceDistance={:.3f};score={:.3f}".format(
+                            nearest_[0], nearest_[1], nearest_[2], np.max(p)
+                        )
+                        self.typesClst[contig][gg] = nearest
 
     def transformMat(self, mat):
 
@@ -229,29 +315,6 @@ class AnnotationFilesToEmerald:
             nres.append(func(gg))
         return np.array(nres), np.array(nix)
 
-    def defineLooseClusters(self, score, g):
-        
-        log.info("Define Clusters")
-        self.bridged, self.looseClst, self.borderClst, self.typesClst = {}, {}, {}, {}
-        self.score = _params["greed"][str(g)] if score == None else score
-
-        for contig in self.annResults:
-            self.looseClst[contig] = np.array(
-                self.rmLessThan(
-                    self.fillGap(
-                        np.where(self.annResults[contig] < self.score, 0, 1),
-                        _params["fill"],
-                    ),
-                    _params["rmless"],
-                )
-            )
-            self.borderClst[contig] = np.where(
-                self.annResults[contig] < _params["thBorder"], 0, 1
-            )
-            self.typesClst[contig] = np.empty(
-                len(self.annResults[contig]), dtype=object
-            )
-
     def rmLessThan(self, contig, n):
         newContig = []
         for k, g in groupby(contig):
@@ -279,55 +342,6 @@ class AnnotationFilesToEmerald:
         y = b+(m*x)
         return 0 if y<0 else 1 if y>1 else y
     
-    def predictType(self):
-
-        log.info("Predict BGC classes")
-
-        type_score = self.scoreFunc(self.score, _params["score_b"], _params["score_m"])
-        log.info(f"Positive class model threshold: {type_score}")
-        log.info(f"type:{type_score} score {self.score}")
-        locations, matrix, typeLi = [], [], []
-        claa = [
-            "Alkaloid",
-            "NRP",
-            "Polyketide",
-            "RiPP",
-            "Saccharide",
-            "Terpene",
-            "Other",
-        ]
-
-        for contig in self.contigsDct:
-            for k, g in groupby(enumerate(self.looseClst[contig]), key=lambda x: x[1]):
-                if k == 0:
-                    continue
-                gg = list(list(zip(*g))[0])
-                tmat_ = np.sum(self.annDct[contig][gg], axis=0)
-                tmat = np.where(tmat_ > 0, 1, 0)
-                locations.append((contig, gg))
-                matrix.append(tmat)
-        if len(matrix) > 0:
-            pred = np.empty((len(matrix), len(claa)))
-            for nc, cla in enumerate(claa):
-                pred[:, nc] = self.typeModel[cla].predict_proba(matrix)[:, 1]
-        else:
-            pred = []
-
-        for ix, p in enumerate(pred):
-            
-            contig, gg = locations[ix]
-
-            if not (np.max(p[[0, 1, 2, 3, 4, 5, 6]]) >= type_score):
-                self.looseClst[contig][gg] = 0
-                self.borderClst[contig][gg] = 0
-
-            else:
-                nearest_ = self.near_classifer(set(np.where(matrix[ix] == 1)[0]))
-                nearest = "nearest_MiBIG={};nearest_MiBIG_class={};nearest_MiBIG_diceDistance={:.3f};score={:.3f}".format(
-                    nearest_[0], nearest_[1], nearest_[2], np.max(p[[0, 1, 2, 3, 4, 5, 6]])
-                )
-                self.typesClst[contig][gg] = nearest
-
     def near_classifer(self, doms):
         mb_ord = [(b, c, self.diceDistance(doms, mbd)) for b, c, mbd in self.mbdoms]
         nearest = sorted(mb_ord, key=lambda x: x[2])[0]
