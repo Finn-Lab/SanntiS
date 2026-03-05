@@ -1,28 +1,21 @@
-name: SanntiS basic test with preprocessed files 
- 
-on: [push, pull_request]  
- 
-jobs: 
-  test: 
-    runs-on: ubuntu-latest  
-    steps: 
-      - name: Checkout repository 
-        uses: actions/checkout@v4 
- 
-      - name: Set up miniconda 
-        uses: conda-incubator/setup-miniconda@v3 
-        with: 
-          activate-environment: test-env  
-          python-version: 3.9   
-          auto-activate-base: false 
- 
-      - name: Install dependencies 
-        shell: bash -l {0}   
-        run: | 
-          conda install -y -c bioconda sanntis 
-          pip install pytest-workflow
- 
-      - name: Run pytest-workflow with preprocessed files 
-        shell: bash -l {0} 
-        run: | 
-          pytest --tag sanntis_with_preprocessed_files
+name: SanntiS basic test with preprocessed files
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --group dev
+
+      - name: Run pytest-workflow with preprocessed files
+        run: uv run pytest --tag sanntis_with_preprocessed_files

@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sanntis"
+version = "0.9.4.1"
+description = "SMBGC detection tool"
+readme = "README.md"
+license = { text = "Apache License, Version 2.0" }
+authors = [
+    { name = "Santiago Sanchez Fragoso", email = "fragoso@ebi.ac.uk" }
+]
+requires-python = ">=3.9,<3.14"
+dependencies = [
+    "biopython",
+    "numpy>=1.19.2,<2.0",
+    "scipy>=1.7.3",
+    "tensorflow>=2.9,<2.16",
+    "scikit-learn>=1.0,<1.3",
+    "joblib>=1.0.1",
+    "requests",
+]
+
+[dependency-groups]
+dev = [
+    "pytest-workflow",
+]
+
+[project.urls]
+Homepage = "https://github.com/Finn-Lab/SanntiS"
+
+[project.scripts]
+sanntis = "sanntis._cli:main"
+sanntis_build_gb = "sanntis.build_gb:main"
+
+[tool.setuptools.packages.find]
+exclude = ["tests", "docs"]
+
+[tool.setuptools.package-data]
+sanntis = [
+    "models/hmm_lib/*",
+    "models/*",
+    "modules/*",
+    "*json",
+    "exclude.txt",
+]

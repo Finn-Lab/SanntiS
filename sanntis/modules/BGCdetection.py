@@ -271,7 +271,7 @@ class AnnotationFilesToEmerald:
 
     def transformMat(self, mat):
 
-        scuash = np.array(list(map(lambda x: np.where(x == 1)[0], mat)))
+        scuash = np.array(list(map(lambda x: np.where(x == 1)[0], mat)), dtype=object)
         nli, nix = [], []
         for ix, x in enumerate(scuash):
             if x.shape[0] == 0:
