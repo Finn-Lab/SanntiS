@@ -3,7 +3,7 @@
   files:
     - path: "BGC0001472.fna.prodigal.faa.sanntis/BGC0001472.fna.prodigal.faa.sanntis.full.gff"
       contains:
-        - "CLUSTER"
+        - "BGC0001472\tSanntiSv0.9.4.1\tCLUSTER\t312\t19485\t.\t.\t.\tID=BGC0001472_sanntis_1;nearest_MiBIG=BGC0001472;nearest_MiBIG_class=RiPP;nearest_MiBIG_diceDistance=0.037;score=0.900;partial=11"
         
 - name: sanntis_full_dependencies
   command: sanntis test/files/BGC0001472.fna
