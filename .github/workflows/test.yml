@@ -14,8 +14,14 @@ jobs:
         with:
           enable-cache: true
 
+      - name: Install HMMER
+        run: sudo apt-get install -y hmmer
+
       - name: Install dependencies
         run: uv sync --group dev
+
+      - name: Run unit tests
+        run: uv run pytest test/test_bgcdetection.py
 
       - name: Run pytest-workflow with preprocessed files
         run: uv run pytest --tag sanntis_with_preprocessed_files
