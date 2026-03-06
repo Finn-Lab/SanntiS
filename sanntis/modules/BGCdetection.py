@@ -16,7 +16,8 @@ import logging
 import os
 import re
 import pickle
-from itertools import groupby
+from itertools import groupby, islice
+from typing import Callable, Optional
 
 from Bio import SeqIO
 import numpy as np
@@ -162,13 +163,25 @@ class AnnotationFilesToEmerald:
 
         self.entriesDct.clear()
 
-    def predictAndClassify(self, score, g, colapseFunc=max):
-        """Run TF prediction, cluster definition and type classification in a single
-        per-contig pass.
+    def predictAndClassify(
+        self,
+        score: Optional[float],
+        g: int,
+        colapseFunc: Callable = max,
+        contig_chunk_size: Optional[int] = None,
+        batch_size: int = 32,
+    ) -> None:
+        """Run TF prediction in batches, then cluster and classify per contig.
 
-        Consumes :meth:`_iter_matrices` so each annotation matrix is built, used and
-        released within the same loop iteration.  Peak memory is proportional to the
-        largest single contig rather than to the entire dataset.
+        Contigs are processed in chunks of contig_chunk_size (or all at once when
+        ``None``).  Within each chunk, annotation matrices for every contig are built
+        first, TF inference is run in a single ``model.predict`` call over the
+        concatenated batch, and then predictions are unpacked and cluster definition
+        plus type classification are performed per contig.
+
+        Peak memory per chunk is proportional to the total number of CDSs in that
+        chunk rather than the entire dataset.  Smaller values of *contig_chunk_size*
+        reduce memory at the cost of more ``model.predict`` calls.
 
         :param score: Validation filter threshold; overrides greediness level when
             not ``None``.
@@ -178,6 +191,12 @@ class AnnotationFilesToEmerald:
         :param colapseFunc: Function used to collapse per-window predictions into a
             per-CDS score. Defaults to ``max``.
         :type colapseFunc: callable
+        :param contig_chunk_size: Number of contigs to include in each TF prediction
+            batch.  ``None`` processes all contigs in a single batch.
+        :type contig_chunk_size: int or None
+        :param batch_size: Mini-batch size passed to ``model.predict``.  Larger
+            values use more memory but reduce Keras overhead.
+        :type batch_size: int
         """
         log.info("Predict BGC probability w/ TensorFlow")
         model_BGC_file = os.path.join(
@@ -205,69 +224,106 @@ class AnnotationFilesToEmerald:
             "Other",
         ]
 
-        for contig, mat in self._iter_matrices():
+        def _process_chunk(chunk: list) -> None:
+            """Batch-predict one chunk of (contig, mat) pairs and classify results.
 
-            # --- TF prediction ---
-            xva_, vaIx = self.transformMat(mat)
-            vaS = (xva_.shape[0] // _params["shape"]) * _params["shape"]
-            xva1 = xva_[:vaS].reshape(vaS // _params["shape"], _params["shape"])
-            xva = np.append(
-                xva1,
-                [list(xva_[vaS:]) + [0] * (_params["shape"] - (vaIx.shape[0] - vaS))],
-                axis=0,
-            )
-            predict_ = model.predict(xva, verbose=0)
-            predict = predict_.reshape(vaS + _params["shape"])
-            predict_str_, nix = self.partialReStrMat(vaIx, predict, func=colapseFunc)
-            self.annResults[contig] = self.projectRes(predict_str_, nix, mat.shape[0])
+            :param chunk: List of ``(contig_id, mat)`` tuples as yielded by
+                :meth:`_iter_matrices`.
+            :type chunk: list
+            """
+            contig_metas = []  # (contig, mat, vaIx, vaS, n_windows)
+            xva_chunks = []
 
-            # --- Cluster definition ---
-            self.looseClst[contig] = np.array(
-                self.rmLessThan(
-                    self.fillGap(
-                        np.where(self.annResults[contig] < self.score, 0, 1),
-                        _params["fill"],
-                    ),
-                    _params["rmless"],
+            for contig, mat in chunk:
+                xva_, vaIx = self.transformMat(mat)
+                vaS = (xva_.shape[0] // _params["shape"]) * _params["shape"]
+                xva1 = xva_[:vaS].reshape(vaS // _params["shape"], _params["shape"])
+                xva = np.append(
+                    xva1,
+                    [list(xva_[vaS:]) + [0] * (_params["shape"] - (vaIx.shape[0] - vaS))],
+                    axis=0,
                 )
-            )
-            self.borderClst[contig] = np.where(
-                self.annResults[contig] < _params["thBorder"], 0, 1
-            )
-            self.typesClst[contig] = np.empty(
-                len(self.annResults[contig]), dtype=object
-            )
+                contig_metas.append((contig, mat, vaIx, vaS, xva.shape[0]))
+                xva_chunks.append(xva)
 
-            # --- Type classification ---
-            locations, matrix = [], []
-            for k, grp in groupby(
-                enumerate(self.looseClst[contig]), key=lambda x: x[1]
-            ):
-                if k == 0:
-                    continue
-                gg = list(list(zip(*grp))[0])
-                tmat_ = np.sum(mat[gg], axis=0)
-                matrix.append(np.where(tmat_ > 0, 1, 0))
-                locations.append(gg)
+            if not xva_chunks:
+                return
 
-            if matrix:
-                pred = np.empty((len(matrix), len(claa)))
-                for nc, cla in enumerate(claa):
-                    pred[:, nc] = self.typeModel[cla].predict_proba(matrix)[:, 1]
+            xva_batch = np.concatenate(xva_chunks, axis=0)
+            # xva_batch is a contiguous copy of all per-contig arrays; drop the
+            # originals now so we don't hold both in memory during model.predict.
+            del xva_chunks
+            predict_batch = model.predict(xva_batch, verbose=0, batch_size=batch_size)
+            # predict_batch has the same shape as xva_batch; release the input
+            # before the per-contig unpacking loop adds further allocations.
+            del xva_batch
 
-                for ix, p in enumerate(pred):
-                    gg = locations[ix]
-                    if not (np.max(p) >= type_score):
-                        self.looseClst[contig][gg] = 0
-                        self.borderClst[contig][gg] = 0
-                    else:
-                        nearest_ = self.near_classifer(
-                            set(np.where(matrix[ix] == 1)[0])
-                        )
-                        nearest = "nearest_MiBIG={};nearest_MiBIG_class={};nearest_MiBIG_diceDistance={:.3f};score={:.3f}".format(
-                            nearest_[0], nearest_[1], nearest_[2], np.max(p)
-                        )
-                        self.typesClst[contig][gg] = nearest
+            offset = 0
+            for contig, mat, vaIx, vaS, n_windows in contig_metas:
+                predict_ = predict_batch[offset : offset + n_windows]
+                offset += n_windows
+
+                predict = predict_.reshape(vaS + _params["shape"])
+                predict_str_, nix = self.partialReStrMat(vaIx, predict, func=colapseFunc)
+                self.annResults[contig] = self.projectRes(predict_str_, nix, mat.shape[0])
+
+                # --- Cluster definition ---
+                self.looseClst[contig] = np.array(
+                    self.rmLessThan(
+                        self.fillGap(
+                            np.where(self.annResults[contig] < self.score, 0, 1),
+                            _params["fill"],
+                        ),
+                        _params["rmless"],
+                    )
+                )
+                self.borderClst[contig] = np.where(
+                    self.annResults[contig] < _params["thBorder"], 0, 1
+                )
+                self.typesClst[contig] = np.empty(
+                    len(self.annResults[contig]), dtype=object
+                )
+
+                # --- Type classification ---
+                locations, matrix = [], []
+                for k, grp in groupby(
+                    enumerate(self.looseClst[contig]), key=lambda x: x[1]
+                ):
+                    if k == 0:
+                        continue
+                    gg = list(list(zip(*grp))[0])
+                    tmat_ = np.sum(mat[gg], axis=0)
+                    matrix.append(np.where(tmat_ > 0, 1, 0))
+                    locations.append(gg)
+
+                if matrix:
+                    pred = np.empty((len(matrix), len(claa)))
+                    for nc, cla in enumerate(claa):
+                        pred[:, nc] = self.typeModel[cla].predict_proba(matrix)[:, 1]
+
+                    for ix, p in enumerate(pred):
+                        gg = locations[ix]
+                        if not (np.max(p) >= type_score):
+                            self.looseClst[contig][gg] = 0
+                            self.borderClst[contig][gg] = 0
+                        else:
+                            nearest_ = self.near_classifer(
+                                set(np.where(matrix[ix] == 1)[0])
+                            )
+                            nearest = "nearest_MiBIG={};nearest_MiBIG_class={};nearest_MiBIG_diceDistance={:.3f};score={:.3f}".format(
+                                nearest_[0], nearest_[1], nearest_[2], np.max(p)
+                            )
+                            self.typesClst[contig][gg] = nearest
+
+        it = self._iter_matrices()
+        if contig_chunk_size is None:
+            _process_chunk(list(it))
+        else:
+            while True:
+                chunk = list(islice(it, contig_chunk_size))
+                if not chunk:
+                    break
+                _process_chunk(chunk)
 
     def transformMat(self, mat):
 

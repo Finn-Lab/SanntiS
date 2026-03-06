@@ -133,6 +133,22 @@ def main(args=None):
         help="Cpus for INTERPROSCAN and HMMSCAN",
         metavar="INT",
     )
+    parser.add_argument(
+        "--contig-chunk-size",
+        dest="contig_chunk_size",
+        default=None,
+        type=int,
+        help="Number of contigs to batch per TF prediction call. Lower values reduce peak memory. Default: all contigs in one batch.",
+        metavar="INT",
+    )
+    parser.add_argument(
+        "--batch-size",
+        dest="batch_size",
+        default=32,
+        type=int,
+        help="Mini-batch size passed to model.predict. Larger values are faster but use more memory [default 32]",
+        metavar="INT",
+    )
 
     args = parser.parse_args(args)
 
@@ -188,7 +204,12 @@ def main(args=None):
     
     log.info("predict bgc regions, define clusters and classify types")
     log.info(f"score: {args.score} greed: {args.greed}")
-    annotate.predictAndClassify(score=args.score, g=args.greed)
+    annotate.predictAndClassify(
+        score=args.score,
+        g=args.greed,
+        contig_chunk_size=args.contig_chunk_size,
+        batch_size=args.batch_size,
+    )
 
     log.info("write output file file")
     outp = Outputs(
