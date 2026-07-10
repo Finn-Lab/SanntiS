@@ -26,6 +26,7 @@ import tensorflow as tf
 from joblib import load
 
 from sanntis import __version__, _params
+from sanntis.io_utils import open_flat_file
 
 log = logging.getLogger(f"SanntiS.{__name__}")
 
@@ -54,7 +55,7 @@ class AnnotationFilesToEmerald:
         if not os.path.isfile(ipsFile):
             log.exception(f"{ipsFile} file not found")
 
-        with open(ipsFile, "r") as h:
+        with open_flat_file(ipsFile, "rt") as h:
 
             lines = h.readlines()
             fmt = "gff" if lines[0][:5] == "##gff" else "tsv"
@@ -84,7 +85,7 @@ class AnnotationFilesToEmerald:
         if not os.path.isfile(hmmFile):
             log.exception(f"{hmmFile} file not found")
 
-        with open(hmmFile, "r") as h:
+        with open_flat_file(hmmFile, "rt") as h:
 
             for l in h:
 
@@ -106,7 +107,10 @@ class AnnotationFilesToEmerald:
                 r"(\w+);rbs_motif=(.+);rbs_spacer=(\S+);gc_cont=(\d+\.\d+)"
             )
             
-            for record in SeqIO.parse(open(cdsPredFile, "r"), file_format):
+            with open_flat_file(cdsPredFile, "rt") as h:
+                records = list(SeqIO.parse(h, file_format))
+
+            for record in records:
                 header = record.description
                 prodigal_match = _prodigal_pattern.search(header)
                 if not prodigal_match:
@@ -124,7 +128,10 @@ class AnnotationFilesToEmerald:
 
         elif file_format == "genbank":
             
-            for record in SeqIO.parse(open(cdsPredFile, "r"), file_format):
+            with open_flat_file(cdsPredFile, "rt") as h:
+                records = list(SeqIO.parse(h, file_format))
+
+            for record in records:
                 for f in record.features:
                     if f.type == "CDS":
                         start, end = int(f.location.start) + 1, int(f.location.end)
