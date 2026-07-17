@@ -4,7 +4,14 @@
     - path: "BGC0001472.fna.prodigal.faa.sanntis/BGC0001472.fna.prodigal.faa.sanntis.full.gff"
       contains:
         - "CLUSTER"
-        
+
+- name: sanntis_with_gzipped_preprocessed_files
+  command: sanntis --is_protein --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3.gz test/files/BGC0001472.fna.prodigal.faa.gz
+  files:
+    - path: "BGC0001472.fna.prodigal.faa.gz.sanntis/BGC0001472.fna.prodigal.faa.gz.sanntis.full.gff"
+      contains:
+        - "CLUSTER"
+
 - name: sanntis_full_dependencies
   command: sanntis test/files/BGC0001472.fna
   files:

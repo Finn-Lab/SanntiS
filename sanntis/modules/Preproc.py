@@ -18,7 +18,7 @@ import subprocess
 from Bio import SeqIO
 
 from sanntis import _params
-from sanntis.io_utils import open_flat_file
+from sanntis.io_utils import materialize_uncompressed, open_flat_file
 log = logging.getLogger(f"SanntiS.{__name__}")
 
 from distutils.spawn import find_executable
@@ -133,6 +133,8 @@ class Preprocess:
 
     def process_sequence(self):
         """ CDS prediction on sequence file"""
+
+        self.seq_file = materialize_uncompressed(self.seq_file, self.outdir)
 
         self.check_fmt()
         

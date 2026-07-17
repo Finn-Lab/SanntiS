@@ -61,7 +61,7 @@ sanntis --is_protein --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/
 conda deactivate sanntis
 ```
 
-Input sequence and annotation flat files read by SanntiS can be provided as plain text or gzip-compressed files with a `.gz` suffix. When SanntiS needs to run Prodigal on nucleotide FASTA input, provide the FASTA file uncompressed because Prodigal is called directly with that file path.
+Any input file may be provided as plain text or gzip-compressed with a `.gz` suffix. Files parsed directly by SanntiS (`--ip-file`, HMM output, preprocessed CDS files, GenBank input) are read through a transparent gzip-aware opener. Sequence files handed to external tools (Prodigal, hmmscan, InterProScan) are decompressed into the output directory before the tools are invoked.
 
 ###  Docker:
 

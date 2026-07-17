@@ -22,7 +22,10 @@ jobs:
           conda install -y -c bioconda sanntis 
           pip install pytest-workflow
  
-      - name: Run pytest-workflow with preprocessed files 
-        shell: bash -l {0} 
-        run: | 
+      - name: Run pytest-workflow with preprocessed files
+        shell: bash -l {0}
+        env:
+          PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION: python
+        run: |
           pytest --tag sanntis_with_preprocessed_files
+          pytest --tag sanntis_with_gzipped_preprocessed_files
