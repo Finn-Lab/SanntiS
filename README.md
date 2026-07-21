@@ -61,6 +61,8 @@ sanntis --is_protein --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/
 conda deactivate sanntis
 ```
 
+Any input file may be provided as plain text or gzip-compressed with a `.gz` suffix. Files parsed directly by SanntiS (`--ip-file`, HMM output, preprocessed CDS files, GenBank input) are read through a transparent gzip-aware opener. Sequence files handed to external tools (Prodigal, hmmscan, InterProScan) are decompressed into the output directory before the tools are invoked.
+
 ###  Docker:
 
 #### Get InterProsScan data:

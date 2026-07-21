@@ -16,13 +16,15 @@ jobs:
           python-version: 3.9   
           auto-activate-base: false 
  
-      - name: Install dependencies 
-        shell: bash -l {0}   
-        run: | 
-          conda install -y -c bioconda sanntis 
-          pip install pytest-workflow
- 
-      - name: Run pytest-workflow with preprocessed files 
-        shell: bash -l {0} 
-        run: | 
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          conda install -y -c bioconda sanntis
+          pip install "protobuf<3.21" pytest-workflow
+          pip install --no-deps --force-reinstall .
+
+      - name: Run pytest-workflow with preprocessed files
+        shell: bash -l {0}
+        run: |
           pytest --tag sanntis_with_preprocessed_files
+          pytest --tag sanntis_with_gzipped_preprocessed_files

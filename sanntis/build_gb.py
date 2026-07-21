@@ -19,6 +19,9 @@ import glob
 import os
 from Bio import SeqIO
 
+from sanntis.io_utils import open_flat_file
+
+
 def main(args=None):
 
     parser = argparse.ArgumentParser(description="build_gb. Tool to build genbank format files ")
@@ -52,8 +55,10 @@ def main(args=None):
     
     args = parser.parse_args(args)
 
-    fna = {rec.id:rec.seq for rec in SeqIO.parse(open(args.nuc_f),'fasta')}
-    faa = list(SeqIO.parse(open(args.pro_f),'fasta'))
+    with open_flat_file(args.nuc_f, "rt") as h:
+        fna = {rec.id:rec.seq for rec in SeqIO.parse(h,'fasta')}
+    with open_flat_file(args.pro_f, "rt") as h:
+        faa = list(SeqIO.parse(h,'fasta'))
 
     feats = {}
 
