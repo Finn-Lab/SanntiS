@@ -139,6 +139,11 @@ class AnnotationFilesToEmerald:
 
                         self.contigsDct.setdefault(record.id, []).append( (protein_id,(start, end)))
 
+        # Downstream code treats list index as gene position on the contig,
+        # so CDS must be in genomic order regardless of input file order
+        for contig in self.contigsDct:
+            self.contigsDct[contig].sort(key=lambda cds: cds[1])
+
     def buildMatrices(self):
 
         for contig in self.contigsDct:
