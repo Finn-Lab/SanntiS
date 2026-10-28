@@ -61,6 +61,8 @@ sanntis --is_protein --ip-file test/files/BGC0001472.fna.prodigal.faa.gff3 test/
 conda deactivate sanntis
 ```
 
+The proteins do not need to be in genomic order: since v0.9.5.1, CDSs are sorted by the start/end coordinates in their Prodigal headers before prediction. Earlier versions used the FASTA file order, so a protein FASTA not sorted by position (e.g. sorted by length) could give wrong CLUSTERs, including ones with start > end. Proteins whose headers do not follow the Prodigal format are skipped with a warning.
+
 Any input file may be provided as plain text or gzip-compressed with a `.gz` suffix. Files parsed directly by SanntiS (`--ip-file`, HMM output, preprocessed CDS files, GenBank input) are read through a transparent gzip-aware opener. Sequence files handed to external tools (Prodigal, hmmscan, InterProScan) are decompressed into the output directory before the tools are invoked.
 
 ###  Docker:
