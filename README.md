@@ -31,10 +31,10 @@ SanntiS runs in one of two modes:
 
 #### Conda
 
-```bash
 > [!WARNING]
 > The Bioconda package is currently out of date and installs **v0.9.x**, which predates the latest major release.
 > To get the current version, see **pip** below. This section will be updated once the new release is available on Bioconda.
+```bash
 # conda create -n sanntis -c conda-forge -c bioconda sanntis
 # conda activate sanntis
 ```
