@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: If you use SanntiS, please cite the publication below.
+title: SanntiS
+abstract: SMBGC Annotation using Neural Networks Trained on Interpro Signatures
+type: software
+license: Apache-2.0
+repository-code: https://github.com/Finn-Lab/SanntiS
+authors:
+  - family-names: Sanchez
+    given-names: Santiago
+preferred-citation:
+  type: article
+  title: Expansion of novel biosynthetic gene clusters from diverse environments using SanntiS
+  authors:
+    - family-names: Sanchez
+      given-names: Santiago
+    - family-names: Rogers
+      given-names: Joel D.
+    - family-names: Rogers
+      given-names: Alexander B.
+    - family-names: Nassar
+      given-names: Maaly
+    - family-names: McEntyre
+      given-names: Johanna
+    - family-names: Welch
+      given-names: Martin
+    - family-names: Hollfelder
+      given-names: Florian
+    - family-names: Finn
+      given-names: Robert D.
+  journal: bioRxiv
+  year: 2023
+  doi: 10.1101/2023.05.23.540769

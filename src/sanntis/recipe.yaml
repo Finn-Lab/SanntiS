@@ -1,0 +1,122 @@
+# SanntiS 1.0 frozen recipe. Values tuned per run (epoch count, t*,
+# NPC thresholds) are written to the bundle's config.json, not here.
+schema_version: 1
+
+ips:
+  pipeline: ebi-pf-team/interproscan6
+  version: 6.0.3.0
+  interpro: "107.0"
+  # The 14 member databases. `canonical` is the normalised name used everywhere in sanntis;
+  # `ips6` is the --applications name; `ips5` the analysis name in IPS 5.x TSVs.
+  apps:
+    - {canonical: pfam, ips6: Pfam, ips5: Pfam}
+    - {canonical: ncbifam, ips6: NCBIFAM, ips5: NCBIfam}
+    - {canonical: sfld, ips6: SFLD, ips5: SFLD}
+    - {canonical: superfamily, ips6: SUPERFAMILY, ips5: SUPERFAMILY}
+    - {canonical: gene3d, ips6: CATH-Gene3D, ips5: Gene3D}
+    - {canonical: hamap, ips6: HAMAP, ips5: Hamap}
+    - {canonical: coils, ips6: COILS, ips5: Coils}
+    - {canonical: cdd, ips6: CDD, ips5: CDD}
+    - {canonical: prints, ips6: PRINTS, ips5: PRINTS}
+    - {canonical: pirsf, ips6: PIRSF, ips5: PIRSF}
+    - {canonical: prositeprofiles, ips6: PROSITE profiles, ips5: ProSiteProfiles}
+    - {canonical: prositepatterns, ips6: PROSITE patterns, ips5: ProSitePatterns}
+    - {canonical: mobidblite, ips6: MobiDB-lite, ips5: MobiDBLite}
+    - {canonical: smart, ips6: SMART, ips5: SMART}
+  # Apps whose total absence from a TSV with >= min_proteins proteins stops `predict`.
+  required_apps: [pfam, gene3d, superfamily]
+  required_apps_min_proteins: 100
+
+features:
+  gene_sep: true
+  dedup_contiguous: true
+  unk_policy: unk
+  vocab_min_df: 2
+  vocab_top_k: 5000
+  vocab_top_k_per_class: 1250
+
+detector:
+  embed_dim: 64
+  embed_dropout: 0.1
+  conv_filters: 128
+  conv_kernel: 4
+  rnn_units: 32
+  n_layers: 2
+  dropout: 0.2
+  window: 200
+
+train:
+  loss: {gamma: 2.0, alpha: 0.25}
+  optimizer: {lr: 0.001, weight_decay: 0.0, grad_clip: 1.0}
+  scheduler: {factor: 0.1, patience: 5}
+  # Early stopping / LR plateau read the validation ORF AUCPR computed with max token aggregation and neighbour
+  # fill (the training-time convention); every reported metric uses the shipped decode (mean / zero).
+  early_stopping: {patience: 8, max_epochs: 60, orf_agg: max, orf_fill: neighbors}
+  batch_size: 64
+  token_dropout: 0.1
+  seeds: [0, 1, 2]
+  amp: true
+
+compose:
+  duplicate_positives: 3
+  seed: 0
+  chunks_per_positive: 3
+  chunk_len_clip: [3, 200]
+  background_min_cds: 5
+
+dedup:
+  dice_threshold: 0.974
+  max_locus_bp: 200000
+
+splits:
+  n_splits: 5
+  val_fraction: 0.2
+
+decode:
+  agg: mean
+  fill: zero
+  threshold: 0.5          # default only; the bundle's config.json carries the tuned t*
+  hysteresis_gap: 0.15
+  merge_gap: 3
+  min_orfs: 1
+
+operating_point:
+  grid: [0.10, 0.95, 0.05]
+  # t* = highest F2_macro on pooled OOF validation among thresholds with floor_metric >= floor (ties → higher t).
+  # Precision floor of the operating point: BGC precision >= 0.80.
+  floor_metric: bgc_precision
+  floor: 0.80
+  # BGC-level metrics are blind to region size: at very low t whole contigs merge into a few regions that all hit a
+  # BGC (BGC precision = macro recall = 1). Thresholds with fewer regions than min_pred_ratio x true BGCs are excluded.
+  min_pred_ratio: 0.5
+
+postfilter:
+  n_estimators: 100
+  drop_threshold: 0.8
+  random_state: 0
+  classes: [NRPS, PKS, ribosomal, terpene, saccharide, other]
+
+npc:
+  min_support: 10
+  precision_targets: [0.8, 0.9]
+  default_precision: 0.9
+  min_df: 2  # token vocabulary shared by the RF and LR members
+  rf: {n_estimators: 500}
+  lr: {C: 10.0}
+  knn: {k: 5, min_df: 1}
+  # Pathway key-domain support flag: per pathway, tokens / token pairs specific to it (one-vs-rest against the
+  # other labelled BGCs; 95 % Wilson lower bound of the precision >= tau, seen in >= min_support BGCs of the
+  # pathway; a pair only when it beats both its tokens), trimmed to a greedy set-cover short list. Pathways whose
+  # out-of-fold rule coverage in CV is below min_coverage are gated (na). Setting chosen in a nested-selection
+  # CV experiment during development.
+  key_domains:
+    tau: 0.35
+    min_support: 3
+    min_coverage: 0.5
+    # candidate tokens: InterPro entries of these types only (no homologous superfamilies, unintegrated
+    # signatures or MobiDB), so the rules name recognisable domains
+    entry_types: [Family, Domain, Repeat, Conserved_site, Active_site, Binding_site, PTM]
+    # a rule must be in <= this share of the non-BGC background entities (drops genome-wide tokens)
+    background_max: 0.02
+  # A class / NPC head is disabled when fewer labelled BGCs are available.
+  min_labelled: 50

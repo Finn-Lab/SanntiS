@@ -1,0 +1,772 @@
+np_term_id	level	name	is_target_level	n_parents	native_index
+NPC:pathway:alkaloids	pathway	Alkaloids	false	0	0
+NPC:pathway:amino_acids_and_peptides	pathway	Amino acids and Peptides	false	0	1
+NPC:pathway:carbohydrates	pathway	Carbohydrates	false	0	2
+NPC:pathway:fatty_acids	pathway	Fatty acids	false	0	3
+NPC:pathway:polyketides	pathway	Polyketides	false	0	4
+NPC:pathway:shikimates_and_phenylpropanoids	pathway	Shikimates and Phenylpropanoids	false	0	5
+NPC:pathway:terpenoids	pathway	Terpenoids	false	0	6
+NPC:superclass:alkylresorcinols	superclass	Alkylresorcinols	true	1	0
+NPC:superclass:amino_acid_glycosides	superclass	Amino acid glycosides	true	1	1
+NPC:superclass:aminosugars_and_aminoglycosides	superclass	Aminosugars and aminoglycosides	true	1	2
+NPC:superclass:anthranilic_acid_alkaloids	superclass	Anthranilic acid alkaloids	true	1	3
+NPC:superclass:apocarotenoids	superclass	Apocarotenoids	true	1	4
+NPC:superclass:aromatic_polyketides	superclass	Aromatic polyketides	true	1	5
+NPC:superclass:carotenoids_c40	superclass	Carotenoids (C40)	true	1	6
+NPC:superclass:carotenoids_c45	superclass	Carotenoids (C45)	true	1	7
+NPC:superclass:carotenoids_c50	superclass	Carotenoids (C50)	true	1	8
+NPC:superclass:chromanes	superclass	Chromanes	true	1	9
+NPC:superclass:coumarins	superclass	Coumarins	true	1	10
+NPC:superclass:cyclic_polyketides	superclass	Cyclic polyketides	true	2	11
+NPC:superclass:diarylheptanoids	superclass	Diarylheptanoids	true	1	12
+NPC:superclass:diazotetronic_acids_and_derivatives	superclass	Diazotetronic acids and derivatives	true	1	13
+NPC:superclass:diphenyl_ethers_dpes	superclass	Diphenyl ethers (DPEs)	true	2	14
+NPC:superclass:diterpenoids	superclass	Diterpenoids	true	1	15
+NPC:superclass:docosanoids	superclass	Docosanoids	true	1	16
+NPC:superclass:eicosanoids	superclass	Eicosanoids	true	1	17
+NPC:superclass:fatty_acids_and_conjugates	superclass	Fatty Acids and Conjugates	true	1	18
+NPC:superclass:fatty_acyl_glycosides	superclass	Fatty acyl glycosides	true	1	19
+NPC:superclass:fatty_acyls	superclass	Fatty acyls	true	1	20
+NPC:superclass:fatty_amides	superclass	Fatty amides	true	1	21
+NPC:superclass:fatty_esters	superclass	Fatty esters	true	1	22
+NPC:superclass:flavonoids	superclass	Flavonoids	true	1	23
+NPC:superclass:fluorenes	superclass	Fluorenes	true	1	24
+NPC:superclass:glycerolipids	superclass	Glycerolipids	true	1	25
+NPC:superclass:glycerophospholipids	superclass	Glycerophospholipids	true	1	26
+NPC:superclass:guanidine_alkaloids	superclass	Guanidine alkaloids	true	1	27
+NPC:superclass:histidine_alkaloids	superclass	Histidine alkaloids	true	1	28
+NPC:superclass:isoflavonoids	superclass	Isoflavonoids	true	1	29
+NPC:superclass:lignans	superclass	Lignans	true	1	30
+NPC:superclass:linear_polyketides	superclass	Linear polyketides	true	2	31
+NPC:superclass:lysine_alkaloids	superclass	Lysine alkaloids	true	1	32
+NPC:superclass:macrolides	superclass	Macrolides	true	2	33
+NPC:superclass:meroterpenoids	superclass	Meroterpenoids	true	2	34
+NPC:superclass:miscellaneous_alkaloids	superclass	Miscellaneous alkaloids	true	1	35
+NPC:superclass:miscellaneous_polyketides	superclass	Miscellaneous polyketides	true	1	36
+NPC:superclass:mitomycin_derivatives	superclass	Mitomycin derivatives	true	1	37
+NPC:superclass:monoterpenoids	superclass	Monoterpenoids	true	1	38
+NPC:superclass:mycosporine_derivatives	superclass	Mycosporine derivatives	true	2	39
+NPC:superclass:naphthalenes	superclass	Naphthalenes	true	1	40
+NPC:superclass:nicotinic_acid_alkaloids	superclass	Nicotinic acid alkaloids	true	1	41
+NPC:superclass:nucleosides	superclass	Nucleosides	true	1	42
+NPC:superclass:octadecanoids	superclass	Octadecanoids	true	1	43
+NPC:superclass:oligopeptides	superclass	Oligopeptides	true	2	44
+NPC:superclass:ornithine_alkaloids	superclass	Ornithine alkaloids	true	1	45
+NPC:superclass:peptide_alkaloids	superclass	Peptide alkaloids	true	2	46
+NPC:superclass:phenanthrenoids	superclass	Phenanthrenoids	true	1	47
+NPC:superclass:phenolic_acids_c6_c1	superclass	Phenolic acids (C6-C1)	true	1	48
+NPC:superclass:phenylethanoids_c6_c2	superclass	Phenylethanoids (C6-C2)	true	1	49
+NPC:superclass:phenylpropanoids_c6_c3	superclass	Phenylpropanoids (C6-C3)	true	2	50
+NPC:superclass:phloroglucinols	superclass	Phloroglucinols	true	2	51
+NPC:superclass:polycyclic_aromatic_polyketides	superclass	Polycyclic aromatic polyketides	true	1	52
+NPC:superclass:polyethers	superclass	Polyethers	true	2	53
+NPC:superclass:polyols	superclass	Polyols	true	1	54
+NPC:superclass:polyprenols	superclass	Polyprenols	true	1	55
+NPC:superclass:proline_alkaloids	superclass	Proline alkaloids	true	1	56
+NPC:superclass:pseudoalkaloids	superclass	Pseudoalkaloids	true	2	57
+NPC:superclass:pseudoalkaloids_transamidation	superclass	Pseudoalkaloids (transamidation)	true	0	58
+NPC:superclass:saccharides	superclass	Saccharides	true	1	59
+NPC:superclass:serine_alkaloids	superclass	Serine alkaloids	true	1	60
+NPC:superclass:sesquiterpenoids	superclass	Sesquiterpenoids	true	1	61
+NPC:superclass:sesterterpenoids	superclass	Sesterterpenoids	true	1	62
+NPC:superclass:small_peptides	superclass	Small peptides	true	2	63
+NPC:superclass:sphingolipids	superclass	Sphingolipids	true	1	64
+NPC:superclass:steroids	superclass	Steroids	true	1	65
+NPC:superclass:stilbenoids	superclass	Stilbenoids	true	1	66
+NPC:superclass:styrylpyrones	superclass	Styrylpyrones	true	1	67
+NPC:superclass:terphenyls	superclass	Terphenyls	true	1	68
+NPC:superclass:tetramate_alkaloids	superclass	Tetramate alkaloids	true	2	69
+NPC:superclass:triterpenoids	superclass	Triterpenoids	true	1	70
+NPC:superclass:tropolones	superclass	Tropolones	true	2	71
+NPC:superclass:tryptophan_alkaloids	superclass	Tryptophan alkaloids	true	2	72
+NPC:superclass:tyrosine_alkaloids	superclass	Tyrosine alkaloids	true	1	73
+NPC:superclass:xanthones	superclass	Xanthones	true	2	74
+NPC:superclass:beta_lactams	superclass	β-lactams	true	1	75
+NPC:superclass:gamma_lactam_beta_lactones	superclass	γ-lactam-β-lactones	true	1	76
+NPC:class:12_oxophytodienoic_acid_metabolites	class	12-oxophytodienoic acid metabolites	false	1	0
+NPC:class:2_arylbenzofurans	class	2-arylbenzofurans	false	1	1
+NPC:class:2_pyrone_derivatives	class	2-pyrone derivatives	false	1	2
+NPC:class:3_decalinoyltetramic_acids	class	3-Decalinoyltetramic acids	false	1	3
+NPC:class:3_spirotetramic_acids	class	3-Spirotetramic acids	false	1	4
+NPC:class:3_acyl_tetramic_acids	class	3-acyl tetramic acids	false	1	5
+NPC:class:3_oligoenoyltetramic_acids	class	3-oligoenoyltetramic acids	false	1	6
+NPC:class:4_pyrone_derivatives	class	4-pyrone derivatives	false	1	7
+NPC:class:abeoabietane_diterpenoids	class	Abeoabietane diterpenoids	false	1	8
+NPC:class:abeolupane_triterpenoids	class	Abeolupane triterpenoids	false	1	9
+NPC:class:abeotaxane_diterpenoids	class	Abeotaxane diterpenoids	false	1	10
+NPC:class:abietane_diterpenoids	class	Abietane diterpenoids	false	1	11
+NPC:class:acetate_derived_alkaloids	class	Acetate-derived alkaloids	false	1	12
+NPC:class:acetogenins	class	Acetogenins	false	1	13
+NPC:class:acidic_glycosphingolipids	class	Acidic glycosphingolipids	false	1	14
+NPC:class:acorane_sesquiterpenoids	class	Acorane sesquiterpenoids	false	1	15
+NPC:class:acridone_alkaloids	class	Acridone alkaloids	false	1	16
+NPC:class:actinomycins	class	Actinomycins	false	1	17
+NPC:class:acutumine_alkaloids	class	Acutumine alkaloids	false	1	18
+NPC:class:acyclic_guanidine_alkaloids	class	Acyclic guanidine alkaloids	false	1	19
+NPC:class:acyclic_monoterpenoids	class	Acyclic monoterpenoids	false	1	20
+NPC:class:acyclic_triterpenoids	class	Acyclic triterpenoids	false	1	21
+NPC:class:acyl_phloroglucinols	class	Acyl phloroglucinols	false	1	22
+NPC:class:adianane_triterpenoids	class	Adianane triterpenoids	false	1	23
+NPC:class:aeruginosins	class	Aeruginosins	false	1	24
+NPC:class:aflatoxins	class	Aflatoxins	false	1	25
+NPC:class:africanane_sesquiterpenoids	class	Africanane sesquiterpenoids	false	1	26
+NPC:class:agarofuran_sesquiterpenoids	class	Agarofuran sesquiterpenoids	false	1	27
+NPC:class:ahp_containing_cyclodepsipeptides	class	Ahp-containing cyclodepsipeptides	false	1	28
+NPC:class:alliacane_sesquiterpenoids	class	Alliacane sesquiterpenoids	false	1	29
+NPC:class:allohimachalane_sesquiterpenoids	class	Allohimachalane sesquiterpenoids	false	1	30
+NPC:class:amarylidaceae_alkaloids	class	Amarylidaceae alkaloids	false	1	31
+NPC:class:amino_cyclitols	class	Amino cyclitols	false	1	32
+NPC:class:amino_fatty_acids	class	Amino fatty acids	false	1	33
+NPC:class:aminoacids	class	Aminoacids	false	1	34
+NPC:class:aminoglycosides	class	Aminoglycosides	false	1	35
+NPC:class:aminosugars	class	Aminosugars	false	1	36
+NPC:class:amphilectane_diterpenoids	class	Amphilectane diterpenoids	false	1	37
+NPC:class:anabaenopeptins	class	Anabaenopeptins	false	1	38
+NPC:class:androstane_steroids	class	Androstane steroids	false	1	39
+NPC:class:angucyclines	class	Angucyclines	false	1	40
+NPC:class:ansa_macrolides	class	Ansa macrolides	false	1	41
+NPC:class:ansa_peptide_alkaloids	class	Ansa peptide alkaloids	false	1	42
+NPC:class:anthocyanidins	class	Anthocyanidins	false	1	43
+NPC:class:anthracyclines	class	Anthracyclines	false	1	44
+NPC:class:anthranillic_acid_derivatives	class	Anthranillic acid derivatives	false	1	45
+NPC:class:anthraquinones_and_anthrones	class	Anthraquinones and anthrones	false	1	46
+NPC:class:antimycins	class	Antimycins	false	1	47
+NPC:class:aphidicolane_diterpenoids	class	Aphidicolane diterpenoids	false	1	48
+NPC:class:aplysiatoxins	class	Aplysiatoxins	false	1	49
+NPC:class:apocarotenoids_c30_psi_psi	class	Apocarotenoids (C30, Ψ-Ψ)	false	1	50
+NPC:class:apocarotenoids_psi	class	Apocarotenoids (Ψ-)	false	1	51
+NPC:class:apocarotenoids_beta	class	Apocarotenoids (β-)	false	1	52
+NPC:class:apocarotenoids_epsilon	class	Apocarotenoids(ε-)	false	1	53
+NPC:class:aporphine_alkaloids	class	Aporphine alkaloids	false	1	54
+NPC:class:apotirucallane_triterpenoids	class	Apotirucallane triterpenoids	false	1	55
+NPC:class:aristolane_sesquiterpenoids	class	Aristolane sesquiterpenoids	false	1	56
+NPC:class:aromadendrane_sesquiterpenoids	class	Aromadendrane sesquiterpenoids	false	1	57
+NPC:class:aromatic_polyketides_with_side_chains	class	Aromatic polyketides with side chains	false	1	58
+NPC:class:arteminisin	class	Arteminisin	false	1	59
+NPC:class:arylnaphthalene_and_aryltetralin_lignans	class	Arylnaphthalene and aryltetralin lignans	false	1	60
+NPC:class:asbestinane_diterpenoids	class	Asbestinane diterpenoids	false	1	61
+NPC:class:ascarosides	class	Ascarosides	false	1	62
+NPC:class:ascomycins_and_rapamycins	class	Ascomycins and Rapamycins	false	1	63
+NPC:class:asperane_sesterterpenoids	class	Asperane sesterterpenoids	false	1	64
+NPC:class:aspidosperma_type	class	Aspidosperma type	false	1	65
+NPC:class:aspidosperma_iboga_hybrid_type_vinca_alkaloids	class	Aspidosperma-Iboga hybrid type (Vinca alkaloids)	false	1	66
+NPC:class:asteriscane_sesquiterpenoids	class	Asteriscane sesquiterpenoids	false	1	67
+NPC:class:atisane_diterpenoids	class	Atisane diterpenoids	false	1	68
+NPC:class:aurones	class	Aurones	false	1	69
+NPC:class:avermectins	class	Avermectins	false	1	70
+NPC:class:azaphilones	class	Azaphilones	false	1	71
+NPC:class:azo_and_azoxy_alkaloids	class	Azo and Azoxy alkaloids	false	1	72
+NPC:class:baccharane_triterpenoids	class	Baccharane triterpenoids	false	1	73
+NPC:class:bactoprenols	class	Bactoprenols	false	1	74
+NPC:class:bafilomycins	class	Bafilomycins	false	1	75
+NPC:class:bagremycins	class	Bagremycins	false	1	76
+NPC:class:bauerane_triterpenoids	class	Bauerane triterpenoids	false	1	77
+NPC:class:benastatins_and_derivatives	class	Benastatins and derivatives	false	1	78
+NPC:class:benzodiazepine_alkaloids	class	Benzodiazepine alkaloids	false	1	79
+NPC:class:benzophenones	class	Benzophenones	false	1	80
+NPC:class:benzoquinones	class	Benzoquinones	false	1	81
+NPC:class:bergamotane_sesquiterpenoids	class	Bergamotane sesquiterpenoids	false	1	82
+NPC:class:betaestacin_type_sesterterpenoids	class	Betaestacin-type sesterterpenoids	false	1	83
+NPC:class:betalain_alkaloids	class	Betalain alkaloids	false	1	84
+NPC:class:beyerane_diterpenoids	class	Beyerane diterpenoids	false	1	85
+NPC:class:biaryl_type_diarylheptanoids	class	Biaryl type diarylheptanoids	false	1	86
+NPC:class:bicyclic_guanidine_alkaloids	class	Bicyclic guanidine alkaloids	false	1	87
+NPC:class:bicyclogermacrane_sesquiterpenoids	class	Bicyclogermacrane sesquiterpenoids	false	1	88
+NPC:class:bicyclohumulane_sesquiterpenoids	class	Bicyclohumulane sesquiterpenoids	false	1	89
+NPC:class:bisabolane_sesquiterpenoids	class	Bisabolane sesquiterpenoids	false	1	90
+NPC:class:bisnaphthalenes	class	Bisnaphthalenes	false	1	91
+NPC:class:bleomycins	class	Bleomycins	false	1	92
+NPC:class:boromycins	class	Boromycins	false	1	93
+NPC:class:botryane_sesquiterpenoids	class	Botryane sesquiterpenoids	false	1	94
+NPC:class:bourbonane_sesquiterpenoids	class	Bourbonane sesquiterpenoids	false	1	95
+NPC:class:branched_fatty_acids	class	Branched fatty acids	false	1	96
+NPC:class:brasilane_sesquiterpenoids	class	Brasilane sesquiterpenoids	false	1	97
+NPC:class:breviane_diterpenoids	class	Breviane diterpenoids	false	1	98
+NPC:class:briarane_diterpenoids	class	Briarane diterpenoids	false	1	99
+NPC:class:bryostatins	class	Bryostatins	false	1	100
+NPC:class:bufadienolides	class	Bufadienolides	false	1	101
+NPC:class:cdp_glycerols	class	CDP-Glycerols	false	1	102
+NPC:class:cadinane_sesquiterpenoids	class	Cadinane sesquiterpenoids	false	1	103
+NPC:class:camphane_monoterpenoids	class	Camphane monoterpenoids	false	1	104
+NPC:class:campherenane_sesquiterpenoids	class	Campherenane sesquiterpenoids	false	1	105
+NPC:class:cannabinoids	class	Cannabinoids	false	1	106
+NPC:class:capnellane_sesquiterpenoids	class	Capnellane sesquiterpenoids	false	1	107
+NPC:class:capsaicins_and_capsaicinoids	class	Capsaicins and Capsaicinoids	false	1	108
+NPC:class:carabrane_sesquiterpenoids	class	Carabrane sesquiterpenoids	false	1	109
+NPC:class:carane_monoterpenoids	class	Carane monoterpenoids	false	1	110
+NPC:class:carbapenems	class	Carbapenems	false	1	111
+NPC:class:carbazole_alkaloids	class	Carbazole alkaloids	false	1	112
+NPC:class:carbocyclic_fatty_acids	class	Carbocyclic fatty acids	false	1	113
+NPC:class:carboline_alkaloids	class	Carboline alkaloids	false	1	114
+NPC:class:cardenolides	class	Cardenolides	false	1	115
+NPC:class:carotenoids_c40_chi_chi	class	Carotenoids (C40, Χ-Χ)	false	1	116
+NPC:class:carotenoids_c40_chi_psi	class	Carotenoids (C40, Χ-Ψ)	false	1	117
+NPC:class:carotenoids_c40_psi_psi	class	Carotenoids (C40, Ψ-Ψ)	false	1	118
+NPC:class:carotenoids_c40_beta_chi	class	Carotenoids (C40, β-Χ)	false	1	119
+NPC:class:carotenoids_c40_beta_psi	class	Carotenoids (C40, β-Ψ)	false	1	120
+NPC:class:carotenoids_c40_beta_beta	class	Carotenoids (C40, β-β)	false	1	121
+NPC:class:carotenoids_c40_beta_gamma	class	Carotenoids (C40, β-γ)	false	1	122
+NPC:class:carotenoids_c40_beta_epsilon	class	Carotenoids (C40, β-ε)	false	1	123
+NPC:class:carotenoids_c40_beta_kappa	class	Carotenoids (C40, β-κ)	false	1	124
+NPC:class:carotenoids_c40_beta_pi	class	Carotenoids (C40, β-π)	false	1	125
+NPC:class:carotenoids_c40_gamma_psi	class	Carotenoids (C40, γ-Ψ)	false	1	126
+NPC:class:carotenoids_c40_gamma_epsilon	class	Carotenoids (C40, γ-ε)	false	1	127
+NPC:class:carotenoids_c40_epsilon_psi	class	Carotenoids (C40, ε-Ψ)	false	1	128
+NPC:class:carotenoids_c40_epsilon_epsilon	class	Carotenoids (C40, ε-ε)	false	1	129
+NPC:class:carotenoids_c40_kappa_chi	class	Carotenoids (C40, κ-Χ)	false	1	130
+NPC:class:carotenoids_c40_kappa_kappa	class	Carotenoids (C40, κ-κ)	false	1	131
+NPC:class:carotenoids_c40_pi_chi	class	Carotenoids (C40, π-Χ)	false	1	132
+NPC:class:carotenoids_c40_pi_psi	class	Carotenoids (C40, π-Ψ)	false	1	133
+NPC:class:carotenoids_c40_pi_pi	class	Carotenoids (C40, π-π)	false	1	134
+NPC:class:carotenoids_c45_psi_psi	class	Carotenoids (C45, Ψ-Ψ)	false	1	135
+NPC:class:carotenoids_c45_beta_psi	class	Carotenoids (C45, β-Ψ)	false	1	136
+NPC:class:carotenoids_c45_epsilon_psi	class	Carotenoids (C45, ε-Ψ)	false	1	137
+NPC:class:carotenoids_c50_psi_psi	class	Carotenoids (C50, Ψ-Ψ)	false	1	138
+NPC:class:carotenoids_c50_beta_psi	class	Carotenoids (C50, β-Ψ)	false	1	139
+NPC:class:carotenoids_c50_beta_beta	class	Carotenoids (C50, β-β)	false	1	140
+NPC:class:carotenoids_c50_gamma_gamma	class	Carotenoids (C50, γ-γ)	false	1	141
+NPC:class:carotenoids_c50_epsilon_epsilon	class	Carotenoids (C50, ε-ε)	false	1	142
+NPC:class:caryolane_sesquiterpenoids	class	Caryolane sesquiterpenoids	false	1	143
+NPC:class:caryophyllane_sesquiterpenoids	class	Caryophyllane sesquiterpenoids	false	1	144
+NPC:class:casbane_diterpenoids	class	Casbane diterpenoids	false	1	145
+NPC:class:cassane_diterpenoids	class	Cassane diterpenoids	false	1	146
+NPC:class:catechols_with_side_chains	class	Catechols with side chains	false	1	147
+NPC:class:cedrane_and_isocedrane_sesquiterpenoids	class	Cedrane and Isocedrane sesquiterpenoids	false	1	148
+NPC:class:cembrane_diterpenoids	class	Cembrane diterpenoids	false	1	149
+NPC:class:cephalosporins	class	Cephalosporins	false	1	150
+NPC:class:cephalotaxus_alkaloids	class	Cephalotaxus alkaloids	false	1	151
+NPC:class:cephamycins	class	Cephamycins	false	1	152
+NPC:class:ceramides	class	Ceramides	false	1	153
+NPC:class:cericerane_sesterterpenoids	class	Cericerane sesterterpenoids	false	1	154
+NPC:class:chalcones	class	Chalcones	false	1	155
+NPC:class:chamigrane_sesquiterpenoids	class	Chamigrane sesquiterpenoids	false	1	156
+NPC:class:cheilanthane_sesterterpenoids	class	Cheilanthane sesterterpenoids	false	1	157
+NPC:class:chiloscyphane_sesquiterpenoids	class	Chiloscyphane sesquiterpenoids	false	1	158
+NPC:class:cholane_steroids	class	Cholane steroids	false	1	159
+NPC:class:cholestane_steroids	class	Cholestane steroids	false	1	160
+NPC:class:chromones	class	Chromones	false	1	161
+NPC:class:cinnamic_acid_amides	class	Cinnamic acid amides	false	1	162
+NPC:class:cinnamic_acids_and_derivatives	class	Cinnamic acids and derivatives	false	1	163
+NPC:class:cinnamoyl_phenols	class	Cinnamoyl phenols	false	1	164
+NPC:class:clavams	class	Clavams	false	1	165
+NPC:class:clavulones	class	Clavulones	false	1	166
+NPC:class:cleistanthane_diterpenoids	class	Cleistanthane diterpenoids	false	1	167
+NPC:class:clovane_sesquiterpenoids	class	Clovane sesquiterpenoids	false	1	168
+NPC:class:colensane_and_clerodane_diterpenoids	class	Colensane and Clerodane diterpenoids	false	1	169
+NPC:class:coloratane_sesquiterpenoids	class	Coloratane sesquiterpenoids	false	1	170
+NPC:class:copaane_sesquiterpenoids	class	Copaane sesquiterpenoids	false	1	171
+NPC:class:copacamphane_sesquiterpenoids	class	Copacamphane sesquiterpenoids	false	1	172
+NPC:class:corynanthe_type	class	Corynanthe type	false	1	173
+NPC:class:coumarinolignans	class	Coumarinolignans	false	2	174
+NPC:class:coumaronochromones	class	Coumaronochromones	false	1	175
+NPC:class:coumestan	class	Coumestan	false	1	176
+NPC:class:cryptophycins	class	Cryptophycins	false	1	177
+NPC:class:cubebane_sesquiterpenoids	class	Cubebane sesquiterpenoids	false	1	178
+NPC:class:cucurbitane_triterpenoids	class	Cucurbitane triterpenoids	false	1	179
+NPC:class:cuparane_sesquiterpenoids	class	Cuparane sesquiterpenoids	false	1	180
+NPC:class:cyano_esters	class	Cyano esters	false	1	181
+NPC:class:cyanogenic_glycosides	class	Cyanogenic glycosides	false	1	182
+NPC:class:cyathane_diterpenoids	class	Cyathane diterpenoids	false	1	183
+NPC:class:cyclic_peptides	class	Cyclic peptides	false	1	184
+NPC:class:cyclitols	class	Cyclitols	false	1	185
+NPC:class:cycloabietane_diterpenoids	class	Cycloabietane diterpenoids	false	1	186
+NPC:class:cycloamphilectane_diterpenoids	class	Cycloamphilectane diterpenoids	false	1	187
+NPC:class:cycloapotirucallane_triterpenoids	class	Cycloapotirucallane triterpenoids	false	1	188
+NPC:class:cycloartane_triterpenoids	class	Cycloartane triterpenoids	false	1	189
+NPC:class:cyclobisabolane_sesquiterpenoids	class	Cyclobisabolane sesquiterpenoids	false	1	190
+NPC:class:cycloeudesmane_sesquiterpenoids	class	Cycloeudesmane sesquiterpenoids	false	1	191
+NPC:class:cyclofarnesane_sesquiterpenoids	class	Cyclofarnesane sesquiterpenoids	false	1	192
+NPC:class:cyclogermacrane_sesquiterpenoids	class	Cyclogermacrane sesquiterpenoids	false	1	193
+NPC:class:cyclolaurane_sesquiterpenoids	class	Cyclolaurane sesquiterpenoids	false	1	194
+NPC:class:cyclonerane_sesquiterpenoids	class	Cyclonerane sesquiterpenoids	false	1	195
+NPC:class:cyclophytane_diterpenoids	class	Cyclophytane diterpenoids	false	1	196
+NPC:class:cyclopiane_diterpenoids	class	Cyclopiane diterpenoids	false	1	197
+NPC:class:cyclopiazonic_acid_tpye_tetramate_alkaloids	class	Cyclopiazonic acid-tpye tetramate alkaloids	false	1	198
+NPC:class:cytochalasan_alkaloids	class	Cytochalasan alkaloids	false	1	199
+NPC:class:cytosporins	class	Cytosporins	false	1	200
+NPC:class:dkxanthenes_and_derivatives	class	DKXanthenes and derivatives	false	1	201
+NPC:class:dactylomelane_diterpenoids	class	Dactylomelane diterpenoids	false	1	202
+NPC:class:dammarane_and_protostane_triterpenoids	class	Dammarane and Protostane triterpenoids	false	1	203
+NPC:class:daphnane_diterpenoids	class	Daphnane diterpenoids	false	1	204
+NPC:class:daucane_sesquiterpenoids	class	Daucane sesquiterpenoids	false	1	205
+NPC:class:decalins_with_2_pyrones	class	Decalins with 2-pyrones	false	1	206
+NPC:class:decalins_with_side_chains	class	Decalins with side chains	false	1	207
+NPC:class:decipiane_diterpenoids	class	Decipiane diterpenoids	false	1	208
+NPC:class:depsides	class	Depsides	false	1	209
+NPC:class:depsidones	class	Depsidones	false	1	210
+NPC:class:depsipeptides	class	Depsipeptides	false	1	211
+NPC:class:devadarane_diterpenoids	class	Devadarane diterpenoids	false	1	212
+NPC:class:diacylglycerols	class	Diacylglycerols	false	1	213
+NPC:class:dialkylresorcinols	class	Dialkylresorcinols	false	1	214
+NPC:class:diarylether_type_diarylheptanoids	class	Diarylether type diarylheptanoids	false	1	215
+NPC:class:dibenzocyclooctadienes_lignans	class	Dibenzocyclooctadienes lignans	false	1	216
+NPC:class:dibenzylbutane_lignans	class	Dibenzylbutane lignans	false	1	217
+NPC:class:dibenzylbutyrolactone_lignans	class	Dibenzylbutyrolactone lignans	false	1	218
+NPC:class:dicarboxylic_acids	class	Dicarboxylic acids	false	1	219
+NPC:class:dihydroflavonols	class	Dihydroflavonols	false	1	220
+NPC:class:dimeric_phloroglucinols	class	Dimeric phloroglucinols	false	1	221
+NPC:class:dipeptides	class	Dipeptides	false	1	222
+NPC:class:disaccharides	class	Disaccharides	false	1	223
+NPC:class:docosa_1_2_dioxolanes	class	Docosa-1,2-dioxolanes	false	1	224
+NPC:class:dolabellane_diterpenoids	class	Dolabellane diterpenoids	false	1	225
+NPC:class:dolastane_diterpenoids	class	Dolastane diterpenoids	false	1	226
+NPC:class:dolichols	class	Dolichols	false	1	227
+NPC:class:drimane_sesquiterpenoids	class	Drimane sesquiterpenoids	false	1	228
+NPC:class:duclauxin_and_derivatives	class	Duclauxin and derivatives	false	1	229
+NPC:class:dunniane_sesquiterpenoids	class	Dunniane sesquiterpenoids	false	1	230
+NPC:class:ecdysteroids	class	Ecdysteroids	false	1	231
+NPC:class:eicosa_1_2_dioxolanes	class	Eicosa-1,2-dioxolanes	false	1	232
+NPC:class:elemane_sesquiterpenoids	class	Elemane sesquiterpenoids	false	1	233
+NPC:class:elfamycins	class	Elfamycins	false	1	234
+NPC:class:enediynes	class	Enediynes	false	1	235
+NPC:class:epothilones	class	Epothilones	false	1	236
+NPC:class:epoxy_fatty_acids	class	Epoxy fatty acids	false	1	237
+NPC:class:epoxyeicosatrienoic_acids	class	Epoxyeicosatrienoic acids	false	1	238
+NPC:class:eremane_diterpenoids	class	Eremane diterpenoids	false	1	239
+NPC:class:eremophilane_sesquiterpenoids	class	Eremophilane sesquiterpenoids	false	1	240
+NPC:class:ergostane_steroids	class	Ergostane steroids	false	1	241
+NPC:class:ergot_alkaloids	class	Ergot alkaloids	false	1	242
+NPC:class:ericamycins	class	Ericamycins	false	1	243
+NPC:class:erythromycins	class	Erythromycins	false	1	244
+NPC:class:erythroxylane_diterpenoids	class	Erythroxylane diterpenoids	false	1	245
+NPC:class:estrane_steroids	class	Estrane steroids	false	1	246
+NPC:class:eudesmane_sesquiterpenoids	class	Eudesmane sesquiterpenoids	false	1	247
+NPC:class:eunicellane_diterpenoids	class	Eunicellane diterpenoids	false	1	248
+NPC:class:farnesane_sesquiterpenoids	class	Farnesane sesquiterpenoids	false	1	249
+NPC:class:fasamycins_and_derivatives	class	Fasamycins and derivatives	false	1	250
+NPC:class:fatty_acid_estolides	class	Fatty acid estolides	false	1	251
+NPC:class:fatty_acyl_coas	class	Fatty acyl CoAs	false	1	252
+NPC:class:fatty_acyl_carnitines	class	Fatty acyl carnitines	false	1	253
+NPC:class:fatty_acyl_glycosides_of_mono_and_disaccharides	class	Fatty acyl glycosides of mono- and disaccharides	false	1	254
+NPC:class:fatty_acyl_homoserine_lactones	class	Fatty acyl homoserine lactones	false	1	255
+NPC:class:fatty_alcohols	class	Fatty alcohols	false	1	256
+NPC:class:fatty_aldehydes	class	Fatty aldehydes	false	1	257
+NPC:class:fatty_ethers	class	Fatty ethers	false	1	258
+NPC:class:fatty_nitriles	class	Fatty nitriles	false	1	259
+NPC:class:fenchane_monoterpenoids	class	Fenchane monoterpenoids	false	1	260
+NPC:class:fernane_and_arborinane_triterpenoids	class	Fernane and Arborinane triterpenoids	false	1	261
+NPC:class:filicane_triterpenoids	class	Filicane triterpenoids	false	1	262
+NPC:class:flavan_3_ols	class	Flavan-3-ols	false	1	263
+NPC:class:flavandiols_leucoanthocyanidins	class	Flavandiols (Leucoanthocyanidins)	false	1	264
+NPC:class:flavanones	class	Flavanones	false	1	265
+NPC:class:flavans	class	Flavans	false	1	266
+NPC:class:flavones	class	Flavones	false	1	267
+NPC:class:flavonolignans	class	Flavonolignans	false	2	268
+NPC:class:flavonols	class	Flavonols	false	1	269
+NPC:class:flavonostilbenes	class	Flavonostilbenes	false	2	270
+NPC:class:friedelane_triterpenoids	class	Friedelane triterpenoids	false	1	271
+NPC:class:fukinane_sesquiterpenoids	class	Fukinane sesquiterpenoids	false	1	272
+NPC:class:fungal_dpes	class	Fungal DPEs	false	1	273
+NPC:class:fungal_cyclic_polyketides_miscellaneous	class	Fungal cyclic polyketides (Miscellaneous)	false	1	274
+NPC:class:furanoabietane_diterpenoids	class	Furanoabietane diterpenoids	false	1	275
+NPC:class:furanoid_lignans	class	Furanoid lignans	false	1	276
+NPC:class:furans	class	Furans	false	1	277
+NPC:class:furocoumarins	class	Furocoumarins	false	1	278
+NPC:class:furofuranoid_lignans	class	Furofuranoid lignans	false	1	279
+NPC:class:furostane_steroids	class	Furostane steroids	false	1	280
+NPC:class:fusicoccane_diterpenoids	class	Fusicoccane diterpenoids	false	1	281
+NPC:class:fusidane_triterpenoids	class	Fusidane triterpenoids	false	1	282
+NPC:class:gallotannins	class	Gallotannins	false	1	283
+NPC:class:gammacerane_triterpenoids	class	Gammacerane triterpenoids	false	1	284
+NPC:class:germacrane_sesquiterpenoids	class	Germacrane sesquiterpenoids	false	1	285
+NPC:class:gersemiane_diterpenoids	class	Gersemiane diterpenoids	false	1	286
+NPC:class:gibberellins	class	Gibberellins	false	1	287
+NPC:class:glucosinolates	class	Glucosinolates	false	1	288
+NPC:class:glutinane_triterpenoids	class	Glutinane triterpenoids	false	1	289
+NPC:class:glycerophosphates	class	Glycerophosphates	false	1	290
+NPC:class:glycerophosphocholines	class	Glycerophosphocholines	false	1	291
+NPC:class:glycerophosphoethanolamines	class	Glycerophosphoethanolamines	false	1	292
+NPC:class:glycerophosphoglycerols	class	Glycerophosphoglycerols	false	1	293
+NPC:class:glycerophosphoglycerophosphates	class	Glycerophosphoglycerophosphates	false	1	294
+NPC:class:glycerophosphoglycerophosphoglycerols	class	Glycerophosphoglycerophosphoglycerols	false	1	295
+NPC:class:glycerophosphoinositol_phosphates	class	Glycerophosphoinositol phosphates	false	1	296
+NPC:class:glycerophosphoinositolglycans	class	Glycerophosphoinositolglycans	false	1	297
+NPC:class:glycerophosphoinositols	class	Glycerophosphoinositols	false	1	298
+NPC:class:glycerophosphoserines	class	Glycerophosphoserines	false	1	299
+NPC:class:glycosyldiacylglycerols	class	Glycosyldiacylglycerols	false	1	300
+NPC:class:glycosylglycerophospholipids	class	Glycosylglycerophospholipids	false	1	301
+NPC:class:glycosylmonoacylglycerols	class	Glycosylmonoacylglycerols	false	1	302
+NPC:class:gorgonane_sesquiterpenoids	class	Gorgonane sesquiterpenoids	false	1	303
+NPC:class:grayanotoxane_diterpenoids	class	Grayanotoxane diterpenoids	false	1	304
+NPC:class:griseofulvins	class	Griseofulvins	false	1	305
+NPC:class:guaiane_sesquiterpenoids	class	Guaiane sesquiterpenoids	false	1	306
+NPC:class:guanacastane_diterpenoids	class	Guanacastane diterpenoids	false	1	307
+NPC:class:gymnomitrane_sesquiterpenoids	class	Gymnomitrane sesquiterpenoids	false	1	308
+NPC:class:halimane_diterpenoids	class	Halimane diterpenoids	false	1	309
+NPC:class:halogenated_hydrocarbons	class	Halogenated hydrocarbons	false	1	310
+NPC:class:hamigerane_sesquiterpenoids	class	Hamigerane sesquiterpenoids	false	1	311
+NPC:class:hapalindole_alkaloids	class	Hapalindole alkaloids	false	1	312
+NPC:class:hasubanan_alkaloids	class	Hasubanan alkaloids	false	1	313
+NPC:class:hepoxilins	class	Hepoxilins	false	1	314
+NPC:class:herbertane_sesquiterpenoids	class	Herbertane sesquiterpenoids	false	1	315
+NPC:class:heterocyclic_fatty_acids	class	Heterocyclic fatty acids	false	1	316
+NPC:class:himachalane_sesquiterpenoids	class	Himachalane sesquiterpenoids	false	1	317
+NPC:class:hirsutane_sesquiterpenoids	class	Hirsutane sesquiterpenoids	false	1	318
+NPC:class:homoerythrina_alkaloids	class	Homoerythrina alkaloids	false	1	319
+NPC:class:homofarnesane_sesquiterpenoids	class	Homofarnesane sesquiterpenoids	false	1	320
+NPC:class:hopane_and_moretane_triterpenoids	class	Hopane and Moretane triterpenoids	false	1	321
+NPC:class:humbertiane_sesquiterpenoids	class	Humbertiane sesquiterpenoids	false	1	322
+NPC:class:humulane_sesquiterpenoids	class	Humulane sesquiterpenoids	false	1	323
+NPC:class:hydrocarbons	class	Hydrocarbons	false	1	324
+NPC:class:hydroperoxy_fatty_acids	class	Hydroperoxy fatty acids	false	1	325
+NPC:class:hydroxy_fatty_acids	class	Hydroxy fatty acids	false	1	326
+NPC:class:hydroxy_hydroperoxyeicosapentaenoic_acids	class	Hydroxy-hydroperoxyeicosapentaenoic acids	false	1	327
+NPC:class:hydroxy_hydroperoxyeicosatetraenoic_acids	class	Hydroxy-hydroperoxyeicosatetraenoic acids	false	1	328
+NPC:class:hydroxy_hydroperoxyeicosatrienoic_acids	class	Hydroxy-hydroperoxyeicosatrienoic acids	false	1	329
+NPC:class:iboga_type	class	Iboga type	false	1	330
+NPC:class:icetexane_diterpenoids	class	Icetexane diterpenoids	false	1	331
+NPC:class:illudalane_sesquiterpenoids	class	Illudalane sesquiterpenoids	false	1	332
+NPC:class:illudane_sesquiterpenoids	class	Illudane sesquiterpenoids	false	1	333
+NPC:class:imidazole_alkaloids	class	Imidazole alkaloids	false	1	334
+NPC:class:indole_diketopiperazine_alkaloids_l_trp_l_ala	class	Indole diketopiperazine alkaloids (L-Trp, L-Ala)	false	1	335
+NPC:class:indole_diketopiperazine_alkaloids_l_trp_l_pro	class	Indole diketopiperazine alkaloids (L-Trp, L-Pro)	false	1	336
+NPC:class:indole_diketopiperazine_alkaloids_l_trp_l_trp	class	Indole diketopiperazine alkaloids (L-Trp, L-Trp)	false	1	337
+NPC:class:indole_diterpenoid_alkaloids_penitrems	class	Indole-Diterpenoid alkaloids (Penitrems)	false	1	338
+NPC:class:indolizidine_alkaloids	class	Indolizidine alkaloids	false	1	339
+NPC:class:ingenane_diterpenoids	class	Ingenane diterpenoids	false	1	340
+NPC:class:iphionane_sesquiterpenoids	class	Iphionane sesquiterpenoids	false	1	341
+NPC:class:iridoids_monoterpenoids	class	Iridoids monoterpenoids	false	1	342
+NPC:class:irregular_monoterpenoids	class	Irregular monoterpenoids	false	1	343
+NPC:class:isariotin_alkaloids	class	Isariotin alkaloids	false	1	344
+NPC:class:ishwarane_sesquiterpenoids	class	Ishwarane sesquiterpenoids	false	1	345
+NPC:class:isoaurones	class	Isoaurones	false	1	346
+NPC:class:isocomane_sesquiterpenoids	class	Isocomane sesquiterpenoids	false	1	347
+NPC:class:isocoumarins	class	Isocoumarins	false	1	348
+NPC:class:isodaucane_sesquiterpenoids	class	Isodaucane sesquiterpenoids	false	1	349
+NPC:class:isoflavanones	class	Isoflavanones	false	1	350
+NPC:class:isoflavones	class	Isoflavones	false	1	351
+NPC:class:isofurans	class	Isofurans	false	1	352
+NPC:class:isoindole_alkaloids	class	Isoindole alkaloids	false	1	353
+NPC:class:isolactarane_sesquiterpenoids	class	Isolactarane sesquiterpenoids	false	1	354
+NPC:class:isoprostanes	class	Isoprostanes	false	1	355
+NPC:class:isoquinoline_alkaloids	class	Isoquinoline alkaloids	false	1	356
+NPC:class:ivaxillarane_sesquiterpenoids	class	Ivaxillarane sesquiterpenoids	false	1	357
+NPC:class:jasmonic_acids	class	Jasmonic acids	false	1	358
+NPC:class:jatrophane_diterpenoids	class	Jatrophane diterpenoids	false	1	359
+NPC:class:jatropholane_diterpenoids	class	Jatropholane diterpenoids	false	1	360
+NPC:class:kaurane_and_phyllocladane_diterpenoids	class	Kaurane and Phyllocladane diterpenoids	false	1	361
+NPC:class:kavalactones_and_derivatives	class	Kavalactones and derivatives	false	1	362
+NPC:class:kempane_diterpenoids	class	Kempane diterpenoids	false	1	363
+NPC:class:labdane_diterpenoids	class	Labdane diterpenoids	false	1	364
+NPC:class:lactam_bearing_macrolide_lactones	class	Lactam bearing macrolide lactones	false	1	365
+NPC:class:lactarane_sesquiterpenoids	class	Lactarane sesquiterpenoids	false	1	366
+NPC:class:lactones	class	Lactones	false	1	367
+NPC:class:ladder_polyethers	class	Ladder polyethers	false	1	368
+NPC:class:lanostane_tirucallane_and_euphane_triterpenoids	class	Lanostane, Tirucallane and Euphane triterpenoids	false	1	369
+NPC:class:lathyrane_diterpenoids	class	Lathyrane diterpenoids	false	1	370
+NPC:class:laurane_sesquiterpenoids	class	Laurane sesquiterpenoids	false	1	371
+NPC:class:leukotrienes	class	Leukotrienes	false	1	372
+NPC:class:levuglandins	class	Levuglandins	false	1	373
+NPC:class:limonoids	class	Limonoids	false	1	374
+NPC:class:linear_diarylheptanoids	class	Linear diarylheptanoids	false	1	375
+NPC:class:linear_peptides	class	Linear peptides	false	1	376
+NPC:class:linear_polyenes	class	Linear polyenes	false	1	377
+NPC:class:linear_sesterterpenoids	class	Linear sesterterpenoids	false	1	378
+NPC:class:linear_tetronates	class	Linear tetronates	false	1	379
+NPC:class:lipopeptides	class	Lipopeptides	false	1	380
+NPC:class:lipoxins	class	Lipoxins	false	1	381
+NPC:class:lippifoliane_sesquiterpenoids	class	Lippifoliane sesquiterpenoids	false	1	382
+NPC:class:lobane_diterpenoids	class	Lobane diterpenoids	false	1	383
+NPC:class:long_chain_bicyclic_phosphotriester	class	Long-Chain Bicyclic Phosphotriester	false	1	384
+NPC:class:longibornane_sesquiterpenoids	class	Longibornane sesquiterpenoids	false	1	385
+NPC:class:longifolane_sesquiterpenoids	class	Longifolane sesquiterpenoids	false	1	386
+NPC:class:longipinane_sesquiterpenoids	class	Longipinane sesquiterpenoids	false	1	387
+NPC:class:luminacins_and_derivatives	class	Luminacins and derivatives	false	1	388
+NPC:class:lupane_triterpenoids	class	Lupane triterpenoids	false	1	389
+NPC:class:macrocyclic_tetramic_acids	class	Macrocyclic tetramic acids	false	1	390
+NPC:class:macrolide_lactams	class	Macrolide lactams	false	1	391
+NPC:class:macrolide_lactones	class	Macrolide lactones	false	1	392
+NPC:class:macrotetrolides	class	Macrotetrolides	false	1	393
+NPC:class:malabaricane_triterpenoids	class	Malabaricane triterpenoids	false	1	394
+NPC:class:mangicol_type_sesterterpenoids	class	Mangicol-type sesterterpenoids	false	1	395
+NPC:class:marasmane_sesquiterpenoids	class	Marasmane sesquiterpenoids	false	1	396
+NPC:class:maresins	class	Maresins	false	1	397
+NPC:class:marine_bacterial_dpes	class	Marine-bacterial DPEs	false	1	398
+NPC:class:megastigmanes	class	Megastigmanes	false	1	399
+NPC:class:melithiazole_and_myxothiazole_derivatives	class	Melithiazole and Myxothiazole derivatives	false	1	400
+NPC:class:menthane_monoterpenoids	class	Menthane monoterpenoids	false	1	401
+NPC:class:merohemiterpenoids	class	Merohemiterpenoids	false	1	402
+NPC:class:meromonoterpenoids	class	Meromonoterpenoids	false	1	403
+NPC:class:merosesquiterpenoids	class	Merosesquiterpenoids	false	1	404
+NPC:class:meroterpenoids_with_5_or_6_membered_ring	class	Meroterpenoids with 5- or 6-membered ring	false	1	405
+NPC:class:meroterpenoids_with_bridged_ring	class	Meroterpenoids with bridged ring	false	1	406
+NPC:class:methoxy_fatty_acids	class	Methoxy fatty acids	false	1	407
+NPC:class:methyl_xanthones	class	Methyl xanthones	false	1	408
+NPC:class:microcolins_and_mirabimids	class	Microcolins and mirabimids	false	1	409
+NPC:class:microcystins	class	Microcystins	false	1	410
+NPC:class:microginins	class	Microginins	false	1	411
+NPC:class:minor_lignans	class	Minor lignans	false	1	412
+NPC:class:miscellaneous_alkaloids	class	Miscellaneous alkaloids	false	1	413
+NPC:class:miscellaneous_apocarotenoids	class	Miscellaneous apocarotenoids	false	1	414
+NPC:class:miscellaneous_meroterpenoids	class	Miscellaneous meroterpenoids	false	1	415
+NPC:class:miscellaneous_polyketides	class	Miscellaneous polyketides	false	1	416
+NPC:class:mitomycins	class	Mitomycins	false	1	417
+NPC:class:monacolins_and_monacolin_derivatives	class	Monacolins and Monacolin derivatives	false	1	418
+NPC:class:monoacylglycerols	class	Monoacylglycerols	false	1	419
+NPC:class:monoalkylresorcinols	class	Monoalkylresorcinols	false	1	420
+NPC:class:monocarbocyclic_sesterterpenoids	class	Monocarbocyclic sesterterpenoids	false	1	421
+NPC:class:monocyclic_guanidine_alkaloids	class	Monocyclic guanidine alkaloids	false	1	422
+NPC:class:monocyclic_monoterpenoids	class	Monocyclic monoterpenoids	false	1	423
+NPC:class:monocyclic_beta_lactams	class	Monocyclic β-lactams	false	1	424
+NPC:class:monomeric_stilbenes	class	Monomeric stilbenes	false	1	425
+NPC:class:monosaccharides	class	Monosaccharides	false	1	426
+NPC:class:morphinan_alkaloids	class	Morphinan alkaloids	false	1	427
+NPC:class:mulinane_diterpenoids	class	Mulinane diterpenoids	false	1	428
+NPC:class:multiflorane_triterpenoids	class	Multiflorane triterpenoids	false	1	429
+NPC:class:mycolic_acids	class	Mycolic acids	false	1	430
+NPC:class:mycosporine_and_mycosporine_like_amino_acids	class	Mycosporine and Mycosporine-like amino acids	false	1	431
+NPC:class:myrsinane_diterpenoids	class	Myrsinane diterpenoids	false	1	432
+NPC:class:n_acyl_amines	class	N-acyl amines	false	1	433
+NPC:class:n_acyl_ethanolamines_endocannabinoids	class	N-acyl ethanolamines (endocannabinoids)	false	1	434
+NPC:class:nagilactone_diterpenoids	class	Nagilactone diterpenoids	false	1	435
+NPC:class:naphthalenes_and_derivatives	class	Naphthalenes and derivatives	false	1	436
+NPC:class:naphthalenones	class	Naphthalenones	false	1	437
+NPC:class:naphthoquinones	class	Naphthoquinones	false	1	438
+NPC:class:nardosinane_sesquiterpenoids	class	Nardosinane sesquiterpenoids	false	1	439
+NPC:class:neoflavonoids	class	Neoflavonoids	false	1	440
+NPC:class:neohopane_triterpenoids	class	Neohopane triterpenoids	false	1	441
+NPC:class:neolignans	class	Neolignans	false	1	442
+NPC:class:neurofurans	class	Neurofurans	false	1	443
+NPC:class:neuroprostanes	class	Neuroprostanes	false	1	444
+NPC:class:neutral_glycosphingolipids	class	Neutral glycosphingolipids	false	1	445
+NPC:class:nitro_fatty_acids	class	Nitro fatty acids	false	1	446
+NPC:class:nonadrides	class	Nonadrides	false	1	447
+NPC:class:norcembrane_diterpenoids	class	Norcembrane diterpenoids	false	1	448
+NPC:class:noreremophilane_sesquiterpenoids	class	Noreremophilane sesquiterpenoids	false	1	449
+NPC:class:noreudesmane_sesquiterpenoids	class	Noreudesmane sesquiterpenoids	false	1	450
+NPC:class:norkaurane_diterpenoids	class	Norkaurane diterpenoids	false	1	451
+NPC:class:norlabdane_diterpenoids	class	Norlabdane diterpenoids	false	1	452
+NPC:class:norpimarane_and_norisopimarane_diterpenoids	class	Norpimarane and Norisopimarane diterpenoids	false	1	453
+NPC:class:norsesterterpenoids	class	Norsesterterpenoids	false	1	454
+NPC:class:oblogolides	class	Oblogolides	false	1	455
+NPC:class:obtusane_diterpenoids	class	Obtusane diterpenoids	false	1	456
+NPC:class:oleanane_triterpenoids	class	Oleanane triterpenoids	false	1	457
+NPC:class:oligomeric_phloroglucinols_phlorotannins	class	Oligomeric phloroglucinols (phlorotannins)	false	1	458
+NPC:class:oligomeric_stibenes	class	Oligomeric stibenes	false	1	459
+NPC:class:oligomycins	class	Oligomycins	false	1	460
+NPC:class:onocerane_triterpenoids	class	Onocerane triterpenoids	false	1	461
+NPC:class:open_chain_polyketides	class	Open-chain polyketides	false	1	462
+NPC:class:open_chained_neoflavonoids	class	Open-chained neoflavonoids	false	1	463
+NPC:class:ophiobolane_sesterterpenoids	class	Ophiobolane sesterterpenoids	false	1	464
+NPC:class:oplopane_sesquiterpenoids	class	Oplopane sesquiterpenoids	false	1	465
+NPC:class:oppositane_sesquiterpenoids	class	Oppositane sesquiterpenoids	false	1	466
+NPC:class:orthosomycins	class	Orthosomycins	false	1	467
+NPC:class:other_docosanoids	class	Other Docosanoids	false	1	468
+NPC:class:other_eicosanoids	class	Other Eicosanoids	false	1	469
+NPC:class:other_octadecanoids	class	Other Octadecanoids	false	1	470
+NPC:class:other_indole_diketopiperazine_alkaloids	class	Other indole diketopiperazine alkaloids	false	1	471
+NPC:class:other_polyketide_meroterpenoids	class	Other polyketide meroterpenoids	false	1	472
+NPC:class:oxa_bridged_macrolides	class	Oxa-Bridged Macrolides	false	1	473
+NPC:class:oxasqualenoids	class	Oxasqualenoids	false	1	474
+NPC:class:oxazole_alkaloids	class	Oxazole alkaloids	false	1	475
+NPC:class:oxidized_glycerophospholipids	class	Oxidized glycerophospholipids	false	1	476
+NPC:class:oxo_fatty_acids	class	Oxo fatty acids	false	1	477
+NPC:class:oxygenated_hydrocarbons	class	Oxygenated hydrocarbons	false	1	478
+NPC:class:pachydictyane_diterpenoids	class	Pachydictyane diterpenoids	false	1	479
+NPC:class:pachysanane_triterpenoids	class	Pachysanane triterpenoids	false	1	480
+NPC:class:pacifigorgiane_sesquiterpenoids	class	Pacifigorgiane sesquiterpenoids	false	1	481
+NPC:class:panasinsane_sesquiterpenoids	class	Panasinsane sesquiterpenoids	false	1	482
+NPC:class:paraconic_acids_and_derivatives	class	Paraconic acids and derivatives	false	1	483
+NPC:class:paraliane_diterpenoids	class	Paraliane diterpenoids	false	1	484
+NPC:class:parguerane_diterpenoids	class	Parguerane diterpenoids	false	1	485
+NPC:class:patchoulane_sesquiterpenoids	class	Patchoulane sesquiterpenoids	false	1	486
+NPC:class:paulomycins_and_derivatives	class	Paulomycins and derivatives	false	1	487
+NPC:class:penicillins	class	Penicillins	false	1	488
+NPC:class:pentacyclic_guanidine_alkaloids	class	Pentacyclic guanidine alkaloids	false	1	489
+NPC:class:pentalenane_sesquiterpenoids	class	Pentalenane sesquiterpenoids	false	1	490
+NPC:class:pepluane_diterpenoids	class	Pepluane diterpenoids	false	1	491
+NPC:class:peptaibols	class	Peptaibols	false	1	492
+NPC:class:perforane_sesquiterpenoids	class	Perforane sesquiterpenoids	false	1	493
+NPC:class:phenalens	class	Phenalens	false	1	494
+NPC:class:phenanthrenes	class	Phenanthrenes	false	1	495
+NPC:class:phenazine_alkaloids	class	Phenazine alkaloids	false	1	496
+NPC:class:phenethylisoquinoline_alkaloids	class	Phenethylisoquinoline alkaloids	false	1	497
+NPC:class:phenoxazine_alkaloids	class	Phenoxazine alkaloids	false	1	498
+NPC:class:phenylalanine_derived_alkaloids	class	Phenylalanine-derived alkaloids	false	1	499
+NPC:class:phenylethanoids	class	Phenylethanoids	false	1	500
+NPC:class:phenylethylamines	class	Phenylethylamines	false	1	501
+NPC:class:phloroglucinol_terpene_hybrids	class	Phloroglucinol-terpene hybrids	false	1	502
+NPC:class:phoslactomycins_or_phosphazomycins	class	Phoslactomycins or Phosphazomycins	false	1	503
+NPC:class:phosphosphingolipids	class	Phosphosphingolipids	false	1	504
+NPC:class:phthalide_derivatives	class	Phthalide derivatives	false	1	505
+NPC:class:phytane_diterpenoids	class	Phytane diterpenoids	false	1	506
+NPC:class:phytofurans	class	Phytofurans	false	1	507
+NPC:class:phytoprostanes	class	Phytoprostanes	false	1	508
+NPC:class:picrotoxane_sesquiterpenoids	class	Picrotoxane sesquiterpenoids	false	1	509
+NPC:class:pimarane_and_isopimarane_diterpenoids	class	Pimarane and Isopimarane diterpenoids	false	1	510
+NPC:class:pimprinine_alkaloids	class	Pimprinine alkaloids	false	1	511
+NPC:class:pinane_monoterpenoids	class	Pinane monoterpenoids	false	1	512
+NPC:class:pinguisane_sesquiterpenoids	class	Pinguisane sesquiterpenoids	false	1	513
+NPC:class:piperidine_alkaloids	class	Piperidine alkaloids	false	1	514
+NPC:class:plant_xanthones	class	Plant xanthones	false	1	515
+NPC:class:platensimycin_and_platencins	class	Platensimycin and Platencins	false	1	516
+NPC:class:podocarpane_diterpenoids	class	Podocarpane diterpenoids	false	1	517
+NPC:class:polyamines	class	Polyamines	false	1	518
+NPC:class:polyene_macrolides	class	Polyene macrolides	false	1	519
+NPC:class:polyesters	class	Polyesters	false	1	520
+NPC:class:polyether_ionophores	class	Polyether ionophores	false	1	521
+NPC:class:polypodane_triterpenoids	class	Polypodane triterpenoids	false	1	522
+NPC:class:polyprenol_derivatives	class	Polyprenol derivatives	false	1	523
+NPC:class:polyprenylated_cyclic_polyketides_hop_meroterpenoids	class	Polyprenylated cyclic polyketides (Hop meroterpenoids)	false	1	524
+NPC:class:polysaccharides	class	Polysaccharides	false	1	525
+NPC:class:pradimicins	class	Pradimicins	false	1	526
+NPC:class:pregnane_steroids	class	Pregnane steroids	false	1	527
+NPC:class:premyrsinane_diterpenoids	class	Premyrsinane diterpenoids	false	1	528
+NPC:class:prenyl_quinone_meroterpenoids	class	Prenyl quinone meroterpenoids	false	1	529
+NPC:class:prenylated_geranylated_phloroglucinols	class	Prenylated,geranylated phloroglucinols	false	1	530
+NPC:class:prenylbisabolane_diterpenoids	class	Prenylbisabolane diterpenoids	false	1	531
+NPC:class:prenyleudesmane_diterpenoids	class	Prenyleudesmane diterpenoids	false	1	532
+NPC:class:presilphiperfolane_and_probotryane_sesquiterpenoids	class	Presilphiperfolane and Probotryane sesquiterpenoids	false	1	533
+NPC:class:prezizaane_sesquiterpenoids	class	Prezizaane sesquiterpenoids	false	1	534
+NPC:class:primary_amides	class	Primary amides	false	1	535
+NPC:class:proanthocyanins	class	Proanthocyanins	false	1	536
+NPC:class:prodigiosins	class	Prodigiosins	false	1	537
+NPC:class:prostaglandins	class	Prostaglandins	false	1	538
+NPC:class:protoberberine_alkaloids	class	Protoberberine alkaloids	false	1	539
+NPC:class:protoilludane_sesquiterpenoids	class	Protoilludane sesquiterpenoids	false	1	540
+NPC:class:protopine_alkaloids	class	Protopine alkaloids	false	1	541
+NPC:class:pseudoguaiane_sesquiterpenoids	class	Pseudoguaiane sesquiterpenoids	false	1	542
+NPC:class:pseudopterane_diterpenoids	class	Pseudopterane diterpenoids	false	1	543
+NPC:class:pterocarpan	class	Pterocarpan	false	1	544
+NPC:class:pulvinones	class	Pulvinones	false	1	545
+NPC:class:purine_alkaloids	class	Purine alkaloids	false	1	546
+NPC:class:purine_nucleos_t_ides	class	Purine nucleos(t)ides	false	1	547
+NPC:class:pyranocoumarins	class	Pyranocoumarins	false	1	548
+NPC:class:pyrazine_and_piperazine_alkaloids	class	Pyrazine and Piperazine alkaloids	false	2	549
+NPC:class:pyridine_alkaloids	class	Pyridine alkaloids	false	1	550
+NPC:class:pyrimidine_nucleos_t_ides	class	Pyrimidine nucleos(t)ides	false	1	551
+NPC:class:pyrrocidine_tetramate_alkaloids	class	Pyrrocidine tetramate alkaloids	false	1	552
+NPC:class:pyrrole_alkaloids	class	Pyrrole alkaloids	false	1	553
+NPC:class:pyrrolidine_alkaloids	class	Pyrrolidine alkaloids	false	1	554
+NPC:class:pyrrolizidine_alkaloids	class	Pyrrolizidine alkaloids	false	1	555
+NPC:class:pyrroloindole_alkaloids	class	Pyrroloindole alkaloids	false	1	556
+NPC:class:pyrroloquinoline_alkaloids	class	Pyrroloquinoline alkaloids	false	1	557
+NPC:class:quadrane_sesquiterpenoids	class	Quadrane sesquiterpenoids	false	1	558
+NPC:class:quassinoids	class	Quassinoids	false	1	559
+NPC:class:quinazoline_alkaloids	class	Quinazoline alkaloids	false	1	560
+NPC:class:quinoline_alkaloids	class	Quinoline alkaloids	false	2	561
+NPC:class:quinolizidine_alkaloids	class	Quinolizidine alkaloids	false	1	562
+NPC:class:resin_glycosides	class	Resin glycosides	false	1	563
+NPC:class:resolvin_ds	class	Resolvin Ds	false	1	564
+NPC:class:resolvin_es	class	Resolvin Es	false	1	565
+NPC:class:rhamnofolane_diterpenoids	class	Rhamnofolane diterpenoids	false	1	566
+NPC:class:rhamnolipids	class	Rhamnolipids	false	1	567
+NPC:class:rhizoxins	class	Rhizoxins	false	1	568
+NPC:class:ripps_amatoxins_and_phallotoxins	class	RiPPs-Amatoxins and Phallotoxins	false	1	569
+NPC:class:ripps_bottromycins	class	RiPPs-Bottromycins	false	1	570
+NPC:class:ripps_cyanobactins	class	RiPPs-Cyanobactins	false	1	571
+NPC:class:ripps_lanthipeptides	class	RiPPs-Lanthipeptides	false	1	572
+NPC:class:ripps_lasso_peptides	class	RiPPs-Lasso peptides	false	1	573
+NPC:class:ripps_microcins	class	RiPPs-Microcins	false	1	574
+NPC:class:ripps_thiopeptides	class	RiPPs-Thiopeptides	false	1	575
+NPC:class:rotenoids	class	Rotenoids	false	1	576
+NPC:class:rotundane_sesquiterpenoids	class	Rotundane sesquiterpenoids	false	1	577
+NPC:class:sacculatane_diterpenoids	class	Sacculatane diterpenoids	false	1	578
+NPC:class:salinosporamides	class	Salinosporamides	false	1	579
+NPC:class:santalane_sesquiterpenoids	class	Santalane sesquiterpenoids	false	1	580
+NPC:class:saponaceolide_triterpenoids	class	Saponaceolide triterpenoids	false	1	581
+NPC:class:sativane_sesquiterpenoids	class	Sativane sesquiterpenoids	false	1	582
+NPC:class:saxitoxins	class	Saxitoxins	false	1	583
+NPC:class:scalarane_sesterterpenoids	class	Scalarane sesterterpenoids	false	1	584
+NPC:class:secoabietane_diterpenoids	class	Secoabietane diterpenoids	false	1	585
+NPC:class:secochamigrane_sesquiterpenoids	class	Secochamigrane sesquiterpenoids	false	1	586
+NPC:class:secoeudesmane_sesquiterpenoids	class	Secoeudesmane sesquiterpenoids	false	1	587
+NPC:class:secogermacrane_sesquiterpenoids	class	Secogermacrane sesquiterpenoids	false	1	588
+NPC:class:secoiridoid_monoterpenoids	class	Secoiridoid monoterpenoids	false	1	589
+NPC:class:secokaurane_diterpenoids	class	Secokaurane diterpenoids	false	1	590
+NPC:class:secolabdane_diterpenoids	class	Secolabdane diterpenoids	false	1	591
+NPC:class:segetane_diterpenoids	class	Segetane diterpenoids	false	1	592
+NPC:class:selaginellins	class	Selaginellins	false	1	593
+NPC:class:serratane_triterpenoids	class	Serratane triterpenoids	false	1	594
+NPC:class:serrulatane_and_biflorane_diterpenoids	class	Serrulatane and Biflorane diterpenoids	false	1	595
+NPC:class:shikimic_acids_and_derivatives	class	Shikimic acids and derivatives	false	1	596
+NPC:class:shionane_triterpenoids	class	Shionane triterpenoids	false	1	597
+NPC:class:silphinane_sesquiterpenoids	class	Silphinane sesquiterpenoids	false	1	598
+NPC:class:silphiperfolane_sesquiterpenoids	class	Silphiperfolane sesquiterpenoids	false	1	599
+NPC:class:simple_amide_alkaloids	class	Simple amide alkaloids	false	1	600
+NPC:class:simple_aromatic_polyketides	class	Simple aromatic polyketides	false	1	601
+NPC:class:simple_coumarins	class	Simple coumarins	false	1	602
+NPC:class:simple_cyclic_polyketides	class	Simple cyclic polyketides	false	1	603
+NPC:class:simple_diketopiperazine_alkaloids	class	Simple diketopiperazine alkaloids	false	1	604
+NPC:class:simple_indole_alkaloids	class	Simple indole alkaloids	false	1	605
+NPC:class:simple_oxindole_alkaloids	class	Simple oxindole alkaloids	false	1	606
+NPC:class:simple_phenolic_acids	class	Simple phenolic acids	false	1	607
+NPC:class:simple_tetramate_alkaloids	class	Simple tetramate alkaloids	false	1	608
+NPC:class:sinularane_sesquiterpenoids	class	Sinularane sesquiterpenoids	false	1	609
+NPC:class:sophorolipids	class	Sophorolipids	false	1	610
+NPC:class:sorbicilinoids	class	Sorbicilinoids	false	1	611
+NPC:class:sphaerane_diterpenoids	class	Sphaerane diterpenoids	false	1	612
+NPC:class:sphaeroane_diterpenoids	class	Sphaeroane diterpenoids	false	1	613
+NPC:class:sphenolobane_diterpenoids	class	Sphenolobane diterpenoids	false	1	614
+NPC:class:sphingoid_bases	class	Sphingoid bases	false	1	615
+NPC:class:spiroaxane_sesquiterpenoids	class	Spiroaxane sesquiterpenoids	false	1	616
+NPC:class:spirodioxynaphthalenes	class	Spirodioxynaphthalenes	false	1	617
+NPC:class:spirostane_steroids	class	Spirostane steroids	false	1	618
+NPC:class:spirotetronate_macrolides	class	Spirotetronate macrolides	false	1	619
+NPC:class:spirovetivane_sesquiterpenoids	class	Spirovetivane sesquiterpenoids	false	1	620
+NPC:class:spongiane_diterpenoids	class	Spongiane diterpenoids	false	1	621
+NPC:class:spriromeroterpenoids	class	Spriromeroterpenoids	false	1	622
+NPC:class:stemona_alkaloids	class	Stemona alkaloids	false	1	623
+NPC:class:steroidal_alkaloids	class	Steroidal alkaloids	false	1	624
+NPC:class:sterpurane_sesquiterpenoids	class	Sterpurane sesquiterpenoids	false	1	625
+NPC:class:stictane_triterpenoids	class	Stictane triterpenoids	false	1	626
+NPC:class:stigmastane_steroids	class	Stigmastane steroids	false	1	627
+NPC:class:stilbenolignans	class	Stilbenolignans	false	2	628
+NPC:class:streptogramins	class	Streptogramins	false	1	629
+NPC:class:streptothricins_and_derivatives	class	Streptothricins and derivatives	false	1	630
+NPC:class:strobilurins_and_derivatives	class	Strobilurins and derivatives	false	1	631
+NPC:class:strychnos_type	class	Strychnos type	false	1	632
+NPC:class:tantazoles_and_mirabazoles	class	Tantazoles and mirabazoles	false	1	633
+NPC:class:taraxerane_triterpenoids	class	Taraxerane triterpenoids	false	1	634
+NPC:class:taxane_diterpenoids	class	Taxane diterpenoids	false	1	635
+NPC:class:terpenoid_alkaloids	class	Terpenoid alkaloids	false	1	636
+NPC:class:terpenoid_tetrahydroisoquinoline_alkaloids	class	Terpenoid tetrahydroisoquinoline alkaloids	false	1	637
+NPC:class:tetracyclic_diterpenoids	class	Tetracyclic diterpenoids	false	1	638
+NPC:class:tetracyclines	class	Tetracyclines	false	1	639
+NPC:class:tetrahydroisoquinoline_alkaloids	class	Tetrahydroisoquinoline alkaloids	false	1	640
+NPC:class:tetraketide_meroterpenoids	class	Tetraketide meroterpenoids	false	1	641
+NPC:class:tetrodotoxins	class	Tetrodotoxins	false	1	642
+NPC:class:thapsane_sesquiterpenoids	class	Thapsane sesquiterpenoids	false	1	643
+NPC:class:thia_fatty_acids	class	Thia fatty acids	false	1	644
+NPC:class:thiazole_alkaloids	class	Thiazole alkaloids	false	1	645
+NPC:class:thiodiketopiperazine_alkaloids	class	Thiodiketopiperazine alkaloids	false	1	646
+NPC:class:thromboxanes	class	Thromboxanes	false	1	647
+NPC:class:thujane_monoterpenoids	class	Thujane monoterpenoids	false	1	648
+NPC:class:thujopsane_sesquiterpenoids	class	Thujopsane sesquiterpenoids	false	1	649
+NPC:class:tigliane_diterpenoids	class	Tigliane diterpenoids	false	1	650
+NPC:class:totarane_diterpenoids	class	Totarane diterpenoids	false	1	651
+NPC:class:trachylobane_diterpenoids	class	Trachylobane diterpenoids	false	1	652
+NPC:class:tremulane_sesquiterpenoids	class	Tremulane sesquiterpenoids	false	1	653
+NPC:class:triacylglycerols	class	Triacylglycerols	false	1	654
+NPC:class:trichothecane_sesquiterpenoids	class	Trichothecane sesquiterpenoids	false	1	655
+NPC:class:tricyclic_guanidine_alkaloids	class	Tricyclic guanidine alkaloids	false	1	656
+NPC:class:triketide_meroterpenoids	class	Triketide meroterpenoids	false	1	657
+NPC:class:trinervitane_diterpenoids	class	Trinervitane diterpenoids	false	1	658
+NPC:class:tripeptides	class	Tripeptides	false	1	659
+NPC:class:tropane_alkaloids	class	Tropane alkaloids	false	1	660
+NPC:class:tropolones_and_derivatives_pks	class	Tropolones and derivatives (PKS)	false	1	661
+NPC:class:tropolones_and_derivatives_shikimate	class	Tropolones and derivatives (Shikimate)	false	1	662
+NPC:class:tylosins	class	Tylosins	false	1	663
+NPC:class:unsaturated_fatty_acids	class	Unsaturated fatty acids	false	1	664
+NPC:class:ursane_and_taraxastane_triterpenoids	class	Ursane and Taraxastane triterpenoids	false	1	665
+NPC:class:usnic_acid_and_derivatives	class	Usnic acid and derivatives	false	1	666
+NPC:class:valerane_sesquiterpenoids	class	Valerane sesquiterpenoids	false	1	667
+NPC:class:valerenane_sesquiterpenoids	class	Valerenane sesquiterpenoids	false	1	668
+NPC:class:valparane_diterpenoids	class	Valparane diterpenoids	false	1	669
+NPC:class:vancomycins_and_teicoplanins	class	Vancomycins and Teicoplanins	false	1	670
+NPC:class:verrucosane_diterpenoids	class	Verrucosane diterpenoids	false	1	671
+NPC:class:verticillane_diterpenoids	class	Verticillane diterpenoids	false	1	672
+NPC:class:villanovane_diterpenoids	class	Villanovane diterpenoids	false	1	673
+NPC:class:viscidane_diterpenoids	class	Viscidane diterpenoids	false	1	674
+NPC:class:vitamin_d2_and_derivatives	class	Vitamin D2 and derivatives	false	1	675
+NPC:class:vitamin_d3_and_derivatives	class	Vitamin D3 and derivatives	false	1	676
+NPC:class:wax_diesters	class	Wax diesters	false	1	677
+NPC:class:wax_monoesters	class	Wax monoesters	false	1	678
+NPC:class:xeniaphyllane_diterpenoids	class	Xeniaphyllane diterpenoids	false	1	679
+NPC:class:xenicane_diterpenoids	class	Xenicane diterpenoids	false	1	680
+NPC:class:yohimbine_like_alkaloids	class	Yohimbine-like alkaloids	false	1	681
+NPC:class:zearalenones	class	Zearalenones	false	1	682
+NPC:class:zizaane_sesquiterpenoids	class	Zizaane sesquiterpenoids	false	1	683
+NPC:class:m_terphenyls	class	m-Terphenyls	false	1	684
+NPC:class:p_terphenyls	class	p-Terphenyls	false	1	685
+NPC:class:pteridine_alkaloids	class	pteridine alkaloids	false	1	686

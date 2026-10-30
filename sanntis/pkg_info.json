@@ -1,9 +1,0 @@
-{
-    "name": "sanntis",
-    "version": "0.9.6",
-    "description": "SMBGC detection tool",
-    "author": "Santiago Sanchez Fragoso",
-    "author_email": "fragoso@ebi.ac.uk",
-    "url": "https://github.com/Finn-Lab/SanntiS",
-    "license": "Apache License, Version 2.0"
-}

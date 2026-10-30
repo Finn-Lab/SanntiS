@@ -1,0 +1,281 @@
+LOCUS       BGC0002020              4504 bp    DNA     linear   CON 27-FEB-2015
+DEFINITION  Photorhabdus luminescens subsp. laumondii TTO1 complete genome.
+ACCESSION   BGC0002020
+VERSION     BGC0002020
+KEYWORDS    .
+SOURCE      Photorhabdus laumondii subsp. laumondii TTO1
+  ORGANISM  Photorhabdus laumondii subsp. laumondii TTO1
+            Bacteria; Pseudomonadota; Gammaproteobacteria; Enterobacterales;
+            Morganellaceae; Photorhabdus.
+COMMENT     ##antiSMASH-Data-START##
+            Version      :: False
+            Run date     :: 2024-10-17 16:43:47
+            NOTE: This is a single region extracted from a larger record!
+            Orig. start  :: 2827499
+            Orig. end    :: 2832003
+            ##antiSMASH-Data-END##
+FEATURES             Location/Qualifiers
+     subregion       1..4504
+                     /aStool="mibig"
+                     /contig_edge="False"
+                     /label="saccharide, NRPS"
+                     /subregion_number="1"
+                     /tool="antismash"
+     region          1..4504
+                     /contig_edge="False"
+                     /product="unknown"
+                     /region_number="1"
+                     /subregion_numbers="1"
+                     /tool="antismash"
+     gene            complement(2..175)
+                     /locus_tag="plu2407"
+     CDS             complement(2..175)
+                     /codon_start=1
+                     /db_xref="InterPro:IPR009081"
+                     /db_xref="UniProtKB/TrEMBL:Q7N4D4"
+                     /function="Unknown"
+                     /locus_tag="plu2407"
+                     /note="unnamed protein product; Hypothetical gene"
+                     /protein_id="CAE14764.1"
+                     /transl_table=11
+                     /translation="MKKYEIKSLDDLDSFQIVSLIINLENELDINLLDEDLTFDDFSDM
+                     NSIIVLVNKCLI"
+     gene            complement(202..1587)
+                     /locus_tag="plu2408"
+     CDS             complement(202..1587)
+                     /NRPS_PKS="Domain: AMP-binding (23-369). E-value: 2.5e-51.
+                     Score: 166.3. Matches aSDomain:
+                     nrpspksdomains_plu2408_AMP-binding.1"
+                     /codon_start=1
+                     /db_xref="GOA:Q7N4D3"
+                     /db_xref="InterPro:IPR000873"
+                     /db_xref="InterPro:IPR020845"
+                     /db_xref="UniProtKB/TrEMBL:Q7N4D3"
+                     /function="Unknown, putative peptide synthetase"
+                     /gene_functions="biosynthetic-additional
+                     (rule-based-clusters) AMP-binding"
+                     /gene_functions="biosynthetic-additional (smcogs)
+                     SMCOG1002:AMP-dependent synthetase and ligase (Score:
+                     138.8; E-value: 3.2e-42)"
+                     /gene_kind="biosynthetic-additional"
+                     /locus_tag="plu2408"
+                     /note="unnamed protein product; Some similarities with
+                     D-alanine-D-alanyl carrier protein ligase"
+                     /protein_id="CAE14766.1"
+                     /sec_met_domain="AMP-binding (E-value: 9.6e-53, bitscore:
+                     167.5, seeds: 400, tool: rule-based-clusters)"
+                     /transl_table=11
+                     /translation="MSFNVIEYLYYSSNNFSQSIFYRDHPIEITYGEFLSKVVYFSDYF
+                     SEVIEKVVAIDIERKDINMYSVFSAMWKNKNTIVPLISDWDDEYKERIINAVKADIRLN
+                     QDLSVYHIKHKVDRNDSVIIPAKTAYILFTSGSTGLPKGVPITHLALKHYIDNIYEELE
+                     IEKGIERLTNTFSPAFDLFYHDLFLSWKSASSITPVETKKIGQLLNKVENNKLTYWFSV
+                     PTLAQMLISLKPKSHQLSSLKVSLFCGELLRKHVVTSWAQISNCQKIFNLYGPTETTIA
+                     CMISDVGIEGPPSLGRALGDMSYKTEHLSGNLYKLLLSGPQIFNGYIGTSKNSFVKIDG
+                     KVYYDTGDLVTILDGEVYFEGRIDRQTKIMGHRVDLQGLEEQLRVKNNNPLVFVVLYYD
+                     KNIDCNTGITIFYQPKNEGEIFDCGFIKNVKVKGIFCIESVPTLISGKVNYKKLELWAK
+                     NQI"
+     CDS_motif       complement(454..510)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_plu2408_0003"
+                     /evalue="5.00E-06"
+                     /label="NRPS-A_a8"
+                     /locus_tag="plu2408"
+                     /protein_end="378"
+                     /protein_start="359"
+                     /score="19.1"
+                     /tool="antismash"
+                     /translation="EGRIDRQTKIMGHRVDLQG"
+     aSDomain        complement(481..1518)
+                     /aSDomain="AMP-binding"
+                     /aSTool="nrps_pks_domains"
+                     /database="nrpspksdomains.hmm"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksdomains_plu2408_AMP-binding.1"
+                     /evalue="2.50E-51"
+                     /label="plu2408_AMP-binding.1"
+                     /locus_tag="plu2408"
+                     /protein_end="369"
+                     /protein_start="23"
+                     /score="166.3"
+                     /tool="antismash"
+                     /translation="DHPIEITYGEFLSKVVYFSDYFSEVIEKVVAIDIERKDINMYSVF
+                     SAMWKNKNTIVPLISDWDDEYKERIINAVKADIRLNQDLSVYHIKHKVDRNDSVIIPAK
+                     TAYILFTSGSTGLPKGVPITHLALKHYIDNIYEELEIEKGIERLTNTFSPAFDLFYHDL
+                     FLSWKSASSITPVETKKIGQLLNKVENNKLTYWFSVPTLAQMLISLKPKSHQLSSLKVS
+                     LFCGELLRKHVVTSWAQISNCQKIFNLYGPTETTIACMISDVGIEGPPSLGRALGDMSY
+                     KTEHLSGNLYKLLLSGPQIFNGYIGTSKNSFVKIDGKVYYDTGDLVTILDGEVYFEGRI
+                     DRQTKI"
+     CDS_motif       complement(742..771)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_plu2408_0002"
+                     /evalue="3.40E-03"
+                     /label="NRPS-A_a5"
+                     /locus_tag="plu2408"
+                     /protein_end="282"
+                     /protein_start="272"
+                     /score="10.1"
+                     /tool="antismash"
+                     /translation="YGPTETTIAC"
+     CDS_motif       complement(1144..1203)
+                     /aSTool="nrps_pks_domains"
+                     /database="abmotifs"
+                     /detection="hmmscan"
+                     /domain_id="nrpspksmotif_plu2408_0001"
+                     /evalue="1.80E-09"
+                     /label="NRPS-A_a3"
+                     /locus_tag="plu2408"
+                     /protein_end="148"
+                     /protein_start="128"
+                     /score="29.6"
+                     /tool="antismash"
+                     /translation="AYILFTSGSTGLPKGVPITH"
+     gene            complement(1572..2444)
+                     /locus_tag="plu2409"
+     CDS             complement(1572..2444)
+                     /codon_start=1
+                     /db_xref="UniProtKB/TrEMBL:Q7N4D2"
+                     /function="Unknown"
+                     /locus_tag="plu2409"
+                     /note="unnamed protein product; Some similarities with
+                     unknown protein"
+                     /protein_id="CAE14769.1"
+                     /transl_table=11
+                     /translation="MMNTKYDLLKNILYKESGINPDYLDIYKKGFNSRDAVKYFLVKKP
+                     GELIRNPINGAPVLTFMSYEQYFNSLGVNITYDDLSHYSLEKNCFRVINPWGFVGIQIG
+                     ESALFSLGVYNPKDMEINGRNYKVYYDFVHPEYTWKGNNKFELFDCPKGESFICTSYNT
+                     WQGDFTGKLGVNNFQDLYEPNKQTTIIYAIWASGINKLCNLIGMKFDLVNLVKYINNEK
+                     KFPFEVSESGILSAIHLVGPYKLFEVIGNGGFITDEIGTSAFSYIESFSFLEIDPMFNH
+                     VMEELCHSM"
+     gene            complement(1592..1597)
+                     /locus_tag="plu2408"
+     regulatory      complement(1592..1597)
+                     /locus_tag="plu2408"
+                     /regulatory_class="ribosome_binding_site"
+     CDS             complement(2446..3630)
+                     /codon_start=1
+                     /db_xref="UniProtKB/TrEMBL:Q7N4D1"
+                     /function="Unknown"
+                     /locus_tag="plu2410"
+                     /note="unnamed protein product; Unknown protein"
+                     /protein_id="CAE14771.1"
+                     /transl_table=11
+                     /translation="MDYYLNRLSNRVTFIDRRNSEFYKWLSTTPEFHIYGDDAKEKLNS
+                     NLFRLSKICPELFIHYTITTDLRVKPVGEVKIKIMAYEDYEHEILSDYNLIKPLTLFLK
+                     ETTNGLSFFFVVNHFLSDALSNGMISNLLSGEDTNWDLYEKNHIKNFVSSKLGKKSRNN
+                     KYNLDFIKEYCELKINNSEKSRFPIRDMKLESSTSVLRHKVLRSTSDNMITAHLIKAIA
+                     SSFDEYFGGEHLYIGLNQHGREPTYSIDPRYTLGWLNEIRPLIIKKSENGYCVNDIKSR
+                     VLMSTLYGGDTNTLLASNTEYGEVGIQFPSICLNVINKKWFTGKINTQYKHKILVNDRG
+                     ACRIMHIGIGLIIDSECCDLTLDFSSLDYEEHYIRGLFYLLIENFNNSHNINFK"
+     gene            complement(2446..3641)
+                     /locus_tag="plu2410"
+     regulatory      complement(3636..3641)
+                     /locus_tag="plu2410"
+                     /regulatory_class="ribosome_binding_site"
+     CDS             complement(3711..4490)
+                     /codon_start=1
+                     /db_xref="InterPro:IPR001173"
+                     /db_xref="InterPro:IPR029044"
+                     /db_xref="UniProtKB/TrEMBL:Q7N4D0"
+                     /function="Unknown"
+                     /gene_functions="biosynthetic-additional
+                     (rule-based-clusters) Glycos_transf_2"
+                     /gene_kind="biosynthetic-additional"
+                     /locus_tag="plu2411"
+                     /note="unnamed protein product; Some similarities with
+                     glycosyltransferase"
+                     /protein_id="CAE14773.1"
+                     /sec_met_domain="Glycos_transf_2 (E-value: 2.6e-27,
+                     bitscore: 84.2, seeds: 256, tool: rule-based-clusters)"
+                     /transl_table=11
+                     /translation="MKISVIIPTINRPSMLLNAVNSVNSQKFLNKEIIIVNDAEKSIGN
+                     IFLHLPNVTVIESNLGKGPGFCRSIGCKHASGDYITFLDDDDIMLPSYLERLHDEILNN
+                     VDKSCFYWSSVKVLDRVSESCVSQFDIKFPIEYDSFSDLAVTALRIGTGYGLTCAREVL
+                     KDIGYFNPKYRYIEDTELVVRLLKNNIHPVPINQIYIEVNKHSSNQLTSSKFNEKRIKE
+                     CYKLLCEQSDFFDKFPTAKAQLNRQILKLENELYSIY"
+     gene            complement(3711..4501)
+                     /locus_tag="plu2411"
+     regulatory      complement(4496..4501)
+                     /locus_tag="plu2411"
+                     /regulatory_class="ribosome_binding_site"
+ORIGIN
+        1 attaaataag acatttattt actaagacaa taattgaatt catatcagaa aaatcatcaa
+       61 acgtaagatc ttcatctagt aggttgatat caagctcatt ttccaaatta ataatcaaag
+      121 aaacaatttg aaatgaatcc aagtcatcaa gtgattttat ttcatatttc ttcataaact
+      181 caattactat tatttcaata tctaaatttg attttttgcc cataattcca actttttata
+      241 atttactttt ccacttatta atgtaggtac agattcgata caaaaaattc ctttcacttt
+      301 aacattctta atgaatccgc aatcaaatat ttcgccttcg tttttaggtt gataaaaaat
+      361 tgtaattcca gtattgcaat ctatattttt gtcataataa agaacaacaa aaaccaaagg
+      421 attattgttc tttaccctta attgttcttc aagaccttga agatcaactc tatgccccat
+      481 aatcttagtc tgccgatcta ttcttccctc aaaatatacc tcaccatcta atatagttac
+      541 taaatctcct gtatcgtaat acactttacc atcgattttc acaaagctat tctttgaagt
+      601 acctatatat ccattaaaaa tttgaggtcc tgacaataat aatttgtata gatttccaga
+      661 taaatgctca gttttgtatg acatatcccc taaagctcgg ccaagactag gtgggccttc
+      721 aatacccaca tcacttatca tacatgcgat tgttgtttca gttggtccat ataaattaaa
+      781 tatcttctgg caattagata tttgtgccca agaggttacg acgtgttttc ttaataattc
+      841 tccgcaaaac aaagaaactt ttaaactaga cagttgatgt gattttggtt tgagagaaat
+      901 cagcatctga gcgagtgtag gaacagaaaa ccaataagtg agtttattat tttccacctt
+      961 atttagtaat tgtccaattt ttttggtttc taccggagtt atggagcttg cactcttcca
+     1021 acttagaaat agatcatgat aaaaaagatc aaaagctgga gaaaatgtat tagttaatcg
+     1081 ttcgatgcct ttttcaattt ccaattcttc atagatatta tcaatataat gttttaaggc
+     1141 taaatgtgta atcggaactc ctttaggtaa accggtagat cctgatgtga acaatatgta
+     1201 tgcagttttt gctggtataa taactgaatc gtttctatct actttatgtt ttatatgata
+     1261 tacactaaga tcttgattga gcctgatatc agctttaact gcattaatta ttcgttcttt
+     1321 atattcatca tcccaatctg aaatcaaagg aactatcgta ttcttgtttt tccacattgc
+     1381 cgaaaaaaca gaatacatat ttatatcctt tctttcaata tcaatagcaa ctactttctc
+     1441 tatcacttca gagaagtaat ctgaaaaata aacaactttg gaaaggaact caccatatgt
+     1501 aatttcaatg ggatgatctc tataaaaaat agactgagaa aaattatttg atgaataata
+     1561 caaatattca attacattga atgacatagt tcctccatta catgattgaa catgggatca
+     1621 atctccaaga atgagaagct ttcaatatag gagaaagcac ttgttcctat ttcatcagtt
+     1681 ataaagccac cattacctat tacttcaaat aacttatatg ggccaactaa atgaatagct
+     1741 gagagaatac cactttcgga cacttcaaaa ggaaacttct tttcattgtt tatatatttc
+     1801 actaagttaa ccaaatcaaa cttcatacct ataaggttac ataatttatt aatcccgcta
+     1861 gcccatatgg cataaataat agtggtctgt ttatttggtt catatagatc ttgaaaatta
+     1921 ttaacaccaa gttttcctgt aaaatcacct tgccatgtat tatatgatgt acatatgaat
+     1981 gattcacctt taggacagtc aaatagttcg aatttattat ttcctttcca tgtatattca
+     2041 gggtgaacaa aatcatagta aaccttataa tttctgccat ttatttccat atctttaggg
+     2101 ttgtatactc ctaaagagaa caaagcagac tcaccaatct gtatgcctac aaacccccaa
+     2161 ggattaatca ctctaaaaca attcttttct agagaataat gactcaaatc atcataagta
+     2221 atattaactc ctaaactatt aaagtactgc tcatatgaca tgaatgttaa aacaggagct
+     2281 ccattaattg gatttcttat tagttctccg ggcttcttaa ccaagaaata cttgacagca
+     2341 tctctagaat taaagccttt tttatatata tccaaataat caggatttat cccagattct
+     2401 ttgtaaagaa tattctttaa tagatcgtat ttagtgttca tcatattatt taaaatttat
+     2461 attgtgtgaa ttattaaaat tttcaatcaa caaataaaat aaccctctaa tataatgctc
+     2521 ttcgtaatca agagaagaga agtctagagt taaatcacaa cattcagagt caataataag
+     2581 tccaatacct atatgcataa ttcgacatgc tccacgatca ttgactaaaa ttttatgttt
+     2641 gtactgtgtg ttaatttttc ctgtaaacca ttttttattt attacattta ggcaaattga
+     2701 tggaaattgt ataccaacct ctccatattc agtgttacta gcaagcagag tattagtatc
+     2761 tccaccatat agagtgctca ttagcactct ggatttgata tcattgacac agtaaccatt
+     2821 ttcgctcttt tttattatca acggccgtat ctcgttcaac catcctaatg tatatctagg
+     2881 atctatcgaa taagtaggtt ctcttccatg ttgatttaac cctatatata ggtgttctcc
+     2941 tccaaagtac tcatcaaatg acgatgctat ggctttaatt aaatgggctg taatcatatt
+     3001 gtctgatgta gatcttaaaa ctttatgacg aagaactgaa gtactggact ctaatttcat
+     3061 atctctaatt ggaaatcttg atttctcgga gttattaatt tttaactcac agtattcttt
+     3121 tataaaatct aaattatatt tattatttct tgatttctta cccagtttag aagatacaaa
+     3181 atttttaata tggttcttct catataaatc ccagttagta tcctctccag ataacagatt
+     3241 tgaaatcatt ccattggaaa gtgcatcaga taagaaatga tttacgacaa agaaaaaact
+     3301 taagccatta gtagtttctt ttaaaaataa agtaagtggt tttatcaagt tataatcaga
+     3361 taatatttca tgctcataat cttcataagc cattatcttt atttttactt cacctacagg
+     3421 tttaacacgc aagtcagttg ttatcgtgta gtgaataaat aactcagggc atatttttga
+     3481 cagcctaaat aagttagagt tgagtttttc ttttgcatca tcaccatata tatgaaattc
+     3541 tggtgttgtt gatagccatt tgtaaaactc agaattacgg cggtctataa aagtaactcg
+     3601 atttgatagt ctatttaagt agtaatccat cactcactcc aaacgggttt atcattaata
+     3661 aattattgca ctagagtgcg agttggtaat taatacttaa ttaactaccg tcagtagata
+     3721 gaatacaact cattttccaa ctttaatatt tgtctattta gctgtgcctt tgctgtcgga
+     3781 aatttatcga agaaatcaga ctgttcacaa agtaatttgt aacattcttt aattcttttt
+     3841 tcattgaatt tacttgatgt taattgatta ctagaatgct tgttgacctc aatgtaaatc
+     3901 tgatttatag gtaccggatg aatattgttc tttagcaatc gaacaactag ttctgtatct
+     3961 tctatatatc tgtattttgg attaaagtat ccgatatcct taagtacttc tcttgcgcaa
+     4021 gtaagtccat atccagtgcc aatccttaaa gctgtcactg ccaaatctga aaaactatca
+     4081 tattcaatag gaaattttat atcgaattga cttacacatg attcggatac tcgatctaaa
+     4141 actttcacgc ttgaccaata aaaacaagat ttatcaacgt tatttaaaat ttcatcatgt
+     4201 aatctttcca aataactagg taacattata tcatcatcat ctaggaaagt tatataatct
+     4261 ccacttgcat gtttacatcc aatacttcga caaaaacctg ggcctttacc taagttactt
+     4321 tcaataactg tcacattagg tagatgtaaa aaaatgttac caatagattt ttctgcatca
+     4381 ttaactatta ttatttcttt attcaagaat ttctgtgaat taacgctgtt aactgcattc
+     4441 agtagcattg atggcctatt aattgttgga attattactg aaattttcat aatttctccc
+     4501 tcat
+//

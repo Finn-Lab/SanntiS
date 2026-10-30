@@ -1,0 +1,21 @@
+site_name: SanntiS
+site_description: SMBGC Annotation using Neural Networks Trained on Interpro Signatures
+theme:
+  name: material
+  logo: assets/sanntis_logo.svg
+  favicon: assets/sanntis_logo.svg
+  features: [navigation.sections, content.code.copy]
+markdown_extensions:
+  - admonition
+  - tables
+  - pymdownx.superfences
+nav:
+  - Home: index.md
+  - Install: install.md
+  - InterProScan setup: setup.md
+  - Predict: predict.md
+  - Train: train.md
+  - Negative genome pool: negatives.md
+  - Running on other infrastructure: infrastructure.md
+  - Model bundle format: bundle.md
+  - Model card template: model-card.md

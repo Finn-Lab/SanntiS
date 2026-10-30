@@ -1,0 +1,199 @@
+06796789ba8b438be71d46732e364740	06796789ba8b438be71d46732e364740	619	Gene3D	G3DSA:6.10.250.3370	-	153	198	7.7E-10	T	15-10-2026	-	-	-	-
+06796789ba8b438be71d46732e364740	06796789ba8b438be71d46732e364740	619	Pfam	PF06276	Ferric iron reductase FhuF-like transporter	433	604	6.5E-36	T	15-10-2026	IPR022770	Aerobactin siderophore biosynthesis IucA/IucC-like, C-terminal	-	-
+06796789ba8b438be71d46732e364740	06796789ba8b438be71d46732e364740	619	Gene3D	G3DSA:1.10.510.40	-	397	618	4.4E-65	T	15-10-2026	-	-	-	-
+06796789ba8b438be71d46732e364740	06796789ba8b438be71d46732e364740	619	Gene3D	G3DSA:3.30.310.280	-	13	148	7.2E-9	T	15-10-2026	-	-	-	-
+06796789ba8b438be71d46732e364740	06796789ba8b438be71d46732e364740	619	Pfam	PF04183	IucA / IucC family	162	408	6.1E-76	T	15-10-2026	IPR007310	Aerobactin siderophore biosynthesis, IucA/IucC, N-terminal	-	-
+10cef06e32aa1753241da6fc0a25e800	10cef06e32aa1753241da6fc0a25e800	263	Gene3D	G3DSA:3.20.20.150	-	1	255	2.5E-30	T	15-10-2026	-	-	-	-
+10cef06e32aa1753241da6fc0a25e800	10cef06e32aa1753241da6fc0a25e800	263	Pfam	PF01261	Xylose isomerase-like TIM barrel	16	249	8.8E-16	T	15-10-2026	IPR013022	Xylose isomerase-like, TIM barrel domain	-	-
+10cef06e32aa1753241da6fc0a25e800	10cef06e32aa1753241da6fc0a25e800	263	SUPERFAMILY	SSF51658	Xylose isomerase-like	8	220	2.76E-28	T	15-10-2026	IPR036237	Xylose isomerase-like superfamily	-	-
+197fad9efff612b1d45b28f8adcd1fb1	197fad9efff612b1d45b28f8adcd1fb1	410	Pfam	PF01761	3-dehydroquinate synthase N-terminal	91	203	3.4E-30	T	15-10-2026	IPR030960	3-dehydroquinate synthase, N-terminal domain	-	-
+197fad9efff612b1d45b28f8adcd1fb1	197fad9efff612b1d45b28f8adcd1fb1	410	CDD	cd08199	EEVS	31	387	0.0	T	15-10-2026	IPR035872	2-epi-5-epi-valiolone synthase-like	-	-
+197fad9efff612b1d45b28f8adcd1fb1	197fad9efff612b1d45b28f8adcd1fb1	410	Gene3D	G3DSA:3.40.50.1970	-	12	197	6.1E-55	T	15-10-2026	-	-	-	-
+197fad9efff612b1d45b28f8adcd1fb1	197fad9efff612b1d45b28f8adcd1fb1	410	Pfam	PF24621	3-dehydroquinate synthase C-terminal	206	351	5.0E-20	T	15-10-2026	IPR056179	3-dehydroquinate synthase, C-terminal domain	-	-
+197fad9efff612b1d45b28f8adcd1fb1	197fad9efff612b1d45b28f8adcd1fb1	410	Gene3D	G3DSA:1.20.1090.10	-	198	405	4.2E-52	T	15-10-2026	-	-	-	-
+197fad9efff612b1d45b28f8adcd1fb1	197fad9efff612b1d45b28f8adcd1fb1	410	SUPERFAMILY	SSF56796	Dehydroquinate synthase-like	32	386	1.83E-77	T	15-10-2026	-	-	-	-
+3224fb84ea368dba37d6f4540ee69e71	3224fb84ea368dba37d6f4540ee69e71	343	Gene3D	G3DSA:1.10.3470.10	ABC transporter involved in vitamin B12 uptake, BtuC	19	343	1.5E-85	T	15-10-2026	IPR037294	ABC transporter, BtuC-like	-	-
+3224fb84ea368dba37d6f4540ee69e71	3224fb84ea368dba37d6f4540ee69e71	343	Pfam	PF01032	FecCD transport family	30	339	2.0E-80	T	15-10-2026	IPR000522	ABC transporter, permease protein, BtuC-like	-	-
+3224fb84ea368dba37d6f4540ee69e71	3224fb84ea368dba37d6f4540ee69e71	343	SUPERFAMILY	SSF81345	ABC transporter involved in vitamin B12 uptake, BtuC	13	339	9.29E-76	T	15-10-2026	IPR037294	ABC transporter, BtuC-like	-	-
+3224fb84ea368dba37d6f4540ee69e71	3224fb84ea368dba37d6f4540ee69e71	343	CDD	cd06550	TM_ABC_iron-siderophores_like	88	338	4.33334E-45	T	15-10-2026	-	-	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	Pfam	PF13561	Enoyl-(Acyl carrier protein) reductase	10	245	1.1E-30	T	15-10-2026	IPR002347	Short-chain dehydrogenase/reductase SDR	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	SUPERFAMILY	SSF51735	NAD(P)-binding Rossmann-fold domains	3	247	6.49E-52	T	15-10-2026	IPR036291	NAD(P)-binding domain superfamily	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	CDD	cd05233	SDR_c	4	242	2.50604E-48	T	15-10-2026	-	-	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	Gene3D	G3DSA:3.40.50.720	-	1	251	3.5E-52	T	15-10-2026	-	-	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	ProSitePatterns	PS00061	Short-chain dehydrogenases/reductases family signature.	132	160	-	T	15-10-2026	IPR020904	Short-chain dehydrogenase/reductase, conserved site	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	PRINTS	PR00081	Glucose/ribitol dehydrogenase family signature	145	164	1.1E-19	T	15-10-2026	IPR002347	Short-chain dehydrogenase/reductase SDR	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	PRINTS	PR00081	Glucose/ribitol dehydrogenase family signature	3	20	1.1E-19	T	15-10-2026	IPR002347	Short-chain dehydrogenase/reductase SDR	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	PRINTS	PR00081	Glucose/ribitol dehydrogenase family signature	119	135	1.1E-19	T	15-10-2026	IPR002347	Short-chain dehydrogenase/reductase SDR	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	PRINTS	PR00081	Glucose/ribitol dehydrogenase family signature	209	229	1.1E-19	T	15-10-2026	IPR002347	Short-chain dehydrogenase/reductase SDR	-	-
+44234363bfbde0e0f35fb97292d21fb6	44234363bfbde0e0f35fb97292d21fb6	252	PRINTS	PR00081	Glucose/ribitol dehydrogenase family signature	166	183	1.1E-19	T	15-10-2026	IPR002347	Short-chain dehydrogenase/reductase SDR	-	-
+5b8f2654dd5fa44102fc47071d721cbd	5b8f2654dd5fa44102fc47071d721cbd	253	CDD	cd05233	SDR_c	12	230	2.21826E-20	T	15-10-2026	-	-	-	-
+5b8f2654dd5fa44102fc47071d721cbd	5b8f2654dd5fa44102fc47071d721cbd	253	Gene3D	G3DSA:3.40.50.720	-	1	235	2.3E-32	T	15-10-2026	-	-	-	-
+5b8f2654dd5fa44102fc47071d721cbd	5b8f2654dd5fa44102fc47071d721cbd	253	PRINTS	PR00081	Glucose/ribitol dehydrogenase family signature	11	28	7.2E-6	T	15-10-2026	IPR002347	Short-chain dehydrogenase/reductase SDR	-	-
+5b8f2654dd5fa44102fc47071d721cbd	5b8f2654dd5fa44102fc47071d721cbd	253	PRINTS	PR00081	Glucose/ribitol dehydrogenase family signature	150	169	7.2E-6	T	15-10-2026	IPR002347	Short-chain dehydrogenase/reductase SDR	-	-
+5b8f2654dd5fa44102fc47071d721cbd	5b8f2654dd5fa44102fc47071d721cbd	253	ProSitePatterns	PS00061	Short-chain dehydrogenases/reductases family signature.	137	165	-	T	15-10-2026	IPR020904	Short-chain dehydrogenase/reductase, conserved site	-	-
+5b8f2654dd5fa44102fc47071d721cbd	5b8f2654dd5fa44102fc47071d721cbd	253	Pfam	PF00106	short chain dehydrogenase	12	190	1.2E-19	T	15-10-2026	IPR002347	Short-chain dehydrogenase/reductase SDR	-	-
+5b8f2654dd5fa44102fc47071d721cbd	5b8f2654dd5fa44102fc47071d721cbd	253	SUPERFAMILY	SSF51735	NAD(P)-binding Rossmann-fold domains	6	237	1.91E-34	T	15-10-2026	IPR036291	NAD(P)-binding domain superfamily	-	-
+689cc2b36f01c66a5f11b6c3cf91cda6	689cc2b36f01c66a5f11b6c3cf91cda6	428	Gene3D	G3DSA:3.40.50.2000	Glycogen Phosphorylase B;	211	407	5.5E-36	T	15-10-2026	-	-	-	-
+689cc2b36f01c66a5f11b6c3cf91cda6	689cc2b36f01c66a5f11b6c3cf91cda6	428	SUPERFAMILY	SSF53756	UDP-Glycosyltransferase/glycogen phosphorylase	17	416	1.33E-43	T	15-10-2026	-	-	-	-
+689cc2b36f01c66a5f11b6c3cf91cda6	689cc2b36f01c66a5f11b6c3cf91cda6	428	Gene3D	G3DSA:3.40.50.2000	Glycogen Phosphorylase B;	7	199	1.6E-51	T	15-10-2026	-	-	-	-
+689cc2b36f01c66a5f11b6c3cf91cda6	689cc2b36f01c66a5f11b6c3cf91cda6	428	Pfam	PF21269	Trehalose synthase, N-terminal domain	19	170	2.1E-36	T	15-10-2026	IPR049438	Trehalose synthase, N-terminal domain	-	-
+689cc2b36f01c66a5f11b6c3cf91cda6	689cc2b36f01c66a5f11b6c3cf91cda6	428	Pfam	PF00534	Glycosyl transferases group 1	317	401	2.2E-15	T	15-10-2026	IPR001296	Glycosyl transferase, family 1	-	-
+7be4591e4dd202c704d7878d8822fca7	7be4591e4dd202c704d7878d8822fca7	344	Pfam	PF00480	ROK family	12	285	4.2E-6	T	15-10-2026	IPR000600	ROK family	-	-
+7be4591e4dd202c704d7878d8822fca7	7be4591e4dd202c704d7878d8822fca7	344	Gene3D	G3DSA:3.30.420.40	-	138	303	1.2E-19	T	15-10-2026	-	-	-	-
+7be4591e4dd202c704d7878d8822fca7	7be4591e4dd202c704d7878d8822fca7	344	Gene3D	G3DSA:3.30.420.40	-	8	137	9.2E-10	T	15-10-2026	-	-	-	-
+7be4591e4dd202c704d7878d8822fca7	7be4591e4dd202c704d7878d8822fca7	344	SUPERFAMILY	SSF53067	Actin-like ATPase domain	10	339	7.56E-25	T	15-10-2026	IPR043129	ATPase, nucleotide binding domain	-	-
+8b9f9998e52b4c9355767159c71111ec	8b9f9998e52b4c9355767159c71111ec	329	CDD	cd06550	TM_ABC_iron-siderophores_like	59	322	1.85064E-44	T	15-10-2026	-	-	-	-
+8b9f9998e52b4c9355767159c71111ec	8b9f9998e52b4c9355767159c71111ec	329	Gene3D	G3DSA:1.10.3470.10	ABC transporter involved in vitamin B12 uptake, BtuC	3	329	3.4E-88	T	15-10-2026	IPR037294	ABC transporter, BtuC-like	-	-
+8b9f9998e52b4c9355767159c71111ec	8b9f9998e52b4c9355767159c71111ec	329	Pfam	PF01032	FecCD transport family	13	324	5.2E-85	T	15-10-2026	IPR000522	ABC transporter, permease protein, BtuC-like	-	-
+8b9f9998e52b4c9355767159c71111ec	8b9f9998e52b4c9355767159c71111ec	329	SUPERFAMILY	SSF81345	ABC transporter involved in vitamin B12 uptake, BtuC	6	324	4.84E-74	T	15-10-2026	IPR037294	ABC transporter, BtuC-like	-	-
+8b9f9998e52b4c9355767159c71111ec	8b9f9998e52b4c9355767159c71111ec	329	ProSiteProfiles	PS51257	Prokaryotic membrane lipoprotein lipid attachment site profile.	1	17	5.0	T	15-10-2026	-	-	-	-
+8b886677b16fce747c41bf2e7ade79e5	8b886677b16fce747c41bf2e7ade79e5	357	Pfam	PF07690	Major Facilitator Superfamily	200	351	2.8E-10	T	15-10-2026	IPR011701	Major facilitator superfamily	-	-
+8b886677b16fce747c41bf2e7ade79e5	8b886677b16fce747c41bf2e7ade79e5	357	Gene3D	G3DSA:1.20.1250.20	MFS general substrate transporter like domains	170	353	2.4E-15	T	15-10-2026	IPR036259	MFS transporter superfamily	-	-
+8b886677b16fce747c41bf2e7ade79e5	8b886677b16fce747c41bf2e7ade79e5	357	Gene3D	G3DSA:1.20.1250.20	MFS general substrate transporter like domains	1	164	2.4E-7	T	15-10-2026	IPR036259	MFS transporter superfamily	-	-
+8b886677b16fce747c41bf2e7ade79e5	8b886677b16fce747c41bf2e7ade79e5	357	ProSiteProfiles	PS50850	Major facilitator superfamily (MFS) profile.	174	357	11.143541	T	15-10-2026	IPR020846	Major facilitator superfamily domain	-	-
+8b886677b16fce747c41bf2e7ade79e5	8b886677b16fce747c41bf2e7ade79e5	357	SUPERFAMILY	SSF103473	MFS general substrate transporter	2	349	1.96E-29	T	15-10-2026	IPR036259	MFS transporter superfamily	-	-
+907f9ba78abda325069513e02d8a4ab7	907f9ba78abda325069513e02d8a4ab7	468	Gene3D	G3DSA:1.20.1720.10	Multidrug resistance protein D	11	224	1.2E-45	T	15-10-2026	-	-	-	-
+907f9ba78abda325069513e02d8a4ab7	907f9ba78abda325069513e02d8a4ab7	468	Pfam	PF07690	Major Facilitator Superfamily	15	406	2.7E-47	T	15-10-2026	IPR011701	Major facilitator superfamily	-	-
+907f9ba78abda325069513e02d8a4ab7	907f9ba78abda325069513e02d8a4ab7	468	ProSiteProfiles	PS50850	Major facilitator superfamily (MFS) profile.	10	456	35.240299	T	15-10-2026	IPR020846	Major facilitator superfamily domain	-	-
+907f9ba78abda325069513e02d8a4ab7	907f9ba78abda325069513e02d8a4ab7	468	Gene3D	G3DSA:1.20.1250.20	MFS general substrate transporter like domains	259	461	2.5E-14	T	15-10-2026	IPR036259	MFS transporter superfamily	-	-
+907f9ba78abda325069513e02d8a4ab7	907f9ba78abda325069513e02d8a4ab7	468	NCBIfam	TIGR00711	DHA2 family efflux MFS transporter permease subunit	12	415	1.0E-78	T	15-10-2026	IPR004638	Drug resistance transporter EmrB-like	-	-
+907f9ba78abda325069513e02d8a4ab7	907f9ba78abda325069513e02d8a4ab7	468	SUPERFAMILY	SSF103473	MFS general substrate transporter	6	453	1.7E-63	T	15-10-2026	IPR036259	MFS transporter superfamily	-	-
+91ac1515368bccf62d32258bb323bebf	91ac1515368bccf62d32258bb323bebf	594	Gene3D	G3DSA:1.10.340.60	AcsD, palm domain, helix bundle	476	556	6.6E-22	T	15-10-2026	IPR043045	PvsD/AcsD-like, palm domain, helix bundle	-	-
+91ac1515368bccf62d32258bb323bebf	91ac1515368bccf62d32258bb323bebf	594	Gene3D	G3DSA:1.10.340.60	AcsD, palm domain, helix bundle	410	444	1.4E-6	T	15-10-2026	IPR043045	PvsD/AcsD-like, palm domain, helix bundle	-	-
+91ac1515368bccf62d32258bb323bebf	91ac1515368bccf62d32258bb323bebf	594	Gene3D	G3DSA:2.30.30.1240	-	38	104	6.0E-34	T	15-10-2026	IPR043033	PvsD/AcsD-like, thumb domain, four stranded beta-sheet	-	-
+91ac1515368bccf62d32258bb323bebf	91ac1515368bccf62d32258bb323bebf	594	Gene3D	G3DSA:1.10.150.640	AcsD, thumb domain, helical bundle	1	37	1.0E-16	T	15-10-2026	IPR043032	PvsD/AcsD-like, thumb domain, helical bundle	-	-
+91ac1515368bccf62d32258bb323bebf	91ac1515368bccf62d32258bb323bebf	594	Gene3D	G3DSA:1.10.150.640	AcsD, thumb domain, helical bundle	105	149	1.6E-13	T	15-10-2026	IPR043032	PvsD/AcsD-like, thumb domain, helical bundle	-	-
+91ac1515368bccf62d32258bb323bebf	91ac1515368bccf62d32258bb323bebf	594	Gene3D	G3DSA:3.30.160.870	-	557	587	5.9E-16	T	15-10-2026	-	-	-	-
+91ac1515368bccf62d32258bb323bebf	91ac1515368bccf62d32258bb323bebf	594	Pfam	PF06276	Ferric iron reductase FhuF-like transporter	417	576	8.8E-31	T	15-10-2026	IPR022770	Aerobactin siderophore biosynthesis IucA/IucC-like, C-terminal	-	-
+91ac1515368bccf62d32258bb323bebf	91ac1515368bccf62d32258bb323bebf	594	Pfam	PF04183	IucA / IucC family	159	387	3.6E-42	T	15-10-2026	IPR007310	Aerobactin siderophore biosynthesis, IucA/IucC, N-terminal	-	-
+9732f9caa7dc2a7085afa26f63e5b585	9732f9caa7dc2a7085afa26f63e5b585	175	PRINTS	PR00038	LuxR bacterial regulatory protein HTH signature	141	153	5.3E-10	T	15-10-2026	IPR000792	Transcription regulator LuxR, C-terminal	-	-
+9732f9caa7dc2a7085afa26f63e5b585	9732f9caa7dc2a7085afa26f63e5b585	175	PRINTS	PR00038	LuxR bacterial regulatory protein HTH signature	125	141	5.3E-10	T	15-10-2026	IPR000792	Transcription regulator LuxR, C-terminal	-	-
+9732f9caa7dc2a7085afa26f63e5b585	9732f9caa7dc2a7085afa26f63e5b585	175	PRINTS	PR00038	LuxR bacterial regulatory protein HTH signature	111	125	5.3E-10	T	15-10-2026	IPR000792	Transcription regulator LuxR, C-terminal	-	-
+9732f9caa7dc2a7085afa26f63e5b585	9732f9caa7dc2a7085afa26f63e5b585	175	Pfam	PF00196	Bacterial regulatory proteins, luxR family	110	165	3.0E-13	T	15-10-2026	IPR000792	Transcription regulator LuxR, C-terminal	-	-
+9732f9caa7dc2a7085afa26f63e5b585	9732f9caa7dc2a7085afa26f63e5b585	175	SUPERFAMILY	SSF46894	C-terminal effector domain of the bipartite response regulators	101	168	3.33E-18	T	15-10-2026	IPR016032	Signal transduction response regulator, C-terminal effector	-	-
+9732f9caa7dc2a7085afa26f63e5b585	9732f9caa7dc2a7085afa26f63e5b585	175	Gene3D	G3DSA:1.10.10.10	-	81	170	2.1E-18	T	15-10-2026	IPR036388	Winged helix-like DNA-binding domain superfamily	-	-
+9732f9caa7dc2a7085afa26f63e5b585	9732f9caa7dc2a7085afa26f63e5b585	175	SMART	SM00421	luxrmega5	108	165	3.3E-18	T	15-10-2026	IPR000792	Transcription regulator LuxR, C-terminal	-	-
+9732f9caa7dc2a7085afa26f63e5b585	9732f9caa7dc2a7085afa26f63e5b585	175	ProSiteProfiles	PS50043	LuxR-type HTH domain profile.	104	169	22.528048	T	15-10-2026	IPR000792	Transcription regulator LuxR, C-terminal	-	-
+9732f9caa7dc2a7085afa26f63e5b585	9732f9caa7dc2a7085afa26f63e5b585	175	CDD	cd06170	LuxR_C_like	111	166	1.48702E-14	T	15-10-2026	IPR000792	Transcription regulator LuxR, C-terminal	-	-
+9f1a808fd9237103b1eb6a3382c48e9e	9f1a808fd9237103b1eb6a3382c48e9e	263	SUPERFAMILY	SSF52540	P-loop containing nucleoside triphosphate hydrolases	4	230	2.22E-60	T	15-10-2026	IPR027417	P-loop containing nucleoside triphosphate hydrolase	-	-
+9f1a808fd9237103b1eb6a3382c48e9e	9f1a808fd9237103b1eb6a3382c48e9e	263	CDD	cd03214	ABC_Iron-Siderophores_B12_Hemin	7	222	9.73918E-85	T	15-10-2026	-	-	-	-
+9f1a808fd9237103b1eb6a3382c48e9e	9f1a808fd9237103b1eb6a3382c48e9e	263	ProSitePatterns	PS00211	ABC transporters family signature.	140	154	-	T	15-10-2026	IPR017871	ABC transporter-like, conserved site	-	-
+9f1a808fd9237103b1eb6a3382c48e9e	9f1a808fd9237103b1eb6a3382c48e9e	263	ProSiteProfiles	PS50893	ATP-binding cassette, ABC transporter-type domain profile.	4	240	22.115623	T	15-10-2026	IPR003439	ABC transporter-like, ATP-binding domain	-	-
+9f1a808fd9237103b1eb6a3382c48e9e	9f1a808fd9237103b1eb6a3382c48e9e	263	Pfam	PF00005	ABC transporter	20	168	2.9E-31	T	15-10-2026	IPR003439	ABC transporter-like, ATP-binding domain	-	-
+9f1a808fd9237103b1eb6a3382c48e9e	9f1a808fd9237103b1eb6a3382c48e9e	263	Gene3D	G3DSA:3.40.50.300	-	4	249	5.4E-67	T	15-10-2026	IPR027417	P-loop containing nucleoside triphosphate hydrolase	-	-
+9f1a808fd9237103b1eb6a3382c48e9e	9f1a808fd9237103b1eb6a3382c48e9e	263	SMART	SM00382	AAA_5	28	216	1.0E-14	T	15-10-2026	IPR003593	AAA+ ATPase domain	-	-
+b335486becd2dd71d57657bbffc19c1b	b335486becd2dd71d57657bbffc19c1b	365	CDD	cd05188	MDR	31	312	3.18673E-19	T	15-10-2026	-	-	-	-
+b335486becd2dd71d57657bbffc19c1b	b335486becd2dd71d57657bbffc19c1b	365	SUPERFAMILY	SSF50129	GroES-like	13	162	9.43E-23	T	15-10-2026	IPR011032	GroES-like superfamily	-	-
+b335486becd2dd71d57657bbffc19c1b	b335486becd2dd71d57657bbffc19c1b	365	Gene3D	G3DSA:3.90.180.10	-	6	347	1.3E-24	T	15-10-2026	-	-	-	-
+b335486becd2dd71d57657bbffc19c1b	b335486becd2dd71d57657bbffc19c1b	365	Pfam	PF08240	Alcohol dehydrogenase GroES-like domain	25	113	1.5E-4	T	15-10-2026	IPR013154	Alcohol dehydrogenase-like, N-terminal	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	Pfam	PF02784	Pyridoxal-dependent decarboxylase, pyridoxal binding domain	32	279	1.3E-30	T	15-10-2026	IPR022644	Orn/DAP/Arg decarboxylase 2, N-terminal	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	SUPERFAMILY	SSF51419	PLP-binding barrel	29	282	2.09E-60	T	15-10-2026	IPR029066	PLP-binding barrel	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	ProSitePatterns	PS00879	Orn/DAP/Arg decarboxylases family 2 signature 2.	222	238	-	T	15-10-2026	IPR022657	Orn/DAP/Arg decarboxylase 2, conserved site	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	SUPERFAMILY	SSF50621	Alanine racemase C-terminal domain-like	265	398	2.3E-33	T	15-10-2026	IPR009006	Alanine racemase/group IV decarboxylase, C-terminal	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	PRINTS	PR01179	Ornithine/diaminopimelate/arginine (ODA) decarboxylase family signature	269	288	5.7E-10	T	15-10-2026	IPR000183	Ornithine/DAP/Arg decarboxylase	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	PRINTS	PR01179	Ornithine/diaminopimelate/arginine (ODA) decarboxylase family signature	52	70	5.7E-10	T	15-10-2026	IPR000183	Ornithine/DAP/Arg decarboxylase	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	PRINTS	PR01179	Ornithine/diaminopimelate/arginine (ODA) decarboxylase family signature	184	197	5.7E-10	T	15-10-2026	IPR000183	Ornithine/DAP/Arg decarboxylase	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	PRINTS	PR01179	Ornithine/diaminopimelate/arginine (ODA) decarboxylase family signature	72	84	5.7E-10	T	15-10-2026	IPR000183	Ornithine/DAP/Arg decarboxylase	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	Gene3D	G3DSA:3.20.20.10	Alanine racemase	31	264	2.1E-48	T	15-10-2026	IPR029066	PLP-binding barrel	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	PRINTS	PR01182	Ornithine decarboxylase signature	93	117	5.3E-6	T	15-10-2026	IPR002433	Ornithine decarboxylase	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	PRINTS	PR01182	Ornithine decarboxylase signature	359	372	5.3E-6	T	15-10-2026	IPR002433	Ornithine decarboxylase	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	PRINTS	PR01182	Ornithine decarboxylase signature	50	77	5.3E-6	T	15-10-2026	IPR002433	Ornithine decarboxylase	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	Gene3D	G3DSA:2.40.37.10	Lyase, Ornithine Decarboxylase; Chain A, domain 1	265	402	2.0E-33	T	15-10-2026	IPR009006	Alanine racemase/group IV decarboxylase, C-terminal	-	-
+bc3facb9c26ad912c90e69e72f073f78	bc3facb9c26ad912c90e69e72f073f78	402	CDD	cd06843	PLPDE_III_PvsE_like	22	394	0.0	T	15-10-2026	-	-	-	-
+c04154a9ed41c3f8cb8eb11cac26a0f8	c04154a9ed41c3f8cb8eb11cac26a0f8	306	Gene3D	G3DSA:3.30.420.40	-	2	115	1.0E-23	T	15-10-2026	-	-	-	-
+c04154a9ed41c3f8cb8eb11cac26a0f8	c04154a9ed41c3f8cb8eb11cac26a0f8	306	Pfam	PF00480	ROK family	8	300	4.8E-45	T	15-10-2026	IPR000600	ROK family	-	-
+c04154a9ed41c3f8cb8eb11cac26a0f8	c04154a9ed41c3f8cb8eb11cac26a0f8	306	SUPERFAMILY	SSF53067	Actin-like ATPase domain	5	302	7.11E-52	T	15-10-2026	IPR043129	ATPase, nucleotide binding domain	-	-
+c04154a9ed41c3f8cb8eb11cac26a0f8	c04154a9ed41c3f8cb8eb11cac26a0f8	306	Gene3D	G3DSA:3.30.420.40	-	117	306	7.2E-46	T	15-10-2026	-	-	-	-
+c53ca71349b39c6024681dc39ad31b53	c53ca71349b39c6024681dc39ad31b53	181	SUPERFAMILY	SSF55811	Nudix	3	172	1.9E-35	T	15-10-2026	IPR015797	NUDIX hydrolase-like domain superfamily	-	-
+c53ca71349b39c6024681dc39ad31b53	c53ca71349b39c6024681dc39ad31b53	181	CDD	cd24161	NUDIX_ADPRase_Ndx2	37	174	2.01049E-60	T	15-10-2026	-	-	-	-
+c53ca71349b39c6024681dc39ad31b53	c53ca71349b39c6024681dc39ad31b53	181	Gene3D	G3DSA:3.90.79.10	Nucleoside Triphosphate Pyrophosphohydrolase	1	178	8.5E-44	T	15-10-2026	-	-	-	-
+c53ca71349b39c6024681dc39ad31b53	c53ca71349b39c6024681dc39ad31b53	181	ProSiteProfiles	PS51462	Nudix hydrolase domain profile.	27	168	11.676158	T	15-10-2026	IPR000086	NUDIX hydrolase domain	-	-
+c53ca71349b39c6024681dc39ad31b53	c53ca71349b39c6024681dc39ad31b53	181	Pfam	PF00293	NUDIX domain	42	155	1.1E-4	T	15-10-2026	IPR000086	NUDIX hydrolase domain	-	-
+c846809908b490f3b26d3f538b2d767c	c846809908b490f3b26d3f538b2d767c	422	Gene3D	G3DSA:3.40.50.2000	Glycogen Phosphorylase B;	225	376	1.4E-16	T	15-10-2026	-	-	-	-
+c846809908b490f3b26d3f538b2d767c	c846809908b490f3b26d3f538b2d767c	422	SUPERFAMILY	SSF53756	UDP-Glycosyltransferase/glycogen phosphorylase	10	390	2.67E-25	T	15-10-2026	-	-	-	-
+c846809908b490f3b26d3f538b2d767c	c846809908b490f3b26d3f538b2d767c	422	Pfam	PF00534	Glycosyl transferases group 1	238	347	2.1E-7	T	15-10-2026	IPR001296	Glycosyl transferase, family 1	-	-
+c846809908b490f3b26d3f538b2d767c	c846809908b490f3b26d3f538b2d767c	422	CDD	cd03801	GT4_PimA-like	117	374	4.80454E-20	T	15-10-2026	-	-	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	Pfam	PF07715	TonB-dependent Receptor Plug Domain	159	252	1.1E-14	T	15-10-2026	IPR012910	TonB-dependent receptor, plug domain	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	Gene3D	G3DSA:2.170.130.10	-	147	269	7.4E-20	T	15-10-2026	IPR037066	TonB-dependent receptor, plug domain superfamily	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	Gene3D	G3DSA:2.40.170.20	-	270	802	5.6E-82	T	15-10-2026	IPR036942	TonB-dependent receptor-like, beta-barrel domain superfamily	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	SMART	SM00965	STN_2	61	112	5.0E-14	T	15-10-2026	IPR011662	Secretin/TonB, short N-terminal domain	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	Pfam	PF00593	TonB dependent receptor-like, beta-barrel	349	767	3.1E-37	T	15-10-2026	IPR000531	TonB-dependent receptor-like, beta-barrel	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	CDD	cd01347	ligand_gated_channel	164	802	2.43986E-88	T	15-10-2026	-	-	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	ProSitePatterns	PS01156	TonB-dependent receptor (TBDR) proteins signature 2.	785	802	-	T	15-10-2026	IPR010917	TonB-dependent receptor, conserved site	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	Pfam	PF07660	Secretin and TonB N terminus short domain	61	112	5.7E-5	T	15-10-2026	IPR011662	Secretin/TonB, short N-terminal domain	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	ProSiteProfiles	PS52016	TonB-dependent receptor (TBDR) proteins profile.	157	802	22.648483	T	15-10-2026	IPR039426	TonB-dependent receptor-like	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	NCBIfam	TIGR01783	TonB-dependent siderophore receptor	160	802	8.8E-99	T	15-10-2026	IPR010105	TonB-dependent siderophore receptor	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	Gene3D	G3DSA:3.55.50.30	-	31	133	1.6E-24	T	15-10-2026	-	-	-	-
+cd563717764fb9028838c8d89f9101da	cd563717764fb9028838c8d89f9101da	802	SUPERFAMILY	SSF56935	Porins	152	802	1.83E-110	T	15-10-2026	-	-	-	-
+d337ff97d5d61546bff6dee5a0a024a5	d337ff97d5d61546bff6dee5a0a024a5	301	SUPERFAMILY	SSF53807	"Helical backbone" metal receptor	31	293	5.89E-54	T	15-10-2026	-	-	-	-
+d337ff97d5d61546bff6dee5a0a024a5	d337ff97d5d61546bff6dee5a0a024a5	301	Pfam	PF01497	Periplasmic binding protein	35	272	8.2E-16	T	15-10-2026	IPR002491	ABC transporter periplasmic binding domain	-	-
+d337ff97d5d61546bff6dee5a0a024a5	d337ff97d5d61546bff6dee5a0a024a5	301	Gene3D	G3DSA:3.40.50.1980	Nitrogenase molybdenum iron protein domain	122	296	1.1E-36	T	15-10-2026	-	-	-	-
+d337ff97d5d61546bff6dee5a0a024a5	d337ff97d5d61546bff6dee5a0a024a5	301	Gene3D	G3DSA:3.40.50.1980	Nitrogenase molybdenum iron protein domain	28	119	1.1E-19	T	15-10-2026	-	-	-	-
+d337ff97d5d61546bff6dee5a0a024a5	d337ff97d5d61546bff6dee5a0a024a5	301	ProSiteProfiles	PS50983	Iron siderophore/cobalamin periplasmic-binding domain profile.	34	299	34.661629	T	15-10-2026	IPR002491	ABC transporter periplasmic binding domain	-	-
+d337ff97d5d61546bff6dee5a0a024a5	d337ff97d5d61546bff6dee5a0a024a5	301	CDD	cd01146	FhuD	30	289	1.45526E-73	T	15-10-2026	-	-	-	-
+d68b98e363cd7dd2b42b0da397767c69	d68b98e363cd7dd2b42b0da397767c69	293	SUPERFAMILY	SSF56784	HAD-like	32	271	3.85E-22	T	15-10-2026	IPR036412	HAD-like superfamily	-	-
+d68b98e363cd7dd2b42b0da397767c69	d68b98e363cd7dd2b42b0da397767c69	293	Gene3D	G3DSA:3.40.50.1000	-	34	229	2.4E-25	T	15-10-2026	IPR023214	HAD superfamily	-	-
+d68b98e363cd7dd2b42b0da397767c69	d68b98e363cd7dd2b42b0da397767c69	293	Gene3D	G3DSA:3.30.70.1020	-	116	191	2.4E-25	T	15-10-2026	-	-	-	-
+d68b98e363cd7dd2b42b0da397767c69	d68b98e363cd7dd2b42b0da397767c69	293	Pfam	PF02358	Trehalose-phosphatase	34	238	2.9E-13	T	15-10-2026	IPR003337	Trehalose-phosphatase	-	-
+d68b98e363cd7dd2b42b0da397767c69	d68b98e363cd7dd2b42b0da397767c69	293	NCBIfam	TIGR00685	trehalose-phosphatase	31	276	3.2E-15	T	15-10-2026	IPR003337	Trehalose-phosphatase	-	-
+d86906c7b6673b15fab72d900d6c8b68	d86906c7b6673b15fab72d900d6c8b68	539	Gene3D	G3DSA:3.40.50.2000	Glycogen Phosphorylase B;	54	324	6.5E-67	T	15-10-2026	-	-	-	-
+d86906c7b6673b15fab72d900d6c8b68	d86906c7b6673b15fab72d900d6c8b68	539	SUPERFAMILY	SSF53756	UDP-Glycosyltransferase/glycogen phosphorylase	120	518	3.45E-59	T	15-10-2026	-	-	-	-
+d86906c7b6673b15fab72d900d6c8b68	d86906c7b6673b15fab72d900d6c8b68	539	Pfam	PF00982	Glycosyltransferase family 20	122	515	4.1E-49	T	15-10-2026	IPR001830	Glycosyl transferase, family 20	-	-
+d86906c7b6673b15fab72d900d6c8b68	d86906c7b6673b15fab72d900d6c8b68	539	CDD	cd03788	GT20_TPS	57	518	3.86616E-119	T	15-10-2026	IPR001830	Glycosyl transferase, family 20	-	-
+d86906c7b6673b15fab72d900d6c8b68	d86906c7b6673b15fab72d900d6c8b68	539	Gene3D	G3DSA:3.40.50.2000	Glycogen Phosphorylase B;	325	497	3.3E-17	T	15-10-2026	-	-	-	-
+d86906c7b6673b15fab72d900d6c8b68	d86906c7b6673b15fab72d900d6c8b68	539	MobiDBLite	mobidb-lite	consensus disorder prediction	1	40	-	T	15-10-2026	-	-	-	-
+e14439ba29d834375dc29154fe8db985	e14439ba29d834375dc29154fe8db985	381	Gene3D	G3DSA:3.20.20.140	-	59	346	1.7E-118	T	15-10-2026	-	-	-	-
+e14439ba29d834375dc29154fe8db985	e14439ba29d834375dc29154fe8db985	381	CDD	cd00854	NagA	7	378	2.28075E-146	T	15-10-2026	IPR003764	N-acetylglucosamine-6-phosphate deacetylase	-	-
+e14439ba29d834375dc29154fe8db985	e14439ba29d834375dc29154fe8db985	381	Gene3D	G3DSA:2.30.40.10	Urease, subunit C, domain 1	11	378	1.7E-118	T	15-10-2026	IPR011059	Metal-dependent hydrolase, composite domain superfamily	-	-
+e14439ba29d834375dc29154fe8db985	e14439ba29d834375dc29154fe8db985	381	SUPERFAMILY	SSF51338	Composite domain of metallo-dependent hydrolases	6	381	7.02E-13	T	15-10-2026	IPR011059	Metal-dependent hydrolase, composite domain superfamily	-	-
+e14439ba29d834375dc29154fe8db985	e14439ba29d834375dc29154fe8db985	381	Pfam	PF01979	Amidohydrolase family	55	378	2.1E-13	T	15-10-2026	IPR006680	Amidohydrolase-related	-	-
+e14439ba29d834375dc29154fe8db985	e14439ba29d834375dc29154fe8db985	381	NCBIfam	TIGR00221	N-acetylglucosamine-6-phosphate deacetylase	8	370	5.7E-71	T	15-10-2026	IPR003764	N-acetylglucosamine-6-phosphate deacetylase	-	-
+e14439ba29d834375dc29154fe8db985	e14439ba29d834375dc29154fe8db985	381	SUPERFAMILY	SSF51556	Metallo-dependent hydrolases	58	351	3.96E-88	T	15-10-2026	IPR032466	Metal-dependent hydrolase	-	-
+e14439ba29d834375dc29154fe8db985	e14439ba29d834375dc29154fe8db985	381	PIRSF	PIRSF038994	NagA	12	381	7.0E-107	T	15-10-2026	IPR003764	N-acetylglucosamine-6-phosphate deacetylase	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	Pfam	PF00702	haloacid dehalogenase-like hydrolase	14	180	1.0E-21	T	15-10-2026	-	-	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	SUPERFAMILY	SSF56784	HAD-like	14	199	7.46E-42	T	15-10-2026	IPR036412	HAD-like superfamily	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	CDD	cd07527	HAD_ScGPP-like	14	212	3.23479E-75	T	15-10-2026	-	-	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	SFLD	SFLDS00003	Haloacid Dehalogenase	14	195	3.0E-40	T	15-10-2026	-	-	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	Gene3D	G3DSA:3.40.50.1000	-	13	187	1.1E-49	T	15-10-2026	IPR023214	HAD superfamily	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	SFLD	SFLDG01129	C1.5: HAD, Beta-PGM, Phosphatase Like	14	195	3.0E-40	T	15-10-2026	-	-	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	Gene3D	G3DSA:1.10.150.240	Putative phosphatase; domain 2	27	87	1.1E-49	T	15-10-2026	IPR023198	Phosphoglycolate phosphatase-like, domain 2	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	NCBIfam	TIGR01509	HAD-IA family hydrolase	14	186	1.3E-15	T	15-10-2026	IPR006439	HAD hydrolase, subfamily IA	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	NCBIfam	TIGR01549	HAD-IA family hydrolase	14	165	2.8E-4	T	15-10-2026	IPR006439	HAD hydrolase, subfamily IA	-	-
+e1b77eec3ecf93f33da00ad5fbcf9384	e1b77eec3ecf93f33da00ad5fbcf9384	224	SFLD	SFLDG01135	C1.5.6: HAD, Beta-PGM, Phosphatase Like	14	195	3.0E-40	T	15-10-2026	-	-	-	-
+e64d4585a6169fb4ed36516870976d2d	e64d4585a6169fb4ed36516870976d2d	393	Gene3D	G3DSA:1.20.1250.20	MFS general substrate transporter like domains	206	386	4.4E-17	T	15-10-2026	IPR036259	MFS transporter superfamily	-	-
+e64d4585a6169fb4ed36516870976d2d	e64d4585a6169fb4ed36516870976d2d	393	Pfam	PF07690	Major Facilitator Superfamily	17	272	3.7E-22	T	15-10-2026	IPR011701	Major facilitator superfamily	-	-
+e64d4585a6169fb4ed36516870976d2d	e64d4585a6169fb4ed36516870976d2d	393	SUPERFAMILY	SSF103473	MFS general substrate transporter	16	383	8.63E-47	T	15-10-2026	IPR036259	MFS transporter superfamily	-	-
+e64d4585a6169fb4ed36516870976d2d	e64d4585a6169fb4ed36516870976d2d	393	Gene3D	G3DSA:1.20.1250.20	MFS general substrate transporter like domains	15	193	8.7E-17	T	15-10-2026	IPR036259	MFS transporter superfamily	-	-
+e64d4585a6169fb4ed36516870976d2d	e64d4585a6169fb4ed36516870976d2d	393	CDD	cd17393	MFS_MosC_like	17	366	4.77479E-56	T	15-10-2026	-	-	-	-
+e64d4585a6169fb4ed36516870976d2d	e64d4585a6169fb4ed36516870976d2d	393	ProSiteProfiles	PS50850	Major facilitator superfamily (MFS) profile.	13	390	15.460965	T	15-10-2026	IPR020846	Major facilitator superfamily domain	-	-
+e6ddddbfa357779c446fad2b8be7a037	e6ddddbfa357779c446fad2b8be7a037	389	MobiDBLite	mobidb-lite	consensus disorder prediction	367	389	-	T	15-10-2026	-	-	-	-
+e6ddddbfa357779c446fad2b8be7a037	e6ddddbfa357779c446fad2b8be7a037	389	Pfam	PF24894	GlmU-like, C-terminal hexapeptide	311	380	1.8E-4	T	15-10-2026	IPR056818	Glucose-1-phosphate adenylyltransferase/Bifunctional protein GlmU-like, C-terminal hexapeptide	-	-
+e6ddddbfa357779c446fad2b8be7a037	e6ddddbfa357779c446fad2b8be7a037	389	Gene3D	G3DSA:3.90.550.10	Spore Coat Polysaccharide Biosynthesis Protein SpsA; Chain A	8	287	2.7E-57	T	15-10-2026	IPR029044	Nucleotide-diphospho-sugar transferases	-	-
+e6ddddbfa357779c446fad2b8be7a037	e6ddddbfa357779c446fad2b8be7a037	389	SUPERFAMILY	SSF53448	Nucleotide-diphospho-sugar transferases	15	339	7.04E-56	T	15-10-2026	IPR029044	Nucleotide-diphospho-sugar transferases	-	-
+e6ddddbfa357779c446fad2b8be7a037	e6ddddbfa357779c446fad2b8be7a037	389	Pfam	PF00483	Nucleotidyl transferase	17	279	3.4E-38	T	15-10-2026	IPR005835	Nucleotidyl transferase domain	-	-
+e6ddddbfa357779c446fad2b8be7a037	e6ddddbfa357779c446fad2b8be7a037	389	Gene3D	G3DSA:2.160.10.10	Hexapeptide repeat proteins	293	385	1.4E-11	T	15-10-2026	-	-	-	-
+ebedf5938d1ff1c63023076815f10579	ebedf5938d1ff1c63023076815f10579	627	Gene3D	G3DSA:1.10.510.40	-	402	603	2.8E-23	T	15-10-2026	-	-	-	-
+ebedf5938d1ff1c63023076815f10579	ebedf5938d1ff1c63023076815f10579	627	Pfam	PF04183	IucA / IucC family	166	409	4.6E-50	T	15-10-2026	IPR007310	Aerobactin siderophore biosynthesis, IucA/IucC, N-terminal	-	-
+ebedf5938d1ff1c63023076815f10579	ebedf5938d1ff1c63023076815f10579	627	Pfam	PF06276	Ferric iron reductase FhuF-like transporter	455	602	9.7E-13	T	15-10-2026	IPR022770	Aerobactin siderophore biosynthesis IucA/IucC-like, C-terminal	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	NCBIfam	NF005386	diaminobutyrate--2-oxoglutarate transaminase	5	457	1.8E-258	T	15-10-2026	-	-	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	SUPERFAMILY	SSF53383	PLP-dependent transferases	27	450	3.94E-125	T	15-10-2026	IPR015424	Pyridoxal phosphate-dependent transferase	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	Gene3D	G3DSA:3.90.1150.10	Aspartate Aminotransferase, domain 1	21	446	1.3E-137	T	15-10-2026	IPR015422	Pyridoxal phosphate-dependent transferase, small domain	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	ProSitePatterns	PS00600	Aminotransferases class-III pyridoxal-phosphate attachment site.	259	296	-	T	15-10-2026	IPR049704	Aminotransferases class-III pyridoxal-phosphate attachment site	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	Gene3D	G3DSA:3.40.640.10	-	73	340	1.3E-137	T	15-10-2026	IPR015421	Pyridoxal phosphate-dependent transferase, major domain	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	NCBIfam	NF005393	diaminobutyrate--2-oxoglutarate transaminase	9	455	1.2E-198	T	15-10-2026	-	-	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	CDD	cd00610	OAT_like	20	449	3.89435E-167	T	15-10-2026	IPR005814	Aminotransferase class-III	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	PIRSF	PIRSF000521	Transaminase_4ab_Lys_Orn	26	450	2.1E-47	T	15-10-2026	IPR005814	Aminotransferase class-III	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	Pfam	PF00202	Aminotransferase class-III	36	449	1.1E-98	T	15-10-2026	IPR005814	Aminotransferase class-III	-	-
+f6f7ddf3e0b2c2fa409067943b6084b1	f6f7ddf3e0b2c2fa409067943b6084b1	458	NCBIfam	TIGR00709	diaminobutyrate--2-oxoglutarate transaminase family protein	18	456	1.2E-213	T	15-10-2026	IPR004637	2,4-diaminobutyrate 4-transaminase	-	-
+fc3417574d2d13afdf8c65a06f2ce2cf	fc3417574d2d13afdf8c65a06f2ce2cf	258	Pfam	PF03328	HpcH/HpaI aldolase/citrate lyase	28	215	1.3E-29	T	15-10-2026	IPR005000	HpcH/HpaI aldolase/citrate lyase domain	-	-
+fc3417574d2d13afdf8c65a06f2ce2cf	fc3417574d2d13afdf8c65a06f2ce2cf	258	SUPERFAMILY	SSF51621	Phosphoenolpyruvate/pyruvate domain	1	252	7.68E-72	T	15-10-2026	IPR015813	Pyruvate/Phosphoenolpyruvate kinase-like domain superfamily	-	-
+fc3417574d2d13afdf8c65a06f2ce2cf	fc3417574d2d13afdf8c65a06f2ce2cf	258	Gene3D	G3DSA:3.20.20.60	-	2	257	2.2E-81	T	15-10-2026	IPR040442	Pyruvate kinase-like domain superfamily	-	-
+fe07b67423f681689b3f59941ff8d8fe	fe07b67423f681689b3f59941ff8d8fe	319	SUPERFAMILY	SSF51735	NAD(P)-binding Rossmann-fold domains	111	280	1.28E-47	T	15-10-2026	IPR036291	NAD(P)-binding domain superfamily	-	-
+fe07b67423f681689b3f59941ff8d8fe	fe07b67423f681689b3f59941ff8d8fe	319	Gene3D	G3DSA:3.90.180.10	-	12	316	9.0E-105	T	15-10-2026	-	-	-	-
+fe07b67423f681689b3f59941ff8d8fe	fe07b67423f681689b3f59941ff8d8fe	319	Pfam	PF13602	Zinc-binding dehydrogenase	183	316	1.7E-22	T	15-10-2026	-	-	-	-
+fe07b67423f681689b3f59941ff8d8fe	fe07b67423f681689b3f59941ff8d8fe	319	SMART	SM00829	PKS_ER_names_mod	10	316	2.5E-51	T	15-10-2026	IPR020843	Enoylreductase domain	-	-
+fe07b67423f681689b3f59941ff8d8fe	fe07b67423f681689b3f59941ff8d8fe	319	CDD	cd05276	p53_inducible_oxidoreductase	1	316	1.21361E-166	T	15-10-2026	IPR014189	Quinone oxidoreductase PIG3	-	-
+fe07b67423f681689b3f59941ff8d8fe	fe07b67423f681689b3f59941ff8d8fe	319	SUPERFAMILY	SSF50129	GroES-like	1	139	4.11E-38	T	15-10-2026	IPR011032	GroES-like superfamily	-	-
+fe07b67423f681689b3f59941ff8d8fe	fe07b67423f681689b3f59941ff8d8fe	319	Gene3D	G3DSA:3.40.50.720	-	120	255	9.0E-105	T	15-10-2026	-	-	-	-
+fe07b67423f681689b3f59941ff8d8fe	fe07b67423f681689b3f59941ff8d8fe	319	Pfam	PF08240	Alcohol dehydrogenase GroES-like domain	27	109	7.4E-10	T	15-10-2026	IPR013154	Alcohol dehydrogenase-like, N-terminal	-	-
+fe07b67423f681689b3f59941ff8d8fe	fe07b67423f681689b3f59941ff8d8fe	319	NCBIfam	TIGR02824	putative NAD(P)H quinone oxidoreductase, PIG3 family	1	317	8.0E-126	T	15-10-2026	IPR014189	Quinone oxidoreductase PIG3	-	-

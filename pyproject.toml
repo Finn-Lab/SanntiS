@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sanntis"
+dynamic = ["version"]
+description = "SMBGC Annotation using Neural Networks Trained on Interpro Signatures"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+authors = [
+    { name = "Santiago Sanchez Fragoso", email = "fragoso@ebi.ac.uk" },
+    { name = "MGnify team", email = "metagenomics-help@ebi.ac.uk" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "numpy>=2.0,<3",
+    "pandas>=2.2,<3",
+    "pyarrow>=17",
+    "scikit-learn>=1.9,<1.10",
+    "scipy>=1.13",
+    "skops>=0.11",
+    "torch>=2.4",
+    "safetensors>=0.4",
+    "huggingface_hub>=0.30",
+    "biopython>=1.84",
+    "pyrodigal>=3.5,<4",
+    "click>=8.1,<9",
+    "pydantic>=2.7,<3",
+    "PyYAML>=6",
+]
+
+[project.urls]
+Homepage = "https://github.com/Finn-Lab/SanntiS"
+Documentation = "https://github.com/Finn-Lab/SanntiS/tree/master/docs"
+Repository = "https://github.com/Finn-Lab/SanntiS"
+Issues = "https://github.com/Finn-Lab/SanntiS/issues"
+Model = "https://huggingface.co/microbiome-informatics/sanntis"
+
+[project.optional-dependencies]
+train = ["matplotlib>=3.8", "rdkit>=2024.3"]
+dev = ["pytest>=8", "pytest-cov", "ruff>=0.6", "pre-commit"]
+docs = ["mkdocs-material>=9.5"]
+
+[project.scripts]
+sanntis = "sanntis.cli:main"
+
+[tool.hatch.version]
+path = "src/sanntis/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sanntis"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/sanntis", "tests", "docs", "README.md", "LICENSE", "CITATION.cff"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+ignore = ["E741"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "slow: long-running tests",
+    "nextflow: needs nextflow on PATH",
+]
