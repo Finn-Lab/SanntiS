@@ -1,0 +1,38 @@
+name: release
+# On a version tag: build sdist + wheel, attach them to a GitHub Release (the install source, together with
+# bioconda; SanntiS is not published to PyPI), then check that the tagged package loads the matching Hub bundle.
+# Tags with a "-" (v1.0.0-beta.1) are marked as pre-releases.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with: {python-version: "3.12"}
+      - run: pip install build
+      - run: python -m build
+      - run: sha256sum dist/* > dist/SHA256SUMS
+      - uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+
+  hub-bundle-load:
+    needs: github-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with: {python-version: "3.12"}
+      - run: pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install "git+https://github.com/${GITHUB_REPOSITORY}@${GITHUB_REF_NAME}"
+      - run: python -c "from sanntis.model.bundle import SanntisModel; m = SanntisModel.from_pretrained('microbiome-informatics/sanntis@' + '${GITHUB_REF_NAME}'); print(m.source)"
