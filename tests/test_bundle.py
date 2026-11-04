@@ -67,6 +67,15 @@ def test_manifest_lists_every_file(dummy_bundle):
     assert not any(n.endswith((".pt", ".pkl", ".joblib")) for n in on_disk)
 
 
+def test_model_card_attributes_training_data(dummy_bundle):
+    card = (dummy_bundle / "README.md").read_text()
+    assert "license: apache-2.0" in card
+    section = card.split("## Licence and data attribution", 1)[1].split("## Citation", 1)[0]
+    for source in ("MIBiG", "CC BY 4.0", "GTDB", "CC BY-SA 4.0", "NCBI", "InterPro", "NPClassifier",
+                   "sanntis-training-data"):
+        assert source in section, source
+
+
 def test_tampered_file_fails(dummy_bundle):
     with open(dummy_bundle / "vocab.json", "a") as fh:
         fh.write(" ")

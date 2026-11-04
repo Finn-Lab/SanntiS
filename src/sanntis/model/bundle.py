@@ -344,6 +344,34 @@ def model_card(manifest: dict, config: BundleConfig) -> str:
         "## Integrity", "", "Every file is listed with its sha256 in `manifest.json` and verified on load. "
         "No pickles: detectors are safetensors, sklearn models skops (explicit trusted types), the kNN reference a "
         "sparse npz.", "",
+        *DATA_ATTRIBUTION,
         "## Citation", "", "```bibtex", *CITATION.splitlines(), "```", "",
     ]
     return "\n".join(lines)
+
+
+TRAINING_DATA_REPO = "https://huggingface.co/datasets/microbiome-informatics/sanntis-training-data"
+
+# The sources of the training data, with their terms (the model files themselves are Apache-2.0)
+DATA_ATTRIBUTION = [
+    "## Licence and data attribution", "",
+    "The model files are released under Apache-2.0. They hold learned parameters, a vocabulary of InterPro "
+    "signatures and NPClassifier class names and, in `npc_knn.npz`, the kNN reference: one binary domain-presence "
+    "vector and the NPClassifier labels per training BGC (derived from MIBiG; no sequences). The training data come "
+    f"from the sources below and are published with their licences in [sanntis-training-data]({TRAINING_DATA_REPO}) "
+    "(CC BY 4.0; `negatives/` CC BY-SA 4.0).", "",
+    "- [MIBiG](https://mibig.secondarymetabolites.org) (CC BY 4.0): the positive BGCs. Zdouc et al., *Nucleic "
+    "Acids Research* 2025, doi:10.1093/nar/gkae1115.",
+    "- [GTDB](https://gtdb.ecogenomic.org) r226 (CC BY-SA 4.0): the species representatives the prokaryotic "
+    "negative genomes were selected from. Parks et al., *Nucleic Acids Research* 2022, doi:10.1093/nar/gkab776.",
+    "- NCBI GenBank / RefSeq (INSDC; no use restrictions, though submitters may hold rights): the genome and locus "
+    "sequences, including the eukaryotic negative genomes.",
+    "- [InterPro](https://www.ebi.ac.uk/interpro) (CC0): the token annotations. Blum et al., *Nucleic Acids "
+    "Research* 2025, doi:10.1093/nar/gkae1082.",
+    "- [NPClassifier](https://npclassifier.gnps2.org): the product-class labels. Kim et al., *Journal of Natural "
+    "Products* 2021, doi:10.1021/acs.jnatprod.1c00399.",
+    "- [antiSMASH](https://antismash.secondarymetabolites.org) 8.0.1: masking of the native BGCs of the negative "
+    "genomes (its outputs only; the software is not included). Blin et al., *Nucleic Acids Research* 2025, "
+    "doi:10.1093/nar/gkaf334.",
+    "",
+]
