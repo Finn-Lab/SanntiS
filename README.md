@@ -281,6 +281,14 @@ ruff check src tests && pytest -q -m "not nextflow"
 
 Tests marked `nextflow` need Nextflow on `PATH`.
 
+## Acknowledgements
+
+This work is part of EUREMAP (European Research Infrastructure for Marine Bioprospecting, https://euremap.eu),
+funded by the European Union's Horizon Europe research and innovation programme under grant agreement No 101131663
+([doi:10.3030/101131663](https://doi.org/10.3030/101131663)). Views and opinions expressed are however those of the
+author(s) only and do not necessarily reflect those of the European Union. Neither the European Union nor the granting
+authority can be held responsible for them.
+
 ## Citations
 
 If you use SanntiS, please cite:

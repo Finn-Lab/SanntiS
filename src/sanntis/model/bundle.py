@@ -345,10 +345,22 @@ def model_card(manifest: dict, config: BundleConfig) -> str:
         "No pickles: detectors are safetensors, sklearn models skops (explicit trusted types), the kNN reference a "
         "sparse npz.", "",
         *DATA_ATTRIBUTION,
+        *ACKNOWLEDGEMENTS,
         "## Citation", "", "```bibtex", *CITATION.splitlines(), "```", "",
     ]
     return "\n".join(lines)
 
+
+# Funding statement (EUREMAP grant agreement); the same text is in the README and the training-data card
+ACKNOWLEDGEMENTS = [
+    "## Acknowledgements", "",
+    "This work is part of EUREMAP (European Research Infrastructure for Marine Bioprospecting, https://euremap.eu), "
+    "funded by the European Union's Horizon Europe research and innovation programme under grant agreement "
+    "No 101131663 ([doi:10.3030/101131663](https://doi.org/10.3030/101131663)). Views and opinions expressed are "
+    "however those of the author(s) only and do not necessarily reflect those of the European Union. Neither the "
+    "European Union nor the granting authority can be held responsible for them.",
+    "",
+]
 
 TRAINING_DATA_REPO = "https://huggingface.co/datasets/microbiome-informatics/sanntis-training-data"
 

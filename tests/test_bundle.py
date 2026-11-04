@@ -76,6 +76,13 @@ def test_model_card_attributes_training_data(dummy_bundle):
         assert source in section, source
 
 
+def test_model_card_acknowledges_funding(dummy_bundle):
+    card = (dummy_bundle / "README.md").read_text()
+    section = card.split("## Acknowledgements", 1)[1].split("## Citation", 1)[0]
+    for text in ("EUREMAP", "Horizon Europe", "101131663"):
+        assert text in section, text
+
+
 def test_tampered_file_fails(dummy_bundle):
     with open(dummy_bundle / "vocab.json", "a") as fh:
         fh.write(" ")
