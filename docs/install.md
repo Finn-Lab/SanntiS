@@ -15,9 +15,27 @@ SanntiS is installed from a GitHub release tag.
 
 ```bash
 pip install torch --index-url https://download.pytorch.org/whl/cpu   # optional: CPU-only PyTorch
-pip install "git+https://github.com/Finn-Lab/SanntiS@v1.0.0-beta.1"   # Python >= 3.11
-pip install "sanntis[train] @ git+https://github.com/Finn-Lab/SanntiS@v1.0.0-beta.1"   # with the training extras
+pip install "git+https://github.com/Finn-Lab/SanntiS@v1.0.0"   # Python >= 3.11
+pip install "sanntis[train] @ git+https://github.com/Finn-Lab/SanntiS@v1.0.0"   # with the training extras
 ```
+
+## Container
+
+Every release is published as an image on quay.io with CPU-only PyTorch and the model
+bundle of that release baked in, so `predict --ips-tsv` works offline
+(`HF_HUB_OFFLINE=1`; `--model` can still point at a local bundle directory). Managed
+InterProScan 6 mode is not part of the image.
+
+```bash
+docker run --rm -v "$PWD:/data" quay.io/microbiome-informatics/sanntis:1.0.0 \
+    predict /data/genome.gbk --ips-tsv /data/genome.ips.tsv --ips-release 107.0 -o /data/out
+singularity exec docker://quay.io/microbiome-informatics/sanntis:1.0.0 \
+    sanntis predict genome.gbk --ips-tsv genome.ips.tsv --ips-release 107.0 -o out
+```
+
+The image is built by the release workflow (`.github/workflows/release.yml`, job
+`container`) from the `Dockerfile` in the repository root; `workflow_dispatch` builds any
+branch as `quay.io/microbiome-informatics/sanntis:<branch>` for testing.
 
 ## Running InterProScan
 

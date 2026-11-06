@@ -6,7 +6,7 @@ path:
 ```python
 from sanntis import Predictor, SanntisModel
 
-m = SanntisModel.from_pretrained("microbiome-informatics/sanntis@v1.0.0-beta.1")  # Hub, pinned revision
+m = SanntisModel.from_pretrained("microbiome-informatics/sanntis@v1.0.0")  # Hub, pinned revision
 m = SanntisModel.from_pretrained("runs/my_retrain/bundle")            # local directory
 pred = Predictor(m).predict(cds_table)  # columns record_id, cds_idx, locus_tag, start, end, tokens
 ```

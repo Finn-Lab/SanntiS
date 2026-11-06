@@ -4,7 +4,7 @@
 with the same layout as the Hub release and loads the same way, with `--model runs/my_run/bundle`.
 
 ```bash
-pip install "sanntis[train] @ git+https://github.com/Finn-Lab/SanntiS@v1.0.0-beta.1"
+pip install "sanntis[train] @ git+https://github.com/Finn-Lab/SanntiS@v1.0.0"
 sanntis train --run runs/my_run --mibig 4.0 --negatives <pool dir | hub revision> --container-engine docker
 ```
 
