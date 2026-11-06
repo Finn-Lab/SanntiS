@@ -13,4 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-__version__ = "1.0.0b1"  # git / Hub tag v1.0.0-beta.1
+__version__ = "1.0.0"  # git / Hub tag v1.0.0

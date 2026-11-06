@@ -1,10 +1,20 @@
 name: release
 # On a version tag: build sdist + wheel, attach them to a GitHub Release (the install source, together with
-# bioconda; SanntiS is not published to PyPI), then check that the tagged package loads the matching Hub bundle.
+# bioconda; SanntiS is not published to PyPI), check that the tagged package loads the matching Hub bundle,
+# then build the inference image with that bundle baked in and push it to
+# quay.io/microbiome-informatics/sanntis:<version> (and :latest for final releases).
 # Tags with a "-" (v1.0.0-beta.1) are marked as pre-releases.
+# `workflow_dispatch` builds the image for any ref (tag :<ref-slug>) without a GitHub Release, for
+# testing a branch in the ETL before it is tagged.
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag to push (default: the ref name, slashes replaced by '-')"
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -36,3 +46,55 @@ jobs:
       - run: pip install torch --index-url https://download.pytorch.org/whl/cpu
       - run: pip install "git+https://github.com/${GITHUB_REPOSITORY}@${GITHUB_REF_NAME}"
       - run: python -c "from sanntis.model.bundle import SanntisModel; m = SanntisModel.from_pretrained('microbiome-informatics/sanntis@' + '${GITHUB_REF_NAME}'); print(m.source)"
+
+  container:
+    # Needs the repository secrets QUAY_USERNAME / QUAY_PASSWORD (robot account with write
+    # access to quay.io/microbiome-informatics/sanntis), the same pair the ETL repo uses.
+    needs: [github-release, hub-bundle-load]
+    if: always() && (github.event_name == 'workflow_dispatch' || needs.hub-bundle-load.result == 'success')
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY: quay.io
+      IMAGE: quay.io/microbiome-informatics/sanntis
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Resolve tags
+        id: meta
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            version="${GITHUB_REF_NAME#v}"          # v1.0.0 -> 1.0.0, v1.0.0-beta.1 -> 1.0.0-beta.1
+            revision="${GITHUB_REF_NAME}"
+            tags="${IMAGE}:${version}"
+            [[ "${GITHUB_REF_NAME}" != *-* ]] && tags="${tags},${IMAGE}:latest"
+          else
+            slug="${{ github.event.inputs.image_tag }}"
+            [[ -z "${slug}" ]] && slug="${GITHUB_REF_NAME//\//-}"
+            revision=""                             # default bundle of the checked-out code
+            tags="${IMAGE}:${slug}"
+          fi
+          echo "tags=${tags}" >> "${GITHUB_OUTPUT}"
+          echo "revision=${revision}" >> "${GITHUB_OUTPUT}"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_PASSWORD }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          build-args: |
+            SANNTIS_REVISION=${{ steps.meta.outputs.revision }}
+      - name: Smoke test the pushed image
+        shell: bash
+        run: |
+          first="$(echo '${{ steps.meta.outputs.tags }}' | cut -d, -f1)"
+          docker run --rm "${first}" --version
+          docker run --rm -v "$PWD:/data" "${first}" example -o /data/ex
+          docker run --rm -v "$PWD:/data" "${first}" predict /data/ex/ERZ29794225_slice.faa \
+            --gff /data/ex/ERZ29794225_slice.gff --ips-tsv /data/ex/ERZ29794225_slice.ips.tsv \
+            --ips-release 107.0 -o /data/ex/out
+          test -s ex/out/ERZ29794225_slice.sanntis.gff3

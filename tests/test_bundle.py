@@ -144,7 +144,7 @@ def test_mocked_hub_round_trip(dummy_bundle, tmp_path, monkeypatch):
 
 
 def test_default_model_id():
-    """The default model tag names the installed release (v1.0.0-beta.1 ↔ 1.0.0b1[.devN])."""
+    """The default model tag names the installed release (v1.0.0 ↔ 1.0.0[.devN])."""
     from packaging.version import Version
 
     from sanntis import __version__

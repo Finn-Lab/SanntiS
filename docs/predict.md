@@ -132,7 +132,7 @@ antismash --sideload genome.sanntis.antismash.json genome.gbk
   analysis on them.
 
 ```json
-{"tool": {"name": "SanntiS", "version": "1.0.0b1", "description": "...", "configuration": {"kingdom": "proka", "...": "..."}},
+{"tool": {"name": "SanntiS", "version": "1.0.0", "description": "...", "configuration": {"kingdom": "proka", "...": "..."}},
  "records": [{"name": "BGC0002981",
               "subregions": [{"start": 117, "end": 27635, "label": "ribosomal",
                               "details": {"score": "0.8118", "ID": "BGC0002981_sanntis_1", "bgc_class": "ribosomal",

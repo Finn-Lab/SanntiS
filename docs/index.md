@@ -3,7 +3,7 @@
 SanntiS detects and classifies biosynthetic gene clusters (BGCs) from InterProScan domain annotations.
 
 ```bash
-conda create -n sanntis -c conda-forge -c bioconda sanntis   # or: pip install "git+https://github.com/Finn-Lab/SanntiS@v1.0.0-beta.1"
+conda create -n sanntis -c conda-forge -c bioconda sanntis   # or: pip install "git+https://github.com/Finn-Lab/SanntiS@v1.0.0"
 sanntis setup --container-engine docker            # optional: InterProScan 6.0.3.0 and InterPro 107.0 data
 sanntis predict genome.fna --container-engine docker -o out/
 ```
