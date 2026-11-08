@@ -18,7 +18,15 @@ import gzip
 import pandas as pd
 import pytest
 
-from sanntis.io.ips_tsv import IpsTsvError, canonical_app, check_apps, detect_version, read_ips_tsv, tokens_by_key
+from sanntis.io.ips_tsv import (
+    IpsTsvError,
+    canonical_app,
+    check_apps,
+    detect_version,
+    pin_to_signature_map,
+    read_ips_tsv,
+    tokens_by_key,
+)
 
 IPS5 = [
     "p1\tmd5a\t300\tPfam\tPF00109\tketoacyl-synt\t10\t200\t1E-30\tT\t15-10-2026\tIPR014030\tKS N\t-\t-",
@@ -78,3 +86,37 @@ def test_ips6_upper_case_md5(tmp_path):
     h = read_ips_tsv(_write(tmp_path, rows))
     assert h.version == "6" and h.hits["md5"].iloc[0] == "0001c5d32dccb8e03267c370872e1694"
     assert h.hits["app"].iloc[0] == "gene3d"
+
+
+# The same signatures as another InterPro release might report them (map = the model's release).
+PIN_MAP = pd.DataFrame({"signature": ["PF00001", "PF00002", "Coil"], "app": ["pfam", "pfam", "coils"],
+                        "entry": ["IPR000001", "IPR000002", None]})
+PIN_ROWS = [
+    # entry moved: the TSV names another IPR -> the model's entry, counted
+    "p1\tm1\t300\tPfam\tPF00001\t-\t10\t90\t1E-5\tT\t-\tIPR999999\told name\t-\t-",
+    # no --iprlookup in the TSV -> the model's entry, not counted
+    "p1\tm1\t300\tPfam\tPF00002\t-\t100\t190\t1E-5\tT\t-\t-\t-\t-\t-",
+    # integrated in the TSV's release, unintegrated in the model's -> own accession, counted
+    "p2\tm2\t200\tCoils\tCoil\t-\t5\t30\t-\tT\t-\tIPR000777\tx\t-\t-",
+    # signatures the model's release does not know -> dropped, counted
+    "p2\tm2\t200\tPfam\tPF77777\t-\t50\t150\t1E-5\tT\t-\tIPR077777\tnew\t-\t-",
+    "p3\tm3\t100\tPfam\tPF77778\t-\t1\t90\t1E-5\tT\t-\t-\t-\t-\t-",
+]
+
+
+def test_pin_to_signature_map(tmp_path):
+    h = read_ips_tsv(_write(tmp_path, PIN_ROWS))
+    kept, st = pin_to_signature_map(h.hits, PIN_MAP)
+    assert list(kept["signature"]) == ["PF00001", "PF00002", "Coil"]
+    assert st.as_dict() == {"rows": 5, "kept": 3, "drop_share": 0.4, "dropped_unknown_signature_by_app": {"pfam": 2},
+                            "interpro_entry_repinned_by_app": {"coils": 1, "pfam": 1}}
+    # tokens from the model's map; p3 had only unknown signatures -> no tokens at all (not <unk>)
+    assert tokens_by_key(kept, PIN_MAP) == {"p1": ["IPR000001", "IPR000002"], "p2": ["Coil"]}
+
+
+def test_pin_empty_and_all_known(tmp_path):
+    h = read_ips_tsv(_write(tmp_path, PIN_ROWS[:2]))
+    kept, st = pin_to_signature_map(h.hits, PIN_MAP)
+    assert len(kept) == 2 and st.drop_share == 0.0 and not st.dropped_unknown_signature_by_app
+    kept, st = pin_to_signature_map(h.hits.iloc[:0], PIN_MAP)
+    assert kept.empty and st.as_dict()["rows"] == 0 and st.drop_share == 0.0

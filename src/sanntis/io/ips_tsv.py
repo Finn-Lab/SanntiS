@@ -20,7 +20,9 @@ names (col 4) and in col 10 (IPS 5: match status ``T``; IPS 6: the analysis name
 version or the InterPro release.
 
 Tokens come from the bundle's ``signature_map`` (signature → InterPro entry at the bundle's release), never from
-the TSV's own IPR column: a signature absent from the map keeps its own accession.
+the TSV's own IPR column. A precomputed TSV from another InterPro release is first pinned to that map
+(:func:`pin_to_signature_map`): signatures the map does not know are dropped, so a later release cannot add tokens
+the model never saw. An unintegrated signature keeps its own accession as its token.
 """
 
 from __future__ import annotations
@@ -158,6 +160,46 @@ def check_apps(h: IpsHits, *, allow_incomplete: bool = False) -> list[str]:
                           "--allow-incomplete-ips overrides)")
     log.warning(msg)
     return missing
+
+
+PIN_DROP_WARN_SHARE = 0.05  # warn when more than this share of a TSV's kept-app hits has an unknown signature
+
+
+@dataclass
+class PinStats:
+    """What pinning a TSV to the model's signature map changed (run metadata)."""
+
+    rows: int = 0  # hits of the allowed apps
+    kept: int = 0  # of those, signatures known to the map
+    dropped_unknown_signature_by_app: Counter = field(default_factory=Counter)
+    interpro_entry_repinned_by_app: Counter = field(default_factory=Counter)  # TSV IPR column != pinned entry
+
+    @property
+    def drop_share(self) -> float:
+        return (self.rows - self.kept) / self.rows if self.rows else 0.0
+
+    def as_dict(self) -> dict:
+        return {"rows": self.rows, "kept": self.kept, "drop_share": round(self.drop_share, 4),
+                "dropped_unknown_signature_by_app": dict(sorted(self.dropped_unknown_signature_by_app.items())),
+                "interpro_entry_repinned_by_app": dict(sorted(self.interpro_entry_repinned_by_app.items()))}
+
+
+def pin_to_signature_map(hits: pd.DataFrame, signature_map: pd.DataFrame) -> tuple[pd.DataFrame, PinStats]:
+    """Keep the hits whose signature is in ``signature_map`` (the model's InterPro release).
+
+    Counts, per app, the dropped hits and the kept hits whose TSV IPR column names another entry than the map
+    (including an entry the map has as unintegrated). A TSV without IPR columns (no ``--iprlookup``) counts none.
+    """
+    entry = {s: (e if isinstance(e, str) else "") for s, e in zip(signature_map["signature"], signature_map["entry"],
+                                                                     strict=True)}
+    known = hits["signature"].isin(entry.keys())
+    kept = hits[known].reset_index(drop=True)
+    pinned = kept["signature"].map(entry)
+    repinned = kept["ipr"].notna() & (kept["ipr"] != pinned)
+    st = PinStats(rows=len(hits), kept=len(kept),
+                  dropped_unknown_signature_by_app=Counter(hits.loc[~known, "app"]),
+                  interpro_entry_repinned_by_app=Counter(kept.loc[repinned, "app"]))
+    return kept, st
 
 
 def token_of(hits: pd.DataFrame, signature_map: pd.DataFrame) -> pd.Series:

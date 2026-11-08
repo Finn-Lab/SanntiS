@@ -15,18 +15,25 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pytest
 import torch
 
 from sanntis.config import load_recipe
+from sanntis.data import EXAMPLE_DIR
 from sanntis.features.vocab import Vocab
+from sanntis.io.ips_tsv import read_ips_tsv
 from sanntis.model.bundle import BundleConfig, SanntisModel
 from sanntis.model.detector import Detector
 from sanntis.model.npc import NpcModel, NpcThresholds
 from sanntis.model.postfilter import NON_BGC, PostFilter
 from sanntis.train.npc_train import PATHWAYS
+
+FIXTURE_TSVS = [Path(__file__).parent / "fixtures" / "ips576.tsv", Path(__file__).parent / "fixtures" / "ips6.tsv",
+                EXAMPLE_DIR / "ERZ29794225_slice.ips.tsv"]
 
 CLASSES = ["NRPS", "PKS", "ribosomal", "terpene", "saccharide", "other"]
 
@@ -58,8 +65,13 @@ def make_dummy_model(seed: int = 0, n_seeds: int = 2, npc: bool = True) -> Sannt
         th = NpcThresholds(np.full(len(pathways), 0.4), {"pw": {0.8: 0.3, 0.9: 0.55}, "sc": {0.8: 0.3, 0.9: 0.6}})
         npc_model = NpcModel.fit(regions, np.where(np.arange(len(regions)) % 4 == 0, "euk", "proka"), yp, ys,
                                  np.ones(len(regions)), pathways, sc, th, rf_trees=10, n_jobs=1)
-    sigmap = pd.DataFrame({"signature": [f"PF{i:05d}" for i in range(5)], "app": "pfam",
+    # PF00000-PF00004 integrated; every signature of the fixture TSVs known but unintegrated (kept by the pin, its
+    # token is its own accession), like the full signature map of a real InterPro release
+    mapped = pd.DataFrame({"signature": [f"PF{i:05d}" for i in range(5)], "app": "pfam",
                            "entry": [f"IPR{i:06d}" for i in range(5)]})
+    fx = (pd.concat([read_ips_tsv(t).hits[["signature", "app"]] for t in FIXTURE_TSVS])
+          .drop_duplicates("signature").assign(entry=None))
+    sigmap = pd.concat([mapped, fx[~fx["signature"].isin(mapped["signature"])]], ignore_index=True)
     cfg = BundleConfig(detector=r.detector, features=r.features, decode=r.decode,
                        postfilter_drop_threshold=r.postfilter.drop_threshold, bgc_classes=CLASSES,
                        npc_enabled=npc)

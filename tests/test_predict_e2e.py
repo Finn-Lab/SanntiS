@@ -150,6 +150,38 @@ def test_ips_tsv(tmp_path, fake_nf, dummy_bundle, version):
     assert h["ips"] == f"InterProScan {version}.x InterPro unknown (tsv, TSV v{version})"
 
 
+def _with_unknown_signatures(tmp_path, n: int) -> Path:
+    """ips576.tsv plus ``n`` hits of a signature no InterPro release of the model knows (a later release's)."""
+    rows = (FIX / "ips576.tsv").read_text().splitlines()
+    md5 = rows[0].split("\t")[0]
+    extra = [f"{md5}\t{md5}\t619\tPfam\tPF99999\tnew family\t{10 + i}\t{60 + i}\t1E-9\tT\t-\tIPR099999\tnew\t-\t-"
+             for i in range(n)]
+    p = tmp_path / f"later_release_{n}.tsv"
+    p.write_text("\n".join(rows + extra) + "\n")
+    return p
+
+
+@pytest.mark.parametrize("n_unknown, warns", [(2, False), (20, True)])
+def test_ips_tsv_pinned_to_model_release(tmp_path, dummy_bundle, caplog, n_unknown, warns):
+    """Hits of signatures the model's InterPro release does not know are dropped: same predictions as without them."""
+    predict(GBK, "--ips-tsv", FIX / "ips576.tsv", "--model", dummy_bundle, "-o", tmp_path / "base")
+    with caplog.at_level("INFO", logger="sanntis"):
+        predict(GBK, "--ips-tsv", _with_unknown_signatures(tmp_path, n_unknown), "--ips-release", "108.0",
+                "--model", dummy_bundle, "-o", tmp_path / "later")
+    for name in ("BGC0003066.sanntis.gff3", "BGC0003066.orf_scores.tsv"):
+        assert features(tmp_path / "base" / name) == features(tmp_path / "later" / name)
+    base = json.loads((tmp_path / "base" / "BGC0003066.run.json").read_text())
+    meta = json.loads((tmp_path / "later" / "BGC0003066.run.json").read_text())
+    pin = meta["ips"]["pin"]
+    assert pin["dropped_unknown_signature_by_app"] == {"pfam": n_unknown}
+    assert pin["kept"] == base["ips"]["pin"]["kept"] and pin["rows"] == pin["kept"] + n_unknown
+    assert pin["interpro_release"] == meta["model"]["ips"]["interpro"]
+    assert meta["ips"]["interpro_release"] == "108.0" and meta["qc"] == base["qc"]
+    warned = [r for r in caplog.records if r.levelname == "WARNING" and "signatures unknown" in r.getMessage()]
+    assert bool(warned) is warns
+    assert not [r for r in caplog.records if "differs from the bundle" in r.getMessage()]
+
+
 def test_ips_tsv_and_managed_agree(tmp_path, fake_nf, dummy_bundle):
     """IPS6 TSV given by hand == the managed IPS6 path (same recorded output)."""
     predict(GBK, "--model", dummy_bundle, "-o", tmp_path / "m")

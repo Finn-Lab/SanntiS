@@ -42,9 +42,14 @@ the version is detected from the file. Hits are joined to the CDS by protein id,
 `<contig>_<n>` for pyrodigal calls. When the ids do not match, hits are joined by the md5 of the sequence. Hits of
 other analyses, such as PANTHER, are dropped. If Pfam, Gene3D or SUPERFAMILY have no hit at all in a TSV of 100 or
 more proteins, the run stops; `--allow-incomplete-ips` continues instead. The InterPro release cannot be read from
-the TSV, so it is declared with `--ips-release`. Without it, the release is recorded as `unknown`. A release that
-differs from the model produces a warning. Signatures are mapped to InterPro entries with the table of the model,
-not with the IPR column of the TSV.
+the TSV, so it is declared with `--ips-release`. Without it, the release is recorded as `unknown`.
+
+Hits are pinned to the InterPro release of the model, so a TSV from a later release gives the same tokens as one
+from the model's release. Signatures are mapped to InterPro entries with the table of the model, not with the IPR
+column of the TSV. Hits of signatures that the model's release does not have, such as families added in later
+releases, are dropped. `<prefix>.run.json` records under `ips.pin` how many hits were kept, how many were dropped
+per application, and how many had a different InterPro entry in the TSV. When more than 5 % of the hits are dropped,
+a warning is logged. Runs of the managed InterProScan 6 are always at the model's release.
 
 ## Options
 
@@ -75,7 +80,7 @@ not with the IPR column of the TSV.
 | `<prefix>.sanntis.antismash.json` | the same regions as antiSMASH sideloader JSON, see below |
 | `<prefix>.orf_scores.tsv` | `record_id, cds_idx, locus_tag, score` |
 | `<prefix>.regions.tsv` | one row per region with every attribute |
-| `<prefix>.run.json` | run metadata: input, model, InterProScan mode, version and release, cache hits, join statistics, QC, timings |
+| `<prefix>.run.json` | run metadata: input, model, InterProScan mode, version and release, cache hits, join statistics, pinning to the model's InterPro release (`--ips-tsv`), QC, timings |
 | `<prefix>.cds.faa`, `<prefix>.cds.gff3` | written with `--write-faa` |
 
 GFF attributes: `ID`, `nearest_MiBIG_class` (equal to `bgc_class`), `bgc_class`, `p_non_bgc`, `n_orfs`,
@@ -132,7 +137,7 @@ antismash --sideload genome.sanntis.antismash.json genome.gbk
   analysis on them.
 
 ```json
-{"tool": {"name": "SanntiS", "version": "1.0.0", "description": "...", "configuration": {"kingdom": "proka", "...": "..."}},
+{"tool": {"name": "SanntiS", "version": "1.1.0", "description": "...", "configuration": {"kingdom": "proka", "...": "..."}},
  "records": [{"name": "BGC0002981",
               "subregions": [{"start": 117, "end": 27635, "label": "ribosomal",
                               "details": {"score": "0.8118", "ID": "BGC0002981_sanntis_1", "bgc_class": "ribosomal",
