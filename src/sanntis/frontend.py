@@ -37,7 +37,16 @@ from sanntis.io.fasta import InputError, input_kind, input_prefix, read_nucleoti
 from sanntis.io.genbank import read_genbank
 from sanntis.io.gff import write_gff
 from sanntis.io.gff_cds import read_faa_gff
-from sanntis.io.ips_tsv import IpsHits, check_apps, join_tokens, read_ips_tsv, tokens_by_key
+from sanntis.io.ips_tsv import (
+    PIN_DROP_WARN_SHARE,
+    IpsHits,
+    PinStats,
+    check_apps,
+    join_tokens,
+    pin_to_signature_map,
+    read_ips_tsv,
+    tokens_by_key,
+)
 from sanntis.io.tables import write_orf_scores, write_regions
 from sanntis.model.bundle import SanntisModel, default_model_id
 from sanntis.predict import Predictor
@@ -138,20 +147,21 @@ def annotate_managed(samples: list[Sample], m: SanntisModel, opts: NextflowOptio
 
 def annotate_tsv(samples: list[Sample], m: SanntisModel, *, ips_release: str | None,
                  allow_incomplete_ips: bool) -> None:
-    """Tokens from a precomputed InterProScan TSV, joined to the CDS by protein id, else md5."""
+    """Tokens from a precomputed InterProScan TSV, pinned to the model's signature map and joined to the CDS by
+    protein id, else md5."""
     bundle_release = m.manifest.get("ips", {}).get("interpro")
-    parsed: dict[Path, tuple[IpsHits, list[str]]] = {}  # TSV → hits, missing apps
+    release = ips_release or "unknown"
+    parsed: dict[Path, tuple[IpsHits, list[str], PinStats]] = {}  # TSV → pinned hits, missing apps, pin stats
     for s in samples:
         if s.ips_tsv not in parsed:
             h = read_ips_tsv(s.ips_tsv)
-            parsed[s.ips_tsv] = h, check_apps(h, allow_incomplete=allow_incomplete_ips)
             log.info("%s: InterProScan %s TSV, %d proteins, dropped analyses %s", s.ips_tsv, h.version, h.n_proteins,
                      dict(h.dropped))
-        h, missing_apps = parsed[s.ips_tsv]
-        release = ips_release or "unknown"
-        if release != bundle_release:
-            log.warning("--ips-tsv InterPro release %s differs from the bundle's %s (declare it with --ips-release)",
-                        release, bundle_release)
+            h.hits, pin = pin_to_signature_map(h.hits, m.signature_map)
+            h.per_app = Counter(h.hits["app"])
+            _log_pin(s.ips_tsv, pin, release, bundle_release)
+            parsed[s.ips_tsv] = h, check_apps(h, allow_incomplete=allow_incomplete_ips), pin
+        h, missing_apps, pin = parsed[s.ips_tsv]
         toks, keys, js = join_tokens(s.cds, h.hits, m.signature_map)
         if not h.hits.empty and js.by_id + js.by_md5 == 0:
             raise InputError(f"{s.ips_tsv}: no protein matches a CDS of {s.input} by id or md5 (wrong TSV?)")
@@ -163,7 +173,19 @@ def annotate_tsv(samples: list[Sample], m: SanntisModel, *, ips_release: str | N
         s.ips = {"mode": "tsv", "tsv": str(s.ips_tsv.resolve()), "detected_tsv_version": h.version,
                  "ips_version": f"{h.version}.x" if h.version in ("5", "6") else "unknown",
                  "interpro_release": release, "tsv_proteins": h.n_proteins,
-                 "dropped_analyses": dict(h.dropped), "missing_apps": missing_apps, "join": vars(js)}
+                 "dropped_analyses": dict(h.dropped), "missing_apps": missing_apps, "join": vars(js),
+                 "pin": {"interpro_release": bundle_release, **pin.as_dict()}}
+
+
+def _log_pin(tsv: Path, pin: PinStats, release: str, bundle_release: str | None) -> None:
+    """Hits of an InterPro release other than the model's are mapped to the model's; warn only on a large drop."""
+    log.info("%s: InterPro release %s mapped to the model's %s: %d/%d hits kept, unknown signatures dropped %s, "
+             "InterPro entry changed %s", tsv, release, bundle_release, pin.kept, pin.rows,
+             dict(pin.dropped_unknown_signature_by_app), dict(pin.interpro_entry_repinned_by_app))
+    if pin.drop_share > PIN_DROP_WARN_SHARE:
+        log.warning("%s: %.1f%% of the hits have signatures unknown to the model's InterPro %s and were dropped "
+                    "(declared release %s; a much newer InterProScan release?)", tsv, 100 * pin.drop_share,
+                    bundle_release, release)
 
 
 def gff_header(s: Sample, m: SanntisModel, qc: dict, qc_flags: list[str], kingdom: str, npc_precision: str) -> dict:

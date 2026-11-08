@@ -51,7 +51,7 @@ log = logging.getLogger(__name__)
 
 SCHEMA_VERSION = 1
 DEFAULT_REPO = "microbiome-informatics/sanntis"
-DEFAULT_REVISION = "v1.0.0"  # Hub tag of the default model = git tag of this release; bump with _version.py
+DEFAULT_REVISION = "v1.1.0"  # Hub tag of the default model = git tag of this release; bump with _version.py
 SIGNATURE_MAP_COLUMNS = ["signature", "app", "entry"]
 
 
