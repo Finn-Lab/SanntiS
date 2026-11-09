@@ -1,10 +1,11 @@
 <p align="center">
-  <img src="docs/assets/sanntis_logo.svg" alt="SanntiS logo" width="320">
+  <img src="https://raw.githubusercontent.com/Finn-Lab/SanntiS/master/docs/assets/sanntis_logo.svg" alt="SanntiS logo" width="320">
 </p>
 
 [![CI](https://github.com/Finn-Lab/SanntiS/actions/workflows/ci.yml/badge.svg)](https://github.com/Finn-Lab/SanntiS/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/sanntis.svg)](https://pypi.org/project/sanntis/)
 [![Bioconda](https://img.shields.io/conda/vn/bioconda/sanntis.svg)](https://anaconda.org/bioconda/sanntis)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/Finn-Lab/SanntiS/blob/master/LICENSE)
 [![DOI](https://img.shields.io/badge/DOI-10.1101%2F2023.05.23.540769-blue.svg)](https://doi.org/10.1101/2023.05.23.540769)
 
 # SanntiS
@@ -44,7 +45,7 @@ The conda package includes Nextflow and Java, which the second mode requires.
 #### pip
 
 ```bash
-pip install "git+https://github.com/Finn-Lab/SanntiS@v1.1.0"      # Python >= 3.11
+pip install sanntis      # Python >= 3.11
 ```
 
 Or the release image, with the model bundle baked in (precomputed-InterProScan mode only):
@@ -145,7 +146,7 @@ Proteins are deduplicated and looked up in the annotation cache in `$SANNTIS_CAC
 InterProScan runs. Proteins seen in an earlier run are not annotated again.
 
 On a cluster, pass a Nextflow configuration with `--nf-config` or `--nf-profile` and run `sanntis` itself as a
-small batch job. See [Running on other infrastructure](docs/infrastructure.md).
+small batch job. See [Running on other infrastructure](https://github.com/Finn-Lab/SanntiS/blob/master/docs/infrastructure.md).
 
 ### Options
 
@@ -166,7 +167,7 @@ sanntis predict INPUT... [-o OUTDIR] [--model HUB_ID@REV | DIR] [options]
 | `--container-engine`, `--nf-config`, `--nf-profile`, `--nf-args` | | Nextflow options of mode 2 |
 
 `sanntis predict --help` lists every option, and `sanntis -v predict ...` logs progress. The options are described
-in [docs/predict.md](docs/predict.md).
+in [docs/predict.md](https://github.com/Finn-Lab/SanntiS/blob/master/docs/predict.md).
 
 ## Output
 
@@ -214,7 +215,7 @@ BGC0002981	SanntiS	CLUSTER	118	27635	0.8118	.	.	ID=BGC0002981_sanntis_1;nearest_
 
 The `##` header lines record the model, the InterProScan version and the annotation coverage QC of the run.
 `qc-flags` lists warnings such as few CDS with domains or a missing member database. The attributes and the QC
-flags are documented in [docs/predict.md](docs/predict.md).
+flags are documented in [docs/predict.md](https://github.com/Finn-Lab/SanntiS/blob/master/docs/predict.md).
 
 ### antiSMASH compatibility
 
@@ -241,9 +242,9 @@ sanntis predict genome.fna --model runs/my_run/bundle                           
 HF_HUB_OFFLINE=1 sanntis predict ...                                              # offline, once cached
 ```
 
-The model directory layout is described in [Model bundle format](docs/bundle.md). SanntiS can retrain a model
-from a MIBiG release or from other BGC collections; see [Training a model](docs/train.md) and
-[Negative genome pool](docs/negatives.md).
+The model directory layout is described in [Model bundle format](https://github.com/Finn-Lab/SanntiS/blob/master/docs/bundle.md). SanntiS can retrain a model
+from a MIBiG release or from other BGC collections; see [Training a model](https://github.com/Finn-Lab/SanntiS/blob/master/docs/train.md) and
+[Negative genome pool](https://github.com/Finn-Lab/SanntiS/blob/master/docs/negatives.md).
 
 ### Training data
 
@@ -271,11 +272,11 @@ builds the archives and the validation report of the run are in the [`sanntisv1-
 
 ## Documentation
 
-- [Install](docs/install.md), caches and environment variables
-- [InterProScan setup](docs/setup.md)
-- [Predict](docs/predict.md): inputs, options, outputs, QC
-- [Running on other infrastructure](docs/infrastructure.md): SLURM and other executors
-- [Model bundle format](docs/bundle.md), [Training](docs/train.md), [Negative genome pool](docs/negatives.md)
+- [Install](https://github.com/Finn-Lab/SanntiS/blob/master/docs/install.md), caches and environment variables
+- [InterProScan setup](https://github.com/Finn-Lab/SanntiS/blob/master/docs/setup.md)
+- [Predict](https://github.com/Finn-Lab/SanntiS/blob/master/docs/predict.md): inputs, options, outputs, QC
+- [Running on other infrastructure](https://github.com/Finn-Lab/SanntiS/blob/master/docs/infrastructure.md): SLURM and other executors
+- [Model bundle format](https://github.com/Finn-Lab/SanntiS/blob/master/docs/bundle.md), [Training](https://github.com/Finn-Lab/SanntiS/blob/master/docs/train.md), [Negative genome pool](https://github.com/Finn-Lab/SanntiS/blob/master/docs/negatives.md)
 
 The pages build into a site with `pip install "sanntis[docs]"` and `mkdocs serve`.
 

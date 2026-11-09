@@ -1,6 +1,6 @@
 name: release
 # On a version tag: build sdist + wheel, attach them to a GitHub Release (the install source, together with
-# bioconda; SanntiS is not published to PyPI), check that the tagged package loads the matching Hub bundle,
+# bioconda and PyPI, see pypi.yml), check that the tagged package loads the matching Hub bundle,
 # then build the inference image with that bundle baked in and push it to
 # quay.io/microbiome-informatics/sanntis:<version> (and :latest for final releases).
 # Tags with a "-" (v1.0.0-beta.1) are marked as pre-releases.

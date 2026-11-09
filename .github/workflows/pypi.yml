@@ -1,0 +1,56 @@
+name: pypi
+# Publish sdist + wheel of a final version tag (v1.2.0, not v1.2.0-beta.1) to https://pypi.org/p/sanntis with
+# PyPI trusted publishing (no API token): the PyPI project trusts this workflow file in the `pypi` environment.
+# `workflow_dispatch` publishes an existing tag, for releases tagged before this workflow existed.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing final version tag to publish, e.g. v1.1.0"
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  TAG: ${{ inputs.tag || github.ref_name }}
+
+jobs:
+  build:
+    if: ${{ !contains(inputs.tag || github.ref_name, '-') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: refs/tags/${{ env.TAG }}
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with: {python-version: "3.12"}
+      - run: pip install build twine
+      - run: python -m build
+      - run: twine check --strict dist/*
+      - name: Tag matches the package version
+        shell: bash
+        run: |
+          version="$(python -c 'import re; print(re.search(r"__version__ = \"([^\"]+)\"", open("src/sanntis/_version.py").read())[1])')"
+          [[ "v${version}" == "${TAG}" ]] || { echo "tag ${TAG} != package version ${version}"; exit 1; }
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/sanntis
+    permissions:
+      id-token: write # trusted publishing
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
