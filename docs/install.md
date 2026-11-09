@@ -11,13 +11,17 @@ The bioconda package includes Nextflow, Java and the `[train]` extras, matplotli
 
 ## pip
 
-SanntiS is installed from a GitHub release tag.
+SanntiS is published on [PyPI](https://pypi.org/project/sanntis/). On Linux, `pip install torch` installs the
+CUDA build of PyTorch (several GB); install the CPU-only build first when there is no GPU.
 
 ```bash
 pip install torch --index-url https://download.pytorch.org/whl/cpu   # optional: CPU-only PyTorch
-pip install "git+https://github.com/Finn-Lab/SanntiS@v1.1.0"   # Python >= 3.11
-pip install "sanntis[train] @ git+https://github.com/Finn-Lab/SanntiS@v1.1.0"   # with the training extras
+pip install sanntis              # Python >= 3.11
+pip install "sanntis[train]"     # with the training extras
 ```
+
+A specific tag or an unreleased branch can be installed from GitHub:
+`pip install "git+https://github.com/Finn-Lab/SanntiS@v1.1.0"`.
 
 ## Container
 
