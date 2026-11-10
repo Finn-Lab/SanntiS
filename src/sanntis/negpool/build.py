@@ -138,16 +138,29 @@ def _call_genes(fna: Path, genome: str) -> list:
 
 
 def dedup_cds(rec):
-    """Keep the first CDS feature per exact location. RefSeq GBFFs list one CDS per transcript, so alternative
-    transcripts with the same CDS give duplicate features; antiSMASH rejects them and they would count twice."""
-    seen: set[str] = set()
+    """One CDS per gene, each with a unique name. RefSeq GBFFs list one CDS per transcript: alternative transcripts
+    give CDS with the same location or the same ``locus_tag``, which antiSMASH rejects and which would put several
+    isoforms of one gene in the pool. Keeps the first CDS per exact location and per ``locus_tag``; a CDS without
+    ``locus_tag`` (e.g. organelle genes named only by ``gene``) gets ``<record>_cds<n>``."""
+    seen_loc: set[str] = set()
+    seen_tag: set[str] = set()
     feats = []
+    n = 0
     for f in rec.features:
         if f.type == "CDS":
             key = str(f.location)
-            if key in seen:
+            tag = (f.qualifiers.get("locus_tag") or [None])[0]
+            if key in seen_loc or (tag is not None and tag in seen_tag):
                 continue
-            seen.add(key)
+            seen_loc.add(key)
+            if tag is None:
+                n += 1
+                tag = f"{rec.id}_cds{n}"
+                while tag in seen_tag:
+                    n += 1
+                    tag = f"{rec.id}_cds{n}"
+                f.qualifiers["locus_tag"] = [tag]
+            seen_tag.add(tag)
         feats.append(f)
     rec.features = feats
     return rec

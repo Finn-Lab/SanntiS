@@ -252,7 +252,11 @@ def test_dedup_cds_keeps_first_per_location():
     rec.features = [SeqFeature(loc, type="CDS", qualifiers={"locus_tag": ["a"]}),
                     SeqFeature(loc, type="CDS", qualifiers={"locus_tag": ["b"]}),
                     SeqFeature(FeatureLocation(50, 80, strand=1), type="CDS", qualifiers={"locus_tag": ["c"]}),
-                    SeqFeature(FeatureLocation(50, 80, strand=1), type="gene")]
+                    SeqFeature(FeatureLocation(50, 80, strand=1), type="gene"),
+                    SeqFeature(FeatureLocation(52, 80, strand=1), type="CDS", qualifiers={"locus_tag": ["c"]}),
+                    SeqFeature(FeatureLocation(85, 95, strand=1), type="CDS", qualifiers={"gene": ["cox1"]}),
+                    SeqFeature(FeatureLocation(88, 98, strand=1), type="CDS", qualifiers={"gene": ["cox1"]})]
     out = B.dedup_cds(rec)
-    assert [f.qualifiers.get("locus_tag", [""])[0] for f in out.features if f.type == "CDS"] == ["a", "c"]
+    tags = [f.qualifiers["locus_tag"][0] for f in out.features if f.type == "CDS"]
+    assert tags == ["a", "c", "c1_cds1", "c1_cds2"]  # same location, then same locus_tag dropped; no tag → named
     assert sum(f.type == "gene" for f in out.features) == 1
