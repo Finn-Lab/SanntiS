@@ -240,3 +240,19 @@ def test_build_with_per_genome_ips_tsv_skips_ips6(tmp_path, env):
     b = pd.read_parquet(pool.path / "cds_tokens.parquet")["tokens"].map(list)
     assert a.tolist() == b.tolist()
     assert pool.manifest["ips"]["per_genome_tsv"] == 1
+
+
+def test_dedup_cds_keeps_first_per_location():
+    from Bio.Seq import Seq
+    from Bio.SeqFeature import CompoundLocation, FeatureLocation, SeqFeature
+    from Bio.SeqRecord import SeqRecord
+
+    loc = CompoundLocation([FeatureLocation(10, 40, strand=-1), FeatureLocation(0, 6, strand=-1)])
+    rec = SeqRecord(Seq("A" * 100), id="c1")
+    rec.features = [SeqFeature(loc, type="CDS", qualifiers={"locus_tag": ["a"]}),
+                    SeqFeature(loc, type="CDS", qualifiers={"locus_tag": ["b"]}),
+                    SeqFeature(FeatureLocation(50, 80, strand=1), type="CDS", qualifiers={"locus_tag": ["c"]}),
+                    SeqFeature(FeatureLocation(50, 80, strand=1), type="gene")]
+    out = B.dedup_cds(rec)
+    assert [f.qualifiers.get("locus_tag", [""])[0] for f in out.features if f.type == "CDS"] == ["a", "c"]
+    assert sum(f.type == "gene" for f in out.features) == 1

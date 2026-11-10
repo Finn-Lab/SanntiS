@@ -137,6 +137,22 @@ def _call_genes(fna: Path, genome: str) -> list:
     return out
 
 
+def dedup_cds(rec):
+    """Keep the first CDS feature per exact location. RefSeq GBFFs list one CDS per transcript, so alternative
+    transcripts with the same CDS give duplicate features; antiSMASH rejects them and they would count twice."""
+    seen: set[str] = set()
+    feats = []
+    for f in rec.features:
+        if f.type == "CDS":
+            key = str(f.location)
+            if key in seen:
+                continue
+            seen.add(key)
+        feats.append(f)
+    rec.features = feats
+    return rec
+
+
 def prepare_unit(out: Path, genome: str) -> None:
     """Download (unless a local path is given) and build the CDS table + antiSMASH input of one genome."""
     from Bio import SeqIO
@@ -151,7 +167,7 @@ def prepare_unit(out: Path, genome: str) -> None:
     if row["kingdom"] == "proka" and not str(src).endswith((".gbk", ".gbk.gz", ".gbff", ".gbff.gz")):
         recs = _call_genes(src, genome)
     else:
-        recs = [r for r in read_records(src) if any(f.type == "CDS" for f in r.features)]
+        recs = [dedup_cds(r) for r in read_records(src) if any(f.type == "CDS" for f in r.features)]
     pdir = out / "prepared" / genome
     pdir.mkdir(parents=True, exist_ok=True)
     rows, seqs = [], {}
