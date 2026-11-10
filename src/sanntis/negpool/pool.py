@@ -23,6 +23,8 @@
       clean_runs.parquet      genome, contig, run_id, cds_idx (list[int], consecutive), n_cds
       native_mask.parquet     genome, contig, cds_idx (CDS overlapping an antiSMASH region)
       test_backbones.parquet  genome, contig, run_id, kingdom (isolate test backbones; excluded from background)
+      portions.parquet        optional: genome, run_id, contigs, cds_idx, n_cds (quota pools; negatives come from
+                              these, see sanntis.negpool.strip.portions)
       manifest.json           IPS / InterPro / apps, antiSMASH version, GTDB / RefSeq snapshot, counts, coverage
                               (genome-wide QC reference), sha256
 
@@ -46,6 +48,7 @@ from sanntis.utils import ChecksumError, sha256_file, write_json
 
 FILES = ("genomes.parquet", "cds_tokens.parquet", "clean_runs.parquet", "native_mask.parquet",
          "test_backbones.parquet")
+OPTIONAL_FILES = ("portions.parquet",)  # lineage-matched pools: the BGC-free CDS kept per genome
 MANIFEST = "manifest.json"
 DEFAULT_REPO = "microbiome-informatics/sanntis-training-data"
 SCHEMA_VERSION = 1
@@ -135,12 +138,13 @@ def write_pool(out: Path, frames: dict[str, pd.DataFrame], meta: dict) -> Pool:
     out = Path(out)
     validate(frames)
     out.mkdir(parents=True, exist_ok=True)
-    for name in FILES:
+    names = [*FILES, *(n for n in OPTIONAL_FILES if frames.get(n) is not None)]
+    for name in names:
         df = frames[name].reset_index(drop=True)
         df.to_parquet(out / name, index=False, compression="zstd")
     man = {"schema_version": SCHEMA_VERSION, "sanntis_version": __version__,
            "created": datetime.now(UTC).isoformat(timespec="seconds"), **meta,
-           "counts": counts_of(frames), "files": {n: sha256_file(out / n) for n in FILES}}
+           "counts": counts_of(frames), "files": {n: sha256_file(out / n) for n in names}}
     write_json(out / MANIFEST, man)
     return Pool(out, man)
 

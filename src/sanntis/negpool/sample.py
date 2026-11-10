@@ -37,7 +37,7 @@ REFSEQ_SUMMARY = "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/{group}/assembly_s
 # group → (genomes per phylum, RefSeq directory): 2-3 per phylum (fungi, protozoa, plants)
 REFSEQ_GROUPS = {"fungi": (3, "fungi"), "protozoa": (2, "protozoa"), "plants": (2, "plant")}
 ASSEMBLY_LEVELS = ("Complete Genome", "Chromosome", "Scaffold")
-GENOME_COLUMNS = ["genome", "kingdom", "lineage", "source", "accession", "group", "taxon", "url", "path"]
+GENOME_COLUMNS = ["genome", "kingdom", "lineage", "source", "accession", "group", "taxon", "url", "path", "quota_cds"]
 RANKS = {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species"}
 
 
@@ -134,7 +134,9 @@ def sample_refseq(summaries: dict[str, Path], lineages: dict[int, dict[str, str]
 
 
 def read_genomes(path: Path) -> pd.DataFrame:
-    """A user / pre-sampled genome table (TSV). Required: genome, kingdom; ``path`` skips the download."""
+    """A user / pre-sampled genome table (TSV). Required: genome, kingdom; ``path`` skips the download;
+    ``quota_cds`` (lineage-matched plans, :mod:`sanntis.negpool.plan`) makes the pool keep only that many BGC-free
+    CDS of the genome, as portions."""
     df = pd.read_csv(path, sep="\t", dtype=str, keep_default_na=False)
     for c in GENOME_COLUMNS:
         if c not in df.columns:

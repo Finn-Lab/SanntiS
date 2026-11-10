@@ -198,3 +198,25 @@ def test_bad_genome_id_rejected(tmp_path):
     gt.write_text("genome\tkingdom\nok_1\tproka\nbad id$(x)\tproka\n")
     with pytest.raises(B.BuildError, match="genome ids"):
         B.build_negatives(B.BuildOptions(out=tmp_path / "out", genomes=gt, dry_run=True))
+
+
+def test_build_quota_pool_annotates_portions_only(tmp_path, env):
+    genomes, entries = env
+    q = tmp_path / "genomes_quota.tsv"
+    lines = genomes.read_text().splitlines()
+    q.write_text(lines[0] + "\tquota_cds\n" + lines[1] + "\t30\n")
+    o = B.BuildOptions(out=tmp_path / "quota", pool_version="vq", genomes=q, entries_json=entries, runner="inline",
+                       workers=1, nextflow=NextflowOptions())
+    pool = B.build_negatives(o, annotate=stub_ips6)
+    por = pd.read_parquet(pool.path / "portions.parquet")
+    assert por["n_cds"].sum() == 30 and len(por) == 3
+    c = pd.read_parquet(pool.path / "cds_tokens.parquet").set_index(["contig", "cds_idx"])
+    bb = pd.read_parquet(pool.path / "test_backbones.parquet")
+    runs = pd.read_parquet(pool.path / "clean_runs.parquet").set_index("run_id")
+    keep = {(ct, int(i)) for cs, ids in zip(por["contigs"], por["cds_idx"], strict=True)
+            for ct, i in zip(cs, ids, strict=True)}
+    keep |= {(runs.at[r, "contig"], int(i)) for r in bb["run_id"] for i in runs.at[r, "cds_idx"]}
+    annotated = {k for k, t in c["tokens"].items() if t is not None}
+    assert annotated == keep  # only portion + backbone CDS were annotated
+    assert "portions.parquet" in pool.manifest["files"] and pool.manifest["portions"]["cds"] == 30
+    load_pool(pool.path)

@@ -60,6 +60,8 @@ log = logging.getLogger(__name__)
 ANTISMASH_VERSION = "8.0.1"
 ANTISMASH_IMAGE = "quay.io/nf-core/antismash:8.0.1--pyhdfd78af_0"  # HMM data hmmpress-ed in the image
 SINGLE_MODE_MIN_BP = 100_000  # pyrodigal single mode needs enough sequence to train
+PORTIONS_PER_GENOME = 3  # quota pools: k windows per genome (one per stratum of the concatenated clean CDS)
+PORTION_SEED = 0
 GENOME_ID_RE = re.compile(r"^[A-Za-z0-9_.-]+$")  # ids become directory names and antiSMASH script arguments
 
 
@@ -98,7 +100,7 @@ def sample_genomes(o: BuildOptions) -> pd.DataFrame:
     for p in summaries.values():
         taxids |= {int(t) for t in S.load_assembly_summary(p)["taxid"].dropna() if str(t).isdigit()}
     euk = S.sample_refseq(summaries, LineageCache().resolve(taxids), seed=0)
-    return pd.concat([proka, euk], ignore_index=True)[S.GENOME_COLUMNS]
+    return pd.concat([proka, euk], ignore_index=True).reindex(columns=S.GENOME_COLUMNS, fill_value="")
 
 
 # ── units ────────────────────────────────────────────────────────────────────
@@ -226,15 +228,52 @@ def pool_tables(out: Path, genomes: pd.DataFrame) -> dict[str, pd.DataFrame]:
         mask += m
         cds_parts.append(cds)
     runs_df = pd.DataFrame(runs, columns=["genome", "contig", "run_id", "cds_idx", "n_cds"])
-    return {"cds": pd.concat(cds_parts, ignore_index=True), "clean_runs.parquet": runs_df,
-            "native_mask.parquet": pd.DataFrame(mask, columns=["genome", "contig", "cds_idx"]),
-            "test_backbones.parquet": strip.test_backbones(runs_df, genomes)}
+    backbones = strip.test_backbones(runs_df, genomes)
+    tables = {"cds": pd.concat(cds_parts, ignore_index=True), "clean_runs.parquet": runs_df,
+              "native_mask.parquet": pd.DataFrame(mask, columns=["genome", "contig", "cds_idx"]),
+              "test_backbones.parquet": backbones}
+    tables["portions.parquet"] = portion_table(runs_df, backbones, genomes)
+    return tables
 
 
-def unique_proteins(out: Path, genomes: pd.DataFrame, dest: Path) -> int:
+def portion_table(runs: pd.DataFrame, backbones: pd.DataFrame, genomes: pd.DataFrame) -> pd.DataFrame | None:
+    """Quota pools (``quota_cds`` in the genome table): per genome, ``quota_cds`` BGC-free CDS drawn as portions of
+    the concatenated clean runs (test-backbone runs excluded). None when no genome has a quota."""
+    q = pd.to_numeric(genomes.get("quota_cds", pd.Series(dtype=str)), errors="coerce")
+    if q.isna().all():
+        return None
+    quota = dict(zip(genomes["genome"], q, strict=True))
+    bb = set(zip(backbones["genome"], backbones["run_id"], strict=True))
+    free = runs[[(g, r) not in bb for g, r in zip(runs["genome"], runs["run_id"], strict=True)]]
+    rows = []
+    for g, sub in free.groupby("genome", sort=True):
+        qg = quota.get(g)
+        if qg is None or pd.isna(qg):
+            raise BuildError(f"{g}: quota pools need quota_cds for every genome")
+        rows += strip.portions(sub, int(qg), k=PORTIONS_PER_GENOME, seed=PORTION_SEED)
+    return pd.DataFrame(rows, columns=["genome", "run_id", "contigs", "cds_idx", "n_cds"])
+
+
+def annotated_keys(tables: dict[str, pd.DataFrame]) -> set[tuple[str, str, int]] | None:
+    """Quota pools annotate only portion and test-backbone CDS; None = every CDS."""
+    p = tables.get("portions.parquet")
+    if p is None:
+        return None
+    keys = {(g, c, int(i)) for g, cs, ids in zip(p["genome"], p["contigs"], p["cds_idx"], strict=True)
+            for c, i in zip(cs, ids, strict=True)}
+    runs = tables["clean_runs.parquet"].set_index(["genome", "run_id"])
+    for g, r in zip(tables["test_backbones.parquet"]["genome"], tables["test_backbones.parquet"]["run_id"],
+                    strict=True):
+        row = runs.loc[(g, r)]
+        keys |= {(g, row["contig"], int(i)) for i in row["cds_idx"]}
+    return keys
+
+
+def unique_proteins(out: Path, genomes: pd.DataFrame, dest: Path, md5s: set[str] | None = None) -> int:
+    """Unique pool proteins (md5-keyed) → ``dest``; ``md5s`` restricts them (quota pools)."""
     seqs: dict[str, str] = {}
     for g in genomes["genome"]:
-        seqs.update(iter_fasta(out / "prepared" / g / "proteins.faa"))
+        seqs.update((m, q) for m, q in iter_fasta(out / "prepared" / g / "proteins.faa") if md5s is None or m in md5s)
     write_protein_fasta(sorted(seqs.items()), dest)
     return len(seqs)
 
@@ -286,9 +325,15 @@ def build_negatives(o: BuildOptions, *, annotate=None) -> Pool | None:
         return None
 
     tables = pool_tables(out, genomes)
+    keys = annotated_keys(tables)
+    cds_all = tables["cds"]
+    annotated = (None if keys is None else
+                 [(g, c, int(i)) in keys for g, c, i in zip(cds_all["genome"], cds_all["contig"], cds_all["cds_idx"],
+                                                            strict=True)])
     ipsdir = out / "ips6"
     faa = ipsdir / "proteins.faa"
-    n_prot = unique_proteins(out, genomes, faa)
+    n_prot = unique_proteins(out, genomes, faa,
+                             None if annotated is None else set(cds_all.loc[annotated, "md5"]))
     rec = load_recipe().ips
     if o.ips_tsv:
         tsvs = [Path(t) for t in o.ips_tsv]
@@ -300,8 +345,9 @@ def build_negatives(o: BuildOptions, *, annotate=None) -> Pool | None:
     sigmap = signature_map_from_entries(entries)
     tokens, tmeta = md5_tokens(tsvs, sigmap)
     cds = tables.pop("cds")
-    cds["tokens"] = [tokens.get(m, []) for m in cds["md5"]]
-    cds["has_features"] = True
+    cds["has_features"] = True if annotated is None else annotated
+    # quota pools: CDS outside portions / backbones were not annotated → None (they break background pieces)
+    cds["tokens"] = [tokens.get(m, []) if a else None for m, a in zip(cds["md5"], cds["has_features"], strict=True)]
     ver = sorted({(out / "antismash" / g / "version.txt").read_text().strip() for g in genomes["genome"]})
     meta = {
         "pool_version": o.pool_version,
@@ -312,10 +358,13 @@ def build_negatives(o: BuildOptions, *, annotate=None) -> Pool | None:
                     "refseq_groups": list(o.refseq_groups), "genomes_tsv": str(gt)},
         "gene_calling": {"proka": "pyrodigal (single mode; meta below 100 kb)", "euk": "RefSeq GBFF CDS"},
         "unique_proteins": n_prot,
+        "portions": None if annotated is None else {"per_genome": PORTIONS_PER_GENOME, "seed": PORTION_SEED,
+                                                    "cds": int(tables["portions.parquet"]["n_cds"].sum())},
         "coverage": coverage_of(cds, tmeta["app_counts"], dict(zip(genomes["genome"], genomes["kingdom"],
                                                                    strict=True))),
     }
-    frames = {"genomes.parquet": genomes[["genome", "kingdom", "lineage", "source", "accession", "group"]],
+    gcols = ["genome", "kingdom", "lineage", "source", "accession", "group"] + (["quota_cds"] if annotated else [])
+    frames = {"genomes.parquet": genomes[gcols],
               "cds_tokens.parquet": cds[["genome", "contig", "cds_idx", "cds_id", "locus_tag", "protein_id", "start",
                                          "end", "strand", "md5", "tokens", "has_features"]], **tables}
     pool = write_pool(out / o.pool_version, frames, meta)

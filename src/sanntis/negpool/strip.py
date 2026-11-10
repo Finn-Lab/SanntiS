@@ -75,3 +75,41 @@ def test_backbones(runs: pd.DataFrame, genomes: pd.DataFrame, n: dict[str, int] 
         out += [{"genome": g, "contig": c, "run_id": r, "kingdom": k}
                 for g, c, r in sel[["genome", "contig", "run_id"]].itertuples(index=False)]
     return pd.DataFrame(out, columns=["genome", "contig", "run_id", "kingdom"])
+
+
+def portions(runs: pd.DataFrame, quota: int, *, k: int = 3, seed: int = 0) -> list[dict]:
+    """Portions of one genome's BGC-free CDS (lineage-matched pools).
+
+    The genome's clean runs (``runs``: genome, contig, run_id, cds_idx; test-backbone runs already removed) are
+    concatenated in contig / run order, so short runs of fragmented assemblies count as much as long ones. ``quota``
+    CDS are then drawn as ``k`` windows, one per equal stratum of the concatenation (non-overlapping), with
+    ``default_rng(seed + crc32(genome))``. A genome with no more than ``quota`` clean CDS gives one portion with all
+    of them. Rows: genome, run_id (``<genome>:portion<j>``), contigs (per CDS), cds_idx, n_cds.
+    """
+    if runs.empty or quota <= 0:
+        return []
+    genome = str(runs["genome"].iloc[0])
+    members: list[tuple[str, int]] = []
+    ordered = runs.assign(_first=runs["cds_idx"].map(lambda x: int(x[0]))).sort_values(["contig", "_first"],
+                                                                                        kind="stable")
+    for contig, idx in ordered[["contig", "cds_idx"]].itertuples(index=False):
+        members += [(str(contig), int(i)) for i in idx]
+    n = len(members)
+    if n <= quota:
+        windows = [(0, n)]
+    else:
+        rng = np.random.default_rng(seed + zlib.crc32(genome.encode()) % 100_000)
+        k = max(1, min(k, quota))
+        sizes = [quota // k + (1 if j < quota % k else 0) for j in range(k)]
+        bounds = np.linspace(0, n, k + 1).astype(int)
+        windows = []
+        for j, L in enumerate(sizes):
+            lo, hi = int(bounds[j]), int(bounds[j + 1])
+            start = lo + int(rng.integers(0, max(hi - lo - L, 0) + 1))
+            windows.append((start, min(start + L, hi)))
+    out = []
+    for j, (a, b) in enumerate(windows):
+        seg = members[a:b]
+        out.append({"genome": genome, "run_id": f"{genome}:portion{j}", "contigs": [c for c, _ in seg],
+                    "cds_idx": [i for _, i in seg], "n_cds": len(seg)})
+    return out
