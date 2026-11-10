@@ -332,15 +332,24 @@ def build_negatives(o: BuildOptions, *, annotate=None) -> Pool | None:
                                                             strict=True)])
     ipsdir = out / "ips6"
     faa = ipsdir / "proteins.faa"
-    n_prot = unique_proteins(out, genomes, faa,
-                             None if annotated is None else set(cds_all.loc[annotated, "md5"]))
+    needed = set(cds_all["md5"]) if annotated is None else set(cds_all.loc[annotated, "md5"])
+    # genomes with their own precomputed TSV (genome table column ips_tsv) are not sent to IPS6
+    own = {g: Path(t) for g, t in zip(genomes["genome"], genomes.get("ips_tsv", pd.Series([""] * len(genomes))),
+                                      strict=True) if t}
+    covered = set(cds_all.loc[cds_all["genome"].isin(own), "md5"]) & needed
+    n_prot = unique_proteins(out, genomes, faa, needed - covered)
     rec = load_recipe().ips
     if o.ips_tsv:
         tsvs = [Path(t) for t in o.ips_tsv]
         ips_meta = {"source": "precomputed", "tsv": [str(t) for t in tsvs]}
-    else:
+    elif n_prot:
         tsvs = [(annotate or annotate_proteins)(faa, ipsdir, o.nextflow)]
         ips_meta = {"source": "ips6 run"}
+    else:
+        tsvs, ips_meta = [], {"source": "precomputed per genome"}
+    if own:
+        tsvs = [*sorted(set(own.values())), *tsvs]
+        ips_meta = {**ips_meta, "per_genome_tsv": len(own), "proteins_from_per_genome_tsv": len(covered)}
     entries = Path(o.entries_json) if o.entries_json else cache_dir("ips6") / "interpro" / rec.interpro / "entries.json"
     sigmap = signature_map_from_entries(entries)
     tokens, tmeta = md5_tokens(tsvs, sigmap)

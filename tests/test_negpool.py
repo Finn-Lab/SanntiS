@@ -220,3 +220,23 @@ def test_build_quota_pool_annotates_portions_only(tmp_path, env):
     assert annotated == keep  # only portion + backbone CDS were annotated
     assert "portions.parquet" in pool.manifest["files"] and pool.manifest["portions"]["cds"] == 30
     load_pool(pool.path)
+
+
+def test_build_with_per_genome_ips_tsv_skips_ips6(tmp_path, env):
+    genomes, entries = env
+    first = _build(tmp_path, env, "inline", "first")
+    tsv = stub_ips6(tmp_path / "first" / "ips6" / "proteins.faa", tmp_path / "own", None)
+    lines = genomes.read_text().splitlines()
+    g2 = tmp_path / "genomes_own.tsv"
+    g2.write_text(lines[0] + "\tips_tsv\n" + lines[1] + f"\t{tsv}\n")
+
+    def no_ips6(*_a, **_k):
+        raise AssertionError("IPS6 must not run for genomes with their own TSV")
+
+    o = B.BuildOptions(out=tmp_path / "own_build", pool_version="vown", genomes=g2, entries_json=entries,
+                       runner="inline", workers=1, nextflow=NextflowOptions())
+    pool = B.build_negatives(o, annotate=no_ips6)
+    a = pd.read_parquet(first.path / "cds_tokens.parquet")["tokens"].map(list)
+    b = pd.read_parquet(pool.path / "cds_tokens.parquet")["tokens"].map(list)
+    assert a.tolist() == b.tolist()
+    assert pool.manifest["ips"]["per_genome_tsv"] == 1

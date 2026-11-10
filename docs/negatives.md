@@ -43,9 +43,36 @@ through Nextflow or with `--runner inline --workers N`, as in [training](train.m
 ## Genome table
 
 `--genomes` takes a TSV and skips sampling. The columns `genome` and `kingdom` (`proka` or `euk`) are required.
-Optional columns: `lineage`, `source`, `accession` (default: the `genome` value), `group`, `taxon` (the antiSMASH
-`--taxon`, default `bacteria` or `fungi`), `url` (the assembly directory) and `path` (a local file, relative to
-the table, which skips the download).
+Optional columns:
+
+| Column | Meaning |
+|---|---|
+| `lineage`, `source`, `group` | descriptive |
+| `accession` | default: the `genome` value |
+| `taxon` | the antiSMASH `--taxon`, default `bacteria` or `fungi` |
+| `url` | the assembly directory |
+| `path` | a local file, relative to the table; skips the download |
+| `quota_cds` | makes a **quota pool** (below) |
+| `ips_tsv` | a precomputed InterProScan TSV of the genome's whole proteome (md5 in column 2). That genome is not sent to the IPS6 run |
+
+## Lineage-matched quota pools
+
+The detector learns P(BGC | tokens). If a lineage holds many positives but few negatives, looking like that
+lineage becomes evidence for a BGC. SanntiS 1.1.0's pool had one actinomycete genome against 54 % actinomycete
+positives, and it over-called in high-GC actinomycetes.
+
+`sanntis.negpool.plan.plan_pool` writes a genome table with `quota_cds` that keeps the ratio of negative to
+positive CDS about constant per lineage:
+- a floor of `floor_cds` per phylum without positives;
+- the rest of the budget in proportion to the positives' CDS per family (falling back to order, then phylum,
+  when a family has no candidate genome);
+- at most `cap` CDS and one genome per species.
+
+In a quota pool each genome keeps `quota_cds` BGC-free CDS:
+- its clean runs are concatenated across contigs, so short runs of fragmented assemblies are not lost;
+- the CDS are drawn as 3 windows, one per stratum, and written to `portions.parquet`;
+- only portion and test-backbone CDS are annotated;
+- training cuts its chunks and background pieces from the portions.
 
 ## Options
 
