@@ -170,8 +170,12 @@ def _build(pos: pd.DataFrame, pool, recipe):
     pe["lineage"] = pe["entity_id"].map(meta["lineage"])
     pe["pfam"] = pe["entity_id"].map(meta["pfam"]).map(list)
     c = r.compose
+    if c.euk_lineages:
+        drop = (pe["kingdom"] == "euk") & ~pe["lineage"].isin(c.euk_lineages)
+        ps["excluded_euk_lineage"] = int(drop.sum())
+        pe = pe[~drop].reset_index(drop=True)
     ne, ns = negative_entities(pool, pe, chunks_per_positive=c.chunks_per_positive, clip=c.chunk_len_clip,
-                               background_min_cds=c.background_min_cds, seed=c.seed)
+                               background_min_cds=c.background_min_cds, euk_lineages=c.euk_lineages, seed=c.seed)
     t = entity_table(pe, ne.assign(lineage=None, pfam=None))
     t["classes"] = t["classes"].map(list)
     return t, {**ps, **ns}

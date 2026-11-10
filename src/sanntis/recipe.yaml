@@ -63,6 +63,8 @@ compose:
   chunks_per_positive: 3
   chunk_len_clip: [3, 200]
   background_min_cds: 5
+  # SanntiS supports fungi among eukaryotes: non-fungal euk positives and pool genomes are left out of training.
+  euk_lineages: [fungi]
 
 dedup:
   dice_threshold: 0.974

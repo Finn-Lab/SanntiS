@@ -138,6 +138,8 @@ class ComposeConfig(_Frozen):
     chunks_per_positive: int
     chunk_len_clip: tuple[int, int]
     background_min_cds: int
+    # Eukaryotic RefSeq groups kept in training (positives by lineage, pool genomes by group). None = all.
+    euk_lineages: tuple[str, ...] | None = None
 
 
 class DedupConfig(_Frozen):
