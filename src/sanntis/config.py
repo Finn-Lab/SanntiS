@@ -132,6 +132,12 @@ class TrainSettings(_Frozen):
     amp: bool
 
 
+class ClusterConfig(_Frozen):
+    share: float  # share of positive occurrences placed in clusters
+    k: tuple[int, int]  # positives per cluster (inclusive range)
+    gap: tuple[int, int]  # background CDS between neighbouring positives (inclusive range)
+
+
 class ComposeConfig(_Frozen):
     duplicate_positives: int
     seed: int
@@ -140,6 +146,8 @@ class ComposeConfig(_Frozen):
     background_min_cds: int
     # Eukaryotic RefSeq groups kept in training (positives by lineage, pool genomes by group). None = all.
     euk_lineages: tuple[str, ...] | None = None
+    # Multi-BGC training compositions (None = off): see sanntis.train.compose.compose.
+    clusters: ClusterConfig | None = None
 
 
 class DedupConfig(_Frozen):

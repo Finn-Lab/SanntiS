@@ -49,7 +49,8 @@ log = logging.getLogger(__name__)
 def corpus(table: pd.DataFrame, recipe: Recipe):
     select = table[table["kind"] != "background"]
     vocab = fit_vocab(select, recipe)
-    seqs = compose(table, duplicate_positives=recipe.compose.duplicate_positives, seed=recipe.compose.seed)
+    seqs = compose(table, duplicate_positives=recipe.compose.duplicate_positives, seed=recipe.compose.seed,
+                   clusters=recipe.compose.clusters)
     return select, vocab, linearized(seqs, vocab, recipe)
 
 

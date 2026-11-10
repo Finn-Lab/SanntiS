@@ -111,7 +111,7 @@ def run_cv_unit(table: pd.DataFrame, split: int, seed: int, out: Path, *, recipe
     sd = split_data(table, split, recipe)
     vocab = fit_vocab(sd.select, recipe)
     c = recipe.compose
-    train_orf = compose(sd.train, duplicate_positives=c.duplicate_positives, seed=c.seed)
+    train_orf = compose(sd.train, duplicate_positives=c.duplicate_positives, seed=c.seed, clusters=c.clusters)
     val_orf = compose(sd.val, duplicate_positives=1, seed=c.seed + 1)
     train_seqs, val_seqs = linearized(train_orf, vocab, recipe), linearized(val_orf, vocab, recipe)
     n_tok = sum(len(s.tokens) for s in train_seqs)
