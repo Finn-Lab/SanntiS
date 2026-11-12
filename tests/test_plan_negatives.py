@@ -147,3 +147,17 @@ def test_gtdb_candidates_filter_and_phylum_fallback(tmp_path, taxdump):
     assert list(c.index) == ["GCF_000000011.1", "GCA_000000012.1"]
     assert c.at["GCF_000000011.1", "clean_cds"] == 7200 and c.at["GCF_000000011.1", "family"] == "Streptomycetaceae"
     assert c.at["GCA_000000012.1", "phylum"] == "Candidatus X" and c.at["GCF_000000011.1", "source"] == "gtdb_r226"
+
+
+def test_plan_ignores_unselected_candidates():
+    """Removing candidates the plan did not select (later exclusions) leaves the plan unchanged."""
+    from sanntis.negpool.plan import PlanOptions, plan_pool
+
+    rows = [{"genome": f"g{i}", "track": "proka", "phylum": "A", "order": "O", "family": "F", "species": f"s{i}",
+             "clean_cds": 1000, "priority": 1} for i in range(30)]
+    pos = pd.DataFrame([{"track": "proka", "phylum": "A", "order": "O", "family": "F", "n_cds": 10}])
+    o = PlanOptions(budget={"proka": 3000}, floor_cds=250)
+    a, _ = plan_pool(pos, pd.DataFrame(rows), o)
+    left = [r for r in rows if r["genome"] in set(a["genome"]) or int(r["genome"][1:]) % 2]
+    b, _ = plan_pool(pos, pd.DataFrame(left), o)
+    assert list(a["genome"]) == list(b["genome"]) and len(a) == 3

@@ -23,9 +23,10 @@ lineage" becomes BGC evidence. The plan therefore keeps the negative:positive CD
 2. **Matched.** The rest of the track budget is split over the positives' lineage groups in proportion to their
    positive CDS. A group is the positives' family when there are candidates in that family, else their order, else
    their phylum (positives without a family fall back the same way).
-3. **Genomes.** Within a group, candidates are taken by ``priority`` (lower first, e.g. genomes that are already
-   annotated), then in a seeded random order, one genome per species, skipping ``exclude_species``. Each genome's
-   quota is ``min(cap, clean_cds)``; the last genome of a group takes the remainder (at least ``min_quota``).
+3. **Genomes.** Within a group, candidates are taken by ``priority`` (lower first), then in a seeded random order
+   (crc32 of seed, group and genome id, so independent of the other candidates), one genome per species, skipping
+   ``exclude_species``. Each genome's quota is ``min(cap, clean_cds)``; the last genome of a group takes the
+   remainder (at least ``min_quota``).
 
 Inputs (pandas frames):
 
@@ -89,8 +90,10 @@ def group_of(row, cand_keys: set[str]) -> str | None:
 
 
 def _order(cands: pd.DataFrame, salt: str, seed: int) -> pd.DataFrame:
-    rng = np.random.default_rng(seed + zlib.crc32(salt.encode()) % 100_000)
-    return cands.assign(_r=rng.random(len(cands))).sort_values(["priority", "_r"], kind="stable").drop(columns="_r")
+    """Priority, then a seeded per-genome key: a genome's place does not depend on the other rows, so removing
+    candidates that are not selected (e.g. later exclusions) leaves the plan unchanged."""
+    key = [zlib.crc32(f"{seed}:{salt}:{g}".encode()) for g in cands["genome"]]
+    return cands.assign(_r=key).sort_values(["priority", "_r", "genome"], kind="stable").drop(columns="_r")
 
 
 def plan_track(pos: pd.DataFrame, cands: pd.DataFrame, track: str, o: PlanOptions) -> tuple[pd.DataFrame, dict]:
