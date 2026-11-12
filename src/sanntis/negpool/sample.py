@@ -38,7 +38,7 @@ REFSEQ_SUMMARY = "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/{group}/assembly_s
 REFSEQ_GROUPS = {"fungi": (3, "fungi"), "protozoa": (2, "protozoa"), "plants": (2, "plant")}
 ASSEMBLY_LEVELS = ("Complete Genome", "Chromosome", "Scaffold")
 GENOME_COLUMNS = ["genome", "kingdom", "lineage", "source", "accession", "group", "taxon", "url", "path", "quota_cds",
-                  "ips_tsv"]
+                  "species"]
 RANKS = {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species"}
 
 
@@ -137,8 +137,7 @@ def sample_refseq(summaries: dict[str, Path], lineages: dict[int, dict[str, str]
 def read_genomes(path: Path) -> pd.DataFrame:
     """A user / pre-sampled genome table (TSV). Required: genome, kingdom; ``path`` skips the download;
     ``quota_cds`` (lineage-matched plans, :mod:`sanntis.negpool.plan`) makes the pool keep only that many BGC-free
-    CDS of the genome, as portions; ``ips_tsv`` (a precomputed InterProScan TSV of the genome's whole proteome,
-    md5 in column 2) annotates that genome instead of the IPS6 run."""
+    CDS of the genome, as portions; ``species`` (else the species of ``lineage``) is what ``--exclude`` matches."""
     df = pd.read_csv(path, sep="\t", dtype=str, keep_default_na=False)
     for c in GENOME_COLUMNS:
         if c not in df.columns:
@@ -148,6 +147,5 @@ def read_genomes(path: Path) -> pd.DataFrame:
     df.loc[df["taxon"] == "", "taxon"] = df["kingdom"].map({"proka": "bacteria", "euk": "fungi"})
     df.loc[df["accession"] == "", "accession"] = df["genome"]
     base = Path(path).parent
-    for col in ("path", "ips_tsv"):
-        df[col] = [str(base / p) if p and not Path(p).is_absolute() else p for p in df[col]]
+    df["path"] = [str(base / p) if p and not Path(p).is_absolute() else p for p in df["path"]]
     return df[GENOME_COLUMNS]

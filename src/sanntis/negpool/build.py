@@ -18,7 +18,7 @@ removal → IPS6 on the pool proteins → pool version.
 
 Build directory (``--out``)::
 
-    build.json  genomes.tsv
+    build.json  genomes.tsv  excluded.tsv (genome-table rows removed by --exclude)
     negpool_prepare/    fan-out (label cpu_small): download + CDS table per genome → prepared/<genome>/
     negpool_antismash/  fan-out (label antismash): antiSMASH per genome → antismash/<genome>/<genome>.antismash.gbk.gz
     ips6/               unique pool proteins (md5) + the IPS6 run
@@ -47,6 +47,7 @@ from sanntis.config import NextflowOptions, load_recipe
 from sanntis.io.fasta import iter_fasta, read_nucleotide_fasta, write_protein_fasta
 from sanntis.io.genbank import cds_rows, iter_cds, read_records
 from sanntis.io.ips_tsv import read_ips_tsv, signature_map_from_entries, tokens_by_key
+from sanntis.negpool import exclude as X
 from sanntis.negpool import sample as S
 from sanntis.negpool import strip
 from sanntis.negpool.download import download_assembly
@@ -74,6 +75,7 @@ class BuildOptions:
     out: Path
     pool_version: str = "v1"
     genomes: Path | None = None  # pre-sampled genome table (skips sampling)
+    exclude: Path | None = None  # assemblies / species that never enter the pool (sanntis.negpool.exclude)
     gtdb_release: str = "226"
     gtdb_n: int = 205
     seed: int = 42
@@ -334,8 +336,17 @@ def build_negatives(o: BuildOptions, *, annotate=None) -> Pool | None:
     gt = out / "genomes.tsv"
     if not gt.exists():
         g = S.read_genomes(o.genomes) if o.genomes else sample_genomes(o)
+        if o.exclude:
+            ex = X.read_exclude(o.exclude)
+            hit = X.excluded(g, ex)
+            g[hit].to_csv(out / "excluded.tsv", sep="\t", index=False)
+            log.info("--exclude: %d of %d genomes removed (%s)", int(hit.sum()), len(g), out / "excluded.tsv")
+            g = g[~hit].reset_index(drop=True)
         g.to_csv(gt, sep="\t", index=False)
     genomes = pd.read_csv(gt, sep="\t", dtype=str, keep_default_na=False)
+    if o.exclude and (left := int(X.excluded(genomes, X.read_exclude(o.exclude)).sum())):
+        raise BuildError(f"{gt} holds {left} genomes listed in --exclude {o.exclude} (written by an earlier build "
+                         "without it?): start from an empty --out")
     if bad := [g for g in genomes["genome"] if not GENOME_ID_RE.match(g)]:
         raise BuildError(f"genome ids are used as file names and in shell scripts: letters, digits and _ . - only "
                          f"(bad: {bad[:5]})")
@@ -362,23 +373,17 @@ def build_negatives(o: BuildOptions, *, annotate=None) -> Pool | None:
     ipsdir = out / "ips6"
     faa = ipsdir / "proteins.faa"
     needed = set(cds_all["md5"]) if annotated is None else set(cds_all.loc[annotated, "md5"])
-    # genomes with their own precomputed TSV (genome table column ips_tsv) are not sent to IPS6
-    own = {g: Path(t) for g, t in zip(genomes["genome"], genomes.get("ips_tsv", pd.Series([""] * len(genomes))),
-                                      strict=True) if t}
-    covered = set(cds_all.loc[cds_all["genome"].isin(own), "md5"]) & needed
-    n_prot = unique_proteins(out, genomes, faa, needed - covered)
+    n_prot = unique_proteins(out, genomes, faa, needed)
     rec = load_recipe().ips
     if o.ips_tsv:
         tsvs = [Path(t) for t in o.ips_tsv]
         ips_meta = {"source": "precomputed", "tsv": [str(t) for t in tsvs]}
     elif n_prot:
         tsvs = [(annotate or annotate_proteins)(faa, ipsdir, o.nextflow)]
-        ips_meta = {"source": "ips6 run"}
+        lk = ipsdir / "run" / "lookup.json"
+        ips_meta = {"source": "ips6 run", "matches_api": json.loads(lk.read_text()) if lk.is_file() else None}
     else:
-        tsvs, ips_meta = [], {"source": "precomputed per genome"}
-    if own:
-        tsvs = [*sorted(set(own.values())), *tsvs]
-        ips_meta = {**ips_meta, "per_genome_tsv": len(own), "proteins_from_per_genome_tsv": len(covered)}
+        tsvs, ips_meta = [], {"source": "no proteins"}
     entries = Path(o.entries_json) if o.entries_json else cache_dir("ips6") / "interpro" / rec.interpro / "entries.json"
     sigmap = signature_map_from_entries(entries)
     tokens, tmeta = md5_tokens(tsvs, sigmap)
@@ -389,6 +394,8 @@ def build_negatives(o: BuildOptions, *, annotate=None) -> Pool | None:
     ver = sorted({(out / "antismash" / g / "version.txt").read_text().strip() for g in genomes["genome"]})
     meta = {
         "pool_version": o.pool_version,
+        "excluded_genomes": (len(pd.read_csv(out / "excluded.tsv", sep="\t", dtype=str))
+                             if (out / "excluded.tsv").is_file() else 0),
         "ips": {"version": rec.version, "interpro": rec.interpro, "apps": rec.app_names, "tsv_versions":
                 tmeta["versions"], "signature_map": str(entries), **ips_meta},
         "antismash": {"version": ver, "options": "--minimal --genefinding-tool none --taxon bacteria|fungi"},
@@ -415,6 +422,7 @@ def run_cli(**kw) -> None:
                          nf_profile=list(kw.get("nf_profile") or ()), nf_args=kw.get("nf_args") or "")
     o = BuildOptions(out=Path(kw["out"]), pool_version=kw.get("pool_version") or "v1",
                      genomes=Path(kw["genomes"]) if kw.get("genomes") else None,
+                     exclude=Path(kw["exclude"]) if kw.get("exclude") else None,
                      antismash_databases=Path(kw["antismash_databases"]) if kw.get("antismash_databases") else None,
                      antismash_image=kw.get("antismash_image"),
                      ips_tsv=tuple(Path(p) for p in kw.get("ips_tsv") or ()),

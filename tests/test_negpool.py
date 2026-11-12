@@ -222,24 +222,33 @@ def test_build_quota_pool_annotates_portions_only(tmp_path, env):
     load_pool(pool.path)
 
 
-def test_build_with_per_genome_ips_tsv_skips_ips6(tmp_path, env):
+def test_build_exclude_removes_genomes(tmp_path, env):
     genomes, entries = env
-    first = _build(tmp_path, env, "inline", "first")
-    tsv = stub_ips6(tmp_path / "first" / "ips6" / "proteins.faa", tmp_path / "own", None)
     lines = genomes.read_text().splitlines()
-    g2 = tmp_path / "genomes_own.tsv"
-    g2.write_text(lines[0] + "\tips_tsv\n" + lines[1] + f"\t{tsv}\n")
-
-    def no_ips6(*_a, **_k):
-        raise AssertionError("IPS6 must not run for genomes with their own TSV")
-
-    o = B.BuildOptions(out=tmp_path / "own_build", pool_version="vown", genomes=g2, entries_json=entries,
+    g2 = tmp_path / "genomes_two.tsv"
+    other = lines[1].replace("tiny\t", "other\t", 1).replace("GCA_000220375.1", "GCF_000999999.2")
+    g2.write_text("\n".join([lines[0], lines[1], other]) + "\n")
+    ex = tmp_path / "exclude.tsv"
+    ex.write_text("accession\tspecies\tnote\nGCA_000999999.1\t\ttest background\n")  # GCA/GCF + version ignored
+    o = B.BuildOptions(out=tmp_path / "ex", pool_version="vex", genomes=g2, exclude=ex, entries_json=entries,
                        runner="inline", workers=1, nextflow=NextflowOptions())
-    pool = B.build_negatives(o, annotate=no_ips6)
-    a = pd.read_parquet(first.path / "cds_tokens.parquet")["tokens"].map(list)
-    b = pd.read_parquet(pool.path / "cds_tokens.parquet")["tokens"].map(list)
-    assert a.tolist() == b.tolist()
-    assert pool.manifest["ips"]["per_genome_tsv"] == 1
+    pool = B.build_negatives(o, annotate=stub_ips6)
+    assert pool.manifest["excluded_genomes"] == 1 and pool.manifest["counts"]["proka"]["genomes"] == 1
+    assert list(pd.read_csv(tmp_path / "ex" / "excluded.tsv", sep="\t")["genome"]) == ["other"]
+    assert pool.manifest["ips"]["source"] == "ips6 run"
+
+
+def test_exclude_matches_accession_core_and_species(tmp_path):
+    from sanntis.negpool.exclude import accession_core, excluded, read_exclude
+
+    assert accession_core("GCF_000123456.2") == accession_core("GCA_000123456.1") == "000123456"
+    ex_f = tmp_path / "ex.tsv"
+    ex_f.write_text("accession\tspecies\nGCA_1.1\t\n\tAspergillus niger\n")
+    ex = read_exclude(ex_f)
+    g = pd.DataFrame({"genome": ["a", "b", "c", "d"], "accession": ["GCF_1.3", "GCF_2.1", "GCF_3.1", "GCF_4.1"],
+                      "species": ["", "", "", "[Aspergillus] Niger"],
+                      "lineage": ["", "kingdom__Fungi;species__Aspergillus niger", "s__Other sp", ""]})
+    assert excluded(g, ex).tolist() == [True, True, False, True]
 
 
 def test_dedup_cds_keeps_first_per_location():
