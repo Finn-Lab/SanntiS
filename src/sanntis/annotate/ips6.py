@@ -256,9 +256,9 @@ def run_ips6(faa: Path, run_dir: Path, opts: NextflowOptions, datadir: Path, app
 
 # Nextflow's FASTA splitter caches each split next to its input; IPS6 splits every batch file several times
 # concurrently, and on large inputs (many batches) a reader occasionally deserialises a cache file another thread is
-# still writing ("KryoException: Buffer underflow", then "Join mismatch"). Seen on 748k proteins (150 batches),
-# not on 5k-20k. We therefore send at most SANNTIS_IPS6_CHUNK proteins per IPS6 run and retry a run from scratch on
-# that signature.
+# still writing ("KryoException: Buffer underflow", then "Join mismatch"). Seen on 748k proteins (150 batches) and,
+# rarely, on the one-protein setup run. We therefore send at most SANNTIS_IPS6_CHUNK proteins per IPS6 run and
+# retry a run from scratch on that signature.
 RACE_SIGNATURES = ("KryoException", "Join mismatch")
 RETRIES = 2
 
@@ -344,8 +344,8 @@ def setup(datadir: str | Path | None = None, container_engine: str | None = None
     first = [a for a in r.app_names if a not in SETUP_SKIP_FIRST]
     log.info("InterProScan 6 setup (%s, InterPro %s) into %s", r.version, r.interpro, datadir)
     plan = run_plan(run_dir, lookup=False)  # setup must exercise the local data
-    run_ips6(faa, run_dir / "pass1", opts, datadir, apps=first, plan=plan)
-    run_ips6(faa, run_dir / "pass2", opts, datadir, plan=plan)
+    run_ips6_retry(faa, run_dir / "pass1", opts, datadir, apps=first, plan=plan)
+    run_ips6_retry(faa, run_dir / "pass2", opts, datadir, plan=plan)
     missing = missing_data(datadir)
     if missing:
         raise Ips6Error(f"InterProScan 6 setup finished but data are still missing in {datadir}: {missing}")
