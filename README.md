@@ -51,7 +51,7 @@ pip install sanntis      # Python >= 3.11
 Or the release image, with the model bundle baked in (precomputed-InterProScan mode only):
 
 ```bash
-docker run --rm -v "$PWD:/data" quay.io/microbiome-informatics/sanntis:1.1.0 predict /data/genome.gbk --ips-tsv /data/genome.ips.tsv -o /data/out
+docker run --rm -v "$PWD:/data" quay.io/microbiome-informatics/sanntis:1.2.0 predict /data/genome.gbk --ips-tsv /data/genome.ips.tsv -o /data/out
 ```
 
 On a machine without a GPU, install the CPU build of PyTorch first:
@@ -209,7 +209,7 @@ Example line, with illustrative values:
 
 ```
 ##gff-version 3
-##sanntis-version 1.1.0
+##sanntis-version 1.2.0
 BGC0002981	SanntiS	CLUSTER	118	27635	0.8118	.	.	ID=BGC0002981_sanntis_1;nearest_MiBIG_class=ribosomal;bgc_class=ribosomal;p_non_bgc=0.0312;n_orfs=22;npc_pathway=Amino acids and Peptides;npc_pathway_score=0.9134;npc_pathway_confident=true;npc_superclass=Oligopeptides;npc_superclass_top=Oligopeptides;npc_superclass_score=0.8710;npc_pathway_key_domains_support=Amino acids and Peptides:IPR003776;npc_pathway_key_domains_unsupported=false
 ```
 
@@ -233,11 +233,24 @@ SanntiS regions appear as subregions next to the antiSMASH detections.
 ## Models
 
 The default model is the Hugging Face Hub release whose tag matches the installed SanntiS version, currently
-`microbiome-informatics/sanntis@v1.1.0`. `--model` selects another Hub revision or a local model directory,
+`microbiome-informatics/sanntis@v1.2.0`. `--model` selects another Hub revision or a local model directory,
 for example one produced by `sanntis train`.
 
+The 1.2.0 model fixes the oversized regions of 1.1.0 in actinomycete genomes (regions up to several hundred kb
+covering half of a *Streptomyces* genome, and neighbouring BGCs merged into one region):
+
+- negatives drawn from the lineages of the positives (negative pool v2b), so that GC- and domain-rich actinomycete
+  background is no longer scored as BGC;
+- training compositions with 2–4 BGCs in a row, so that the detector closes a region between neighbouring BGCs;
+- CDS without InterPro hits take the lower score of their annotated neighbours instead of 0, and regions are not
+  merged across gaps; the operating point is t* = 0.20 (low threshold 0.15).
+
+On actinomycete genomes the regions cover about as much of the genome as antiSMASH regions do, and 93 % of the
+core biosynthetic genes of antiSMASH regions are inside a region (1.1.0: 98 %, with regions covering 58 % of the
+genome).
+
 ```bash
-sanntis predict genome.fna --model microbiome-informatics/sanntis@v1.1.0   # explicit Hub revision
+sanntis predict genome.fna --model microbiome-informatics/sanntis@v1.2.0   # explicit Hub revision
 sanntis predict genome.fna --model runs/my_run/bundle                             # a retrained local model
 HF_HUB_OFFLINE=1 sanntis predict ...                                              # offline, once cached
 ```
@@ -254,7 +267,8 @@ The released model was trained on the data published as the Hub dataset
 | Path (tag) | Content |
 |---|---|
 | `mibig/5.0rc1-train/` (`mibig-5.0rc1-train`) | **Positives**: the 2,797 `active` and `pending` entries of MIBiG 5.0rc1 as a MIBiG-format archive pair. The JSON entries are the 5.0rc1 files; the GenBank record of each BGC comes from the MIBiG 4.0 archive when its locus is unchanged (2,621) and otherwise from the NCBI nuccore record of the first 5.0rc1 locus (174). `manifest.tsv` describes every record, `excluded.tsv` the 2 entries without a usable record and `provenance.json` the sha256 of the source archives. Training drops the 18 loci longer than 200 kb, leaving 2,777 BGCs |
-| `negatives/v1/` (`negatives-v1`) | **Negative genome pool**: 205 GTDB r226 bacterial and archaeal species representatives balanced over phyla and 23 RefSeq fungal and protist genomes, with the regions detected by antiSMASH 8.0.1 removed. 55 prokaryotic and 15 eukaryotic BGC-free runs are held out as test backbones |
+| `negatives/v2b/` (`negatives-v2b`) | **Negative genome pool** (1.2.0): 730 prokaryotic genomes (363 GTDB r226 species representatives, 162 BacDive type strains, 205 from pool v1) drawn per family in proportion to the lineages of the positives, and 159 fungal genomes (RefSeq). Regions detected by antiSMASH 8.0.1 are removed and, for prokaryotes, the clusters of GECCO 0.9.8 as well. Negatives are random portions of the BGC-free runs, up to 1,500 CDS per genome. The genomes behind the Test B sets of `sanntisv1-data-and-analysis` are left out. 55 prokaryotic and 15 fungal BGC-free runs are held out as test backbones |
+| `negatives/v1/` (`negatives-v1`) | Negative genome pool of 1.0 and 1.1: 205 GTDB r226 bacterial and archaeal species representatives balanced over phyla and 23 RefSeq fungal and protist genomes, with the regions detected by antiSMASH 8.0.1 removed |
 | `npclassifier/v1/` (`npclassifier-v1`) | **NPClassifier answers** for the compound structures of the positives, from which the NPC labels are derived |
 
 Positives and negatives are annotated with InterProScan 6.0.3.0 and InterPro 107.0, the 14 member databases listed
@@ -263,10 +277,10 @@ above. With the archive pair downloaded from the dataset, the model is reproduce
 ```bash
 sanntis train --run runs/release --mibig none \
     --external-gbk mibig_5.0rc1-train_gbk.tar.gz --external-json mibig_5.0rc1-train_json.tar.gz \
-    --negatives v1 --npc-cache v1 --container-engine docker
+    --negatives v2b --npc-cache v1 --container-engine docker
 ```
 
-`--negatives v1` and `--npc-cache v1` fetch the pool and the NPClassifier answers from the dataset, so no API
+`--negatives v2b` and `--npc-cache v1` fetch the pool and the NPClassifier answers from the dataset, so no API
 request is made. The bundle's `manifest.json` and model card record the sha256 of these inputs. The runbook that
 builds the archives and the validation report of the run are in the [`sanntisv1-data-and-analysis`](https://github.com/Finn-Lab/sanntisv1-data-and-analysis) repository.
 
