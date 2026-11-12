@@ -65,8 +65,7 @@ compose:
   background_min_cds: 5
   # SanntiS supports fungi among eukaryotes: non-fungal euk positives and pool genomes are left out of training.
   euk_lineages: [fungi]
-  # Multi-BGC compositions (1.2.0): a share of positives is placed in runs of 2-4 BGCs separated by 2-40 background
-  # CDS, so the detector learns to close a region between neighbouring BGCs.
+  # Multi-BGC compositions: a share of positives is placed in runs of 2-4 BGCs separated by 2-40 background CDS.
   clusters: {share: 0.3, k: [2, 4], gap: [2, 40]}
 
 dedup:
@@ -79,9 +78,8 @@ splits:
 
 decode:
   agg: mean
-  # 1.2.0: CDS without InterPro hits take the lower score of their nearest annotated neighbours instead of 0, so an
-  # unannotated gene inside a BGC no longer splits the region; with that, no merge gap is needed (a merge gap also
-  # chains background fragments into regions bridging neighbouring BGCs).
+  # CDS without InterPro hits take the lower score of their nearest annotated neighbours; regions are not merged
+  # across gaps.
   fill: neighbors
   threshold: 0.5          # default only; the bundle's config.json carries t*
   hysteresis_gap: 0.05
@@ -97,8 +95,7 @@ operating_point:
   # BGC-level metrics are blind to region size: at very low t whole contigs merge into a few regions that all hit a
   # BGC (BGC precision = macro recall = 1). Thresholds with fewer regions than min_pred_ratio x true BGCs are excluded.
   min_pred_ratio: 0.5
-  # 1.2.0: t* pinned to 0.20 (low threshold 0.15), chosen on whole-genome footprint and dense multi-BGC benchmarks
-  # (sanntis_dev experiment 2026-11-10_sanntis_footprint); the floor rule above is reported, not applied.
+  # Pinned t* (low threshold t* - hysteresis_gap); the floor rule above is reported, not applied.
   threshold: 0.20
 
 postfilter:
