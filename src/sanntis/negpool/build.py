@@ -139,17 +139,31 @@ def _call_genes(fna: Path, genome: str) -> list:
     return out
 
 
+def trans_spliced(loc) -> bool:
+    """Exons on both strands, or out of order for their strand: antiSMASH reads such a join as an origin-spanning
+    exon of a linear record and rejects the whole record."""
+    parts = list(getattr(loc, "parts", [loc]))
+    strands = {p.strand for p in parts}
+    if len(strands) > 1:
+        return True
+    starts = [int(p.start) for p in parts]
+    return starts != sorted(starts, reverse=strands == {-1})
+
+
 def dedup_cds(rec):
     """One CDS per gene, each with a unique name. RefSeq GBFFs list one CDS per transcript: alternative transcripts
     give CDS with the same location or the same ``locus_tag``, which antiSMASH rejects and which would put several
     isoforms of one gene in the pool. Keeps the first CDS per exact location and per ``locus_tag``; a CDS without
-    ``locus_tag`` (e.g. organelle genes named only by ``gene``) gets ``<record>_cds<n>``."""
+    ``locus_tag`` (e.g. organelle genes named only by ``gene``) gets ``<record>_cds<n>``. Trans-spliced CDS
+    (:func:`trans_spliced`) are dropped."""
     seen_loc: set[str] = set()
     seen_tag: set[str] = set()
     feats = []
     n = 0
     for f in rec.features:
         if f.type == "CDS":
+            if trans_spliced(f.location):
+                continue
             key = str(f.location)
             tag = (f.qualifiers.get("locus_tag") or [None])[0]
             if key in seen_loc or (tag is not None and tag in seen_tag):

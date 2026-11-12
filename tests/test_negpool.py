@@ -269,3 +269,16 @@ def test_dedup_cds_keeps_first_per_location():
     tags = [f.qualifiers["locus_tag"][0] for f in out.features if f.type == "CDS"]
     assert tags == ["a", "c", "c1_cds1", "c1_cds2"]  # same location, then same locus_tag dropped; no tag → named
     assert sum(f.type == "gene" for f in out.features) == 1
+
+
+def test_dedup_cds_drops_trans_spliced():
+    from Bio.Seq import Seq
+    from Bio.SeqFeature import CompoundLocation, FeatureLocation, SeqFeature
+    from Bio.SeqRecord import SeqRecord
+
+    rec = SeqRecord(Seq("A" * 3000), id="c1")
+    rec.features = [SeqFeature(CompoundLocation([FeatureLocation(2000, 2100, 1), FeatureLocation(100, 200, -1)]),
+                               type="CDS", qualifiers={"locus_tag": ["ts"]}),
+                    SeqFeature(CompoundLocation([FeatureLocation(500, 600, -1), FeatureLocation(300, 400, -1)]),
+                               type="CDS", qualifiers={"locus_tag": ["ok"]})]
+    assert [f.qualifiers["locus_tag"][0] for f in B.dedup_cds(rec).features] == ["ok"]
