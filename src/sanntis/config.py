@@ -165,6 +165,7 @@ class OperatingPointConfig(_Frozen):
     floor_metric: str
     floor: float
     min_pred_ratio: float
+    threshold: float | None = None  # pinned t* (the floor rule is then only reported)
 
 
 class KeyDomainsConfig(_Frozen):

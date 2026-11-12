@@ -23,7 +23,7 @@ import pandas as pd
 from sanntis.config import load_recipe
 from sanntis.model.bundle import SanntisModel
 from sanntis.predict import Predictor
-from sanntis.train.cv import run_cv_unit
+from sanntis.train.cv import redecode_cv_unit, run_cv_unit
 from sanntis.train.finalize import build_bundle, run_seed_unit
 from sanntis.train.tune import run_tune
 
@@ -58,6 +58,18 @@ def test_train_core(tmp_path):
     for k in range(5):
         m = run_cv_unit(table, k, 0, run / "cv" / f"split{k}_seed0", recipe=recipe, device="cpu", max_epochs=2)
         assert m["epochs_run"] == 2 and m["vocab_size"] > 3
+    # a re-decode with the same recipe reproduces the split's regions; another decode changes them
+    d0 = run / "cv" / "split0_seed0"
+    before = pd.read_parquet(d0 / "regions.parquet")
+    redecode_cv_unit(table, 0, d0, recipe=recipe)
+    pd.testing.assert_frame_equal(pd.read_parquet(d0 / "regions.parquet"), before)
+    z = dict(np.load(d0 / "oof.npz"))
+    other = recipe.model_copy(update={"decode": recipe.decode.model_copy(
+        update={"fill": "zero" if recipe.decode.fill == "neighbors" else "neighbors"})})
+    redecode_cv_unit(table, 0, d0, recipe=other)  # CDS without tokens score differently under the other fill
+    z2 = np.load(d0 / "oof.npz")
+    assert any(not np.allclose(z[k], z2[k]) for k in z if k.endswith("_scores"))
+    redecode_cv_unit(table, 0, d0, recipe=recipe)
     labels = pd.DataFrame({"accession": table.entity_id[:36], "npc_status": "classified",
                            "pathway": [[PW[i % 3]] for i in range(36)],
                            "superclass": [[f"sc{i % 3}"] for i in range(36)]}).set_index("accession")

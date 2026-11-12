@@ -190,9 +190,15 @@ def degenerate(sweep: pd.DataFrame, min_pred_ratio: float = 0.5) -> pd.Series:
 
 
 def operating_point(sweep: pd.DataFrame, floor: float = 0.80, metric: str = "bgc_precision",
-                    min_pred_ratio: float = 0.5) -> tuple[float, bool]:
+                    min_pred_ratio: float = 0.5, pinned: float | None = None) -> tuple[float, bool]:
     """t* = highest F2_macro among non-degenerate thresholds with ``metric`` >= floor; ties → the higher threshold.
-    Returns (t*, floor_met). If no threshold meets the floor, the one with the highest ``metric`` (ties: higher t)."""
+    Returns (t*, floor_met). If no threshold meets the floor, the one with the highest ``metric`` (ties: higher t).
+    ``pinned``: t* is that threshold (it must be on the sweep grid); floor_met is reported for it."""
+    if pinned is not None:
+        row = sweep[np.isclose(sweep["threshold"], pinned)]
+        if row.empty:
+            raise ValueError(f"pinned threshold {pinned} is not on the sweep grid")
+        return float(pinned), bool(row[metric].iloc[0] >= floor)
     cand = sweep[~degenerate(sweep, min_pred_ratio)]
     if cand.empty:  # every threshold degenerate (tiny inputs): fall back to the full grid
         cand = sweep
