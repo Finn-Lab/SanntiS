@@ -346,6 +346,27 @@ def test_npc_client_cache(tmp_path, monkeypatch):
     assert c.classify("boom") is None and len(calls) == 4
 
 
+def test_npclassifier_outage_backoff(tmp_path, monkeypatch):
+    """Connection errors are retried with capped exponential backoff, then raised and never cached."""
+    import urllib.error
+    import urllib.request
+
+    calls, sleeps = [], []
+
+    def down(req, timeout=None):
+        calls.append(req.full_url)
+        raise urllib.error.URLError(OSError(113, "No route to host"))
+
+    monkeypatch.setattr(urllib.request, "urlopen", down)
+    monkeypatch.setattr(labels.time, "sleep", sleeps.append)
+    c = labels.NPClassifierClient(tmp_path / "npc", min_interval=0)
+    with pytest.raises(labels.LabelError, match="unreachable"):
+        c.classify("CCO")
+    backoff = [s for s in sleeps if s > 0]
+    assert len(calls) == 8 and backoff == [5, 10, 20, 40, 80, 160, 300]
+    assert not list((tmp_path / "npc").iterdir())
+
+
 # ── config / orchestration ───────────────────────────────────────────────────
 
 

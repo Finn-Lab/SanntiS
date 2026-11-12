@@ -121,12 +121,14 @@ def normalise_structure(smiles: str) -> tuple[dict | None, str | None]:
 
 class NPClassifierClient:
     """Cached NPClassifier API client. 200 / 404 / 500 answers are cached (the service answers 500 deterministically
-    for some inputs); connection errors are retried and then raised, never cached."""
+    for some inputs); connection errors are retried with backoff (about 15 minutes in all, to ride out short
+    outages), then raised, never cached."""
 
-    def __init__(self, cache: Path | None = None, *, min_interval: float = 1.0, attempts: int = 4):
+    def __init__(self, cache: Path | None = None, *, min_interval: float = 1.0, attempts: int = 8,
+                 max_backoff: float = 300.0):
         self.dir = Path(cache) if cache else cache_dir("npclassifier")
         self.dir.mkdir(parents=True, exist_ok=True)
-        self.min_interval, self.attempts = min_interval, attempts
+        self.min_interval, self.attempts, self.max_backoff = min_interval, attempts, max_backoff
         self._last = 0.0
         self.requests = 0
 
@@ -151,7 +153,8 @@ class NPClassifierClient:
                 status, err = None, e
             if status in (200, 404) or (status == 500 and i >= 2):
                 break
-            time.sleep(min(60, 2 ** i))
+            if i + 1 < self.attempts:
+                time.sleep(min(self.max_backoff, 5 * 2 ** i))
         if status is None:
             raise LabelError(f"NPClassifier API unreachable ({url[:100]}): {err}")
         rec = {"key": key, "status": status, "body": body,
