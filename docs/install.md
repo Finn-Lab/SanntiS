@@ -21,7 +21,7 @@ pip install "sanntis[train]"     # with the training extras
 ```
 
 A specific tag or an unreleased branch can be installed from GitHub:
-`pip install "git+https://github.com/Finn-Lab/SanntiS@v1.1.0"`.
+`pip install "git+https://github.com/Finn-Lab/SanntiS@v1.2.0"`.
 
 ## Container
 
@@ -31,9 +31,9 @@ bundle of that release baked in, so `predict --ips-tsv` works offline
 InterProScan 6 mode is not part of the image.
 
 ```bash
-docker run --rm -v "$PWD:/data" quay.io/microbiome-informatics/sanntis:1.1.0 \
+docker run --rm -v "$PWD:/data" quay.io/microbiome-informatics/sanntis:1.2.0 \
     predict /data/genome.gbk --ips-tsv /data/genome.ips.tsv --ips-release 107.0 -o /data/out
-singularity exec docker://quay.io/microbiome-informatics/sanntis:1.1.0 \
+singularity exec docker://quay.io/microbiome-informatics/sanntis:1.2.0 \
     sanntis predict genome.gbk --ips-tsv genome.ips.tsv --ips-release 107.0 -o out
 ```
 
