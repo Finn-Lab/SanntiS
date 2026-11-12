@@ -69,7 +69,11 @@ With a precomputed InterProScan TSV passed as `--ips-tsv`, Nextflow and a contai
 |---|---|
 | `SANNTIS_CACHE` | cache root, see above |
 | `SANNTIS_THREADS` | torch and BLAS threads of `sanntis train` and its units. Default: the CPUs available to the process. `predict` uses `--threads` |
-| `SANNTIS_IPS6_CHUNK` | maximum number of proteins per InterProScan 6 run, default 20000. Larger inputs run in sequential chunks |
+| `SANNTIS_IPS6_CHUNK` | maximum number of proteins per InterProScan 6 run, default 20000. Larger inputs run in chunks |
+| `SANNTIS_IPS6_PARALLEL` | InterProScan 6 chunks run at the same time, each its own `nextflow run`, default 1 |
+| `SANNTIS_IPS6_CPUS` | cores of each multi-threaded InterProScan 6 task (its `--cpus`), default 4 |
+| `SANNTIS_IPS6_QUEUE_SIZE`, `SANNTIS_IPS6_SUBMIT_RATE` | Nextflow `executor.queueSize` and `submitRateLimit` of each InterProScan 6 run, applied after `--nf-config`; at most `PARALLEL` x `QUEUE_SIZE` IPS6 tasks run at once. See [infrastructure](infrastructure.md) |
+| `SANNTIS_IPS6_LOOKUP`, `SANNTIS_IPS6_MATCHES_API` | precalculated-match lookup: `auto` (default) or `off`, and the Matches API URL. See [InterProScan setup](setup.md#precalculated-matches) |
 | `SANNTIS_DATA_REPO` | Hub dataset in which `--negatives <version>` is resolved, default `microbiome-informatics/sanntis-training-data` |
 | `NCBI_API_KEY`, `NCBI_EMAIL` | optional credentials for the NCBI taxonomy lookups of `train` and `build-negatives`, which raise the rate limit |
 | `SANNTIS_DEBUG_MAX_EPOCHS` | caps the detector epochs, for tests and smoke runs. The cap is recorded in the model manifest and the model card carries a warning |

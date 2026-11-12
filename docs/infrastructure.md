@@ -36,3 +36,23 @@ sbatch -c 2 --mem 8G --wrap "sanntis predict genome.fna --container-engine singu
 ```
 
 Institutional nf-core configurations are passed the same way, with `--nf-config` and `--nf-profile`.
+
+## Large InterProScan 6 runs
+
+Large protein sets (training positives, negative pools, test sets) are annotated in chunks of
+`SANNTIS_IPS6_CHUNK` proteins, each its own `nextflow run` with its own work directory. Three settings size the
+load on the scheduler:
+
+- `SANNTIS_IPS6_CPUS` (default 4): InterProScan 6 `--cpus`, the cores of each multi-threaded task (HMMER searches,
+  Gene3D, SFLD, SUPERFAMILY, SMART, PIRSF, PROSITE profiles, MobiDB-lite); single-threaded tasks take 1;
+- `SANNTIS_IPS6_PARALLEL`: chunks run at the same time (one Nextflow head each, in the calling job);
+- `SANNTIS_IPS6_QUEUE_SIZE` / `SANNTIS_IPS6_SUBMIT_RATE`: `executor.queueSize` / `submitRateLimit` of each
+  InterProScan 6 run, applied after `--nf-config` so they do not change the queue of the other fan-out steps.
+
+At most `PARALLEL` x `QUEUE_SIZE` tasks are queued at once, so about `PARALLEL` x `QUEUE_SIZE` x `CPUS` cores are
+busy. For example, about 2,500 cores:
+
+```bash
+export SANNTIS_IPS6_PARALLEL=16 SANNTIS_IPS6_QUEUE_SIZE=40 SANNTIS_IPS6_SUBMIT_RATE='100/1min'
+export NXF_OPTS="-Xms256m -Xmx2g"   # per Nextflow head: size the calling job for PARALLEL heads
+```
