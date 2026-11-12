@@ -127,5 +127,7 @@ def build_bundle(table: pd.DataFrame, tune: dict, seed_dir: Path, out: Path, *, 
                                                      "floor_metric": tune["floor_metric"], "floor": tune["floor"],
                                                      "min_pred_ratio": tune["min_pred_ratio"],
                                                      "floor_met": tune["floor_met"],
+                                                     "t_star_pinned": tune.get("t_star_pinned", False),
+                                                     "euk_lineages": list(recipe.compose.euk_lineages or []),
                                                      "npc": tune.get("npc")}})
     return model
