@@ -102,11 +102,12 @@ def load_cds(s: Sample, kingdom: str, genecall: str, threads: int) -> None:
     elif s.kind == "protein":
         s.cds, st = read_faa_gff(s.input, s.gff)
         s.meta.update(records=st.records, bp=None, gff=str(s.gff.resolve()), compound_locations=st.compound,
+                      compound_split=st.compound_split,
                       unmatched_proteins=st.unmatched_proteins)
     else:
         s.cds, st = read_genbank(s.input)
         s.meta.update(records=st.records, bp=sum(st.record_lengths.values()), pseudo_skipped=st.pseudo_skipped,
-                      compound_locations=st.compound)
+                      compound_locations=st.compound, compound_split=st.compound_split)
     s.meta["cds"] = len(s.cds)
     log.info("%s: %d records, %d CDS", s.id, s.meta["records"], len(s.cds))
 

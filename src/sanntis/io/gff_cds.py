@@ -25,6 +25,7 @@ from urllib.parse import unquote
 import pandas as pd
 
 from sanntis.io.fasta import InputError, finish_cds_table, open_text, read_protein_fasta
+from sanntis.io.genbank import MAX_INTRON_BP, cds_extent
 
 log = logging.getLogger(__name__)
 
@@ -36,6 +37,7 @@ class GffCdsStats:
     records: int = 0  # seqids with >= 1 CDS
     cds: int = 0
     compound: int = 0  # IDs on several rows (reported as their span)
+    compound_split: int = 0  # of which with a gap > MAX_INTRON_BP (placed at their main block of rows)
     unmatched_proteins: int = 0  # FASTA records with no CDS (skipped)
 
 
@@ -50,10 +52,11 @@ def _attributes(col9: str) -> dict[str, str]:
 
 def read_faa_gff(faa: Path | str, gff: Path | str) -> tuple[pd.DataFrame, GffCdsStats]:
     """Every ``CDS`` row of ``gff``; its ``ID`` names the protein in ``faa``. Score and phase are ignored and rows
-    may come in any order. An ``ID`` on several rows (same seqid and strand) is reported as its span. A CDS without
+    may come in any order. An ``ID`` on several rows (same seqid and strand) is reported as its span (as its main
+    block of rows when rows are more than ``MAX_INTRON_BP`` apart, see :func:`cds_extent`). A CDS without
     a protein is an error; proteins without a CDS are skipped with a warning."""
     proteins = read_protein_fasta(faa)
-    spans: dict[str, list] = {}  # ID → [seqid, start, end, strand, rows]
+    spans: dict[str, list] = {}  # ID → [seqid, strand, [(start0, end)]]
     with open_text(gff) as fh:
         for n, line in enumerate(fh, 1):
             if line.startswith("##FASTA"):
@@ -75,24 +78,28 @@ def read_faa_gff(faa: Path | str, gff: Path | str) -> tuple[pd.DataFrame, GffCds
                 raise InputError(f"{gff}:{n}: bad coordinates {start}..{end}")
             s = spans.get(cid)
             if s is None:
-                spans[cid] = [seqid, start, end, strand, 1]
-            elif (s[0], s[3]) != (seqid, strand):
+                spans[cid] = [seqid, strand, [(start - 1, end)]]
+            elif (s[0], s[1]) != (seqid, strand):
                 raise InputError(f"{gff}:{n}: CDS {cid} spans several sequences or strands")
             else:
-                s[1], s[2], s[4] = min(s[1], start), max(s[2], end), s[4] + 1
+                s[2].append((start - 1, end))
     if not spans:
         raise InputError(f"{gff}: no CDS features")
     missing = [c for c in spans if c not in proteins]
     if missing:
         raise InputError(f"{len(missing)} CDS of {gff} have no protein in {faa} (e.g. {', '.join(missing[:3])}); "
                          "the GFF ID must equal the FASTA id, and both files must come from the same gene calls")
-    st = GffCdsStats(compound=sum(s[4] > 1 for s in spans.values()),
-                     unmatched_proteins=len(proteins) - len(spans))
+    ext = {cid: cds_extent(s[2]) for cid, s in spans.items()}
+    st = GffCdsStats(compound=sum(len(s[2]) > 1 for s in spans.values()),
+                     compound_split=sum(e[2] for e in ext.values()), unmatched_proteins=len(proteins) - len(spans))
     if st.unmatched_proteins:
         log.warning("%s: %d proteins have no CDS in %s and are skipped", faa, st.unmatched_proteins, gff)
     if st.compound:
         log.info("%s: %d CDS on several rows (reported as their span)", gff, st.compound)
-    cds = finish_cds_table([{"record_id": s[0], "locus_tag": cid, "start": s[1] - 1, "end": s[2], "strand": s[3],
-                             "protein": proteins[cid]} for cid, s in spans.items()])
+    if st.compound_split:
+        log.warning("%s: %d CDS with rows > %d bp apart placed at their main block", gff, st.compound_split,
+                    MAX_INTRON_BP)
+    cds = finish_cds_table([{"record_id": s[0], "locus_tag": cid, "start": ext[cid][0], "end": ext[cid][1],
+                             "strand": s[1], "protein": proteins[cid]} for cid, s in spans.items()])
     st.records, st.cds = cds["record_id"].nunique(), len(cds)
     return cds, st

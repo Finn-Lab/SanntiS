@@ -10,7 +10,7 @@ sanntis predict PROTEINS.faa --gff GENES.gff [--ips-tsv IPS.tsv --ips-release 10
 | Input | Genes | Notes |
 |---|---|---|
 | `.fna` `.fa` `.fasta`, optionally `.gz` | pyrodigal in `meta` mode by default, or `--genecall single`, which trains on inputs of at least 20 kb | prokaryotes only |
-| `.gbk` `.gb` `.gbff`, optionally `.gz` | the CDS of the file | every CDS needs a `/translation`; pseudo genes without one are skipped; joined locations are reported as their span |
+| `.gbk` `.gb` `.gbff`, optionally `.gz` | the CDS of the file | every CDS needs a `/translation`; pseudo genes without one are skipped; joined locations are reported as their span, or as their main block of exons when exons are more than 50 kb apart (a gene-model artefact; counted as `compound_split` in `run.json`) |
 | `.faa`, optionally `.gz`, with `--gff` | the `CDS` rows of the GFF3 | see below; one input per run |
 
 **Protein FASTA with GFF3.** Gene calls made elsewhere: the GFF3 gives the coordinates and the FASTA the
@@ -137,7 +137,7 @@ antismash --sideload genome.sanntis.antismash.json genome.gbk
   analysis on them.
 
 ```json
-{"tool": {"name": "SanntiS", "version": "1.1.0", "description": "...", "configuration": {"kingdom": "proka", "...": "..."}},
+{"tool": {"name": "SanntiS", "version": "1.2.0", "description": "...", "configuration": {"kingdom": "proka", "...": "..."}},
  "records": [{"name": "BGC0002981",
               "subregions": [{"start": 117, "end": 27635, "label": "ribosomal",
                               "details": {"score": "0.8118", "ID": "BGC0002981_sanntis_1", "bgc_class": "ribosomal",
