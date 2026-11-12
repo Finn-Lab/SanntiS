@@ -101,6 +101,7 @@ def test_plan_negatives_cli(tmp_path, taxdump):
         _cand("tiny", "proka", "GCF_000000010.1", 25, 0, 50),  # below min quota
         _cand("f1", "euk", "GCF_000000007.1", 44, 1, 8000),
         _cand("f2", "euk", "GCF_000000008.1", 45, 1, 8000),
+        {**_cand("u1", "proka", "GCA_000000011.1", 999999, 1, 3000), "phylum": "Candidatus Z"},  # no NCBI lineage
     ])
     exclude = _tsv(tmp_path / "exclude.tsv", [{"accession": "GCA_000000004.9", "species": ""},
                                               {"accession": "", "species": "Streptomyces gamma"}])
@@ -116,6 +117,7 @@ def test_plan_negatives_cli(tmp_path, taxdump):
     assert {"s2_refseq", "c1", "f1", "f2", "b1"} <= set(t.index)
     assert not {"s2", "s3", "p1", "tiny", "b2", "b3"} & set(t.index)
     assert t.at["c1", "plan_role"] == "floor" and t.at["c1", "quota_cds"] == "250"
+    assert t.at["u1", "plan_role"] == "floor" and t.at["u1", "phylum"] == "Candidatus Z"
     assert t.at["b1", "plan_role"] == "breadth" and t.at["b1", "quota_cds"] == "500"
     assert "kingdom__Fungi" in t.at["f1", "lineage"] and t.at["f1", "taxon"] == "fungi"
     assert t.at["s1", "species"] == "Streptomyces alpha" and t.at["s1", "group"] == "family:Streptomycetaceae"

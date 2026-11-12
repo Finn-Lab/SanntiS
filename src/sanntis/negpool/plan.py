@@ -42,7 +42,8 @@ table ``sanntis build-negatives --genomes`` reads:
   eukaryote lineages), lineage from their MIBiG NCBI taxid;
 - candidates: GTDB species representatives of one release (CheckM2 completeness / contamination thresholds,
   ``clean_cds`` = 0.9 x protein count) and candidate tables (TSV: genome, kingdom, accession, taxid, source,
-  priority, clean_cds; optional url, taxon, species), lineage from their NCBI taxid;
+  priority, clean_cds; optional url, taxon, species, and phylum where the taxdump has none), lineage from their
+  NCBI taxid;
 - every lineage from one NCBI taxdump; ``--exclude`` removes genomes before planning; a breadth table adds genomes
   that are not planned with a fixed quota (``plan_role`` breadth).
 """
@@ -235,7 +236,11 @@ def read_candidates(path: Path, tax) -> pd.DataFrame:
     df["priority"] = pd.to_numeric(df["priority"]).astype(int)
     df["clean_cds"] = pd.to_numeric(df["clean_cds"])
     df.loc[df["taxon"] == "", "taxon"] = df["kingdom"].map({"proka": "bacteria", "euk": "fungi"})
-    return with_lineage(df, tax)
+    out = with_lineage(df.drop(columns=[c for c in ("phylum", "order", "family", "lineage") if c in df]), tax)
+    if "phylum" in df:  # the table's phylum where the taxdump has none (e.g. GTDB phyla of candidate taxa)
+        given = df["phylum"].replace("", None)
+        out["phylum"] = out["phylum"].where(out["phylum"].notna(), given)
+    return out
 
 
 def _finish_species(df: pd.DataFrame) -> pd.DataFrame:

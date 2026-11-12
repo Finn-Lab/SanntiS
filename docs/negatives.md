@@ -93,7 +93,7 @@ Inputs of `plan-negatives`:
 | `--positives` | a `sanntis train` run stopped after `annotate`: its deduplicated positives, eukaryotes restricted to the recipe's lineages |
 | `--taxdump` | one NCBI taxdump (a `taxdmp_<date>.zip` of the NCBI archive, path or URL with `--taxdump-sha256`, or its directory): the lineage of every positive and candidate, by NCBI taxid |
 | `--gtdb-release` | candidates: the GTDB species representatives of the release with CheckM2 completeness >= `--gtdb-min-completeness` (90) and contamination <= `--gtdb-max-contamination` (5); `clean_cds` = 0.9 x protein count; priority `--gtdb-priority` (1) |
-| `--candidates` | candidate tables (TSV: `genome`, `kingdom`, `accession`, `taxid`, `source`, `priority`, `clean_cds`; optional `url`, `taxon`, `species`). `clean_cds` estimates the BGC-free CDS of the genome |
+| `--candidates` | candidate tables (TSV: `genome`, `kingdom`, `accession`, `taxid`, `source`, `priority`, `clean_cds`; optional `url`, `taxon`, `species`, and `phylum`, used where the taxdump has none). `clean_cds` estimates the BGC-free CDS of the genome |
 | `--exclude` | as for `build-negatives` |
 | `--budget` | negative CDS per track (`proka=<n>`, `euk=<n>`) |
 | `--cap`, `--floor-cds`, `--min-quota`, `--seed` | 1,500, 250, 100, 0 |

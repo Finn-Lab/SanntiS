@@ -134,7 +134,7 @@ def train(**kw) -> None:
 @click.option("--taxdump-sha256", default=None, help="sha256 of a --taxdump URL.")
 @click.option("--candidates", multiple=True, type=click.Path(exists=True, dir_okay=False),
               help="Candidate genomes (TSV: genome, kingdom, accession, taxid, source, priority, clean_cds[, url, "
-                   "taxon, species]; repeatable).")
+                   "taxon, species, phylum]; repeatable).")
 @click.option("--gtdb-release", default=None, help="Add the GTDB species representatives of this release, e.g. 226.")
 @click.option("--gtdb-priority", type=int, default=1, show_default=True)
 @click.option("--gtdb-min-completeness", type=float, default=90.0, show_default=True, help="CheckM2, %.")
