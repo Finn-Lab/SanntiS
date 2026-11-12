@@ -150,6 +150,12 @@ def trans_spliced(loc) -> bool:
     return starts != sorted(starts, reverse=strands == {-1})
 
 
+def organelle(rec) -> bool:
+    """A mitochondrion / plastid / ... record (``/organelle`` on its source): not part of the nuclear genome, and its
+    origin-spanning features break antiSMASH."""
+    return any(f.type == "source" and "organelle" in f.qualifiers for f in rec.features)
+
+
 def dedup_cds(rec):
     """One CDS per gene, each with a unique name. RefSeq GBFFs list one CDS per transcript: alternative transcripts
     give CDS with the same location or the same ``locus_tag``, which antiSMASH rejects and which would put several
@@ -196,7 +202,8 @@ def prepare_unit(out: Path, genome: str) -> None:
     if row["kingdom"] == "proka" and not str(src).endswith((".gbk", ".gbk.gz", ".gbff", ".gbff.gz")):
         recs = _call_genes(src, genome)
     else:
-        recs = [dedup_cds(r) for r in read_records(src) if any(f.type == "CDS" for f in r.features)]
+        recs = [dedup_cds(r) for r in read_records(src)
+                if not organelle(r) and any(f.type == "CDS" for f in r.features)]
     pdir = out / "prepared" / genome
     pdir.mkdir(parents=True, exist_ok=True)
     rows, seqs = [], {}

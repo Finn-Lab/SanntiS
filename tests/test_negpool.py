@@ -282,3 +282,17 @@ def test_dedup_cds_drops_trans_spliced():
                     SeqFeature(CompoundLocation([FeatureLocation(500, 600, -1), FeatureLocation(300, 400, -1)]),
                                type="CDS", qualifiers={"locus_tag": ["ok"]})]
     assert [f.qualifiers["locus_tag"][0] for f in B.dedup_cds(rec).features] == ["ok"]
+
+
+def test_organelle_records():
+    from Bio.Seq import Seq
+    from Bio.SeqFeature import FeatureLocation, SeqFeature
+    from Bio.SeqRecord import SeqRecord
+
+    def rec(**q):
+        r = SeqRecord(Seq("A" * 100), id="r")
+        r.features = [SeqFeature(FeatureLocation(0, 100, 1), type="source", qualifiers=q)]
+        return r
+
+    assert B.organelle(rec(organelle=["mitochondrion"]))
+    assert not B.organelle(rec(chromosome=["1"]))

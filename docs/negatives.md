@@ -24,7 +24,8 @@ the pool.
    listed in `excluded.tsv`.
 2. **Prepare** is a fan-out step with the label `cpu_small`. Each assembly is downloaded and md5-verified, and its
    CDS table is built. Prokaryotic genes are called with pyrodigal in single mode, or in meta mode below 100 kb. A
-   local `.gbk` or `.gbff` file contributes its own CDS. Eukaryotic CDS come from the RefSeq GBFF.
+   local `.gbk` or `.gbff` file contributes its own CDS. Eukaryotic CDS come from the RefSeq GBFF, without its
+   organelle records (mitochondrion, plastid), with one CDS per gene and no trans-spliced CDS.
 3. **antiSMASH 8.0.1** is a fan-out step with the label `antismash`. It runs `--minimal --genefinding-tool none`
    per genome. With a container engine it runs in `quay.io/nf-core/antismash:8.0.1--pyhdfd78af_0`;
    `--antismash-image` selects another image for `--runner inline`. Without a container engine, `antismash` 8.0.1
