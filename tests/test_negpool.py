@@ -198,3 +198,101 @@ def test_bad_genome_id_rejected(tmp_path):
     gt.write_text("genome\tkingdom\nok_1\tproka\nbad id$(x)\tproka\n")
     with pytest.raises(B.BuildError, match="genome ids"):
         B.build_negatives(B.BuildOptions(out=tmp_path / "out", genomes=gt, dry_run=True))
+
+
+def test_build_quota_pool_annotates_portions_only(tmp_path, env):
+    genomes, entries = env
+    q = tmp_path / "genomes_quota.tsv"
+    lines = genomes.read_text().splitlines()
+    q.write_text(lines[0] + "\tquota_cds\n" + lines[1] + "\t30\n")
+    o = B.BuildOptions(out=tmp_path / "quota", pool_version="vq", genomes=q, entries_json=entries, runner="inline",
+                       workers=1, nextflow=NextflowOptions())
+    pool = B.build_negatives(o, annotate=stub_ips6)
+    por = pd.read_parquet(pool.path / "portions.parquet")
+    assert por["n_cds"].sum() == 30 and len(por) == 3
+    c = pd.read_parquet(pool.path / "cds_tokens.parquet").set_index(["contig", "cds_idx"])
+    bb = pd.read_parquet(pool.path / "test_backbones.parquet")
+    runs = pd.read_parquet(pool.path / "clean_runs.parquet").set_index("run_id")
+    keep = {(ct, int(i)) for cs, ids in zip(por["contigs"], por["cds_idx"], strict=True)
+            for ct, i in zip(cs, ids, strict=True)}
+    keep |= {(runs.at[r, "contig"], int(i)) for r in bb["run_id"] for i in runs.at[r, "cds_idx"]}
+    annotated = {k for k, t in c["tokens"].items() if t is not None}
+    assert annotated == keep  # only portion + backbone CDS were annotated
+    assert "portions.parquet" in pool.manifest["files"] and pool.manifest["portions"]["cds"] == 30
+    load_pool(pool.path)
+
+
+def test_build_exclude_removes_genomes(tmp_path, env):
+    genomes, entries = env
+    lines = genomes.read_text().splitlines()
+    g2 = tmp_path / "genomes_two.tsv"
+    other = lines[1].replace("tiny\t", "other\t", 1).replace("GCA_000220375.1", "GCF_000999999.2")
+    g2.write_text("\n".join([lines[0], lines[1], other]) + "\n")
+    ex = tmp_path / "exclude.tsv"
+    ex.write_text("accession\tspecies\tnote\nGCA_000999999.1\t\ttest background\n")  # GCA/GCF + version ignored
+    o = B.BuildOptions(out=tmp_path / "ex", pool_version="vex", genomes=g2, exclude=ex, entries_json=entries,
+                       runner="inline", workers=1, nextflow=NextflowOptions())
+    pool = B.build_negatives(o, annotate=stub_ips6)
+    assert pool.manifest["excluded_genomes"] == 1 and pool.manifest["counts"]["proka"]["genomes"] == 1
+    assert list(pd.read_csv(tmp_path / "ex" / "excluded.tsv", sep="\t")["genome"]) == ["other"]
+    assert pool.manifest["ips"]["source"] == "ips6 run"
+
+
+def test_exclude_matches_accession_core_and_species(tmp_path):
+    from sanntis.negpool.exclude import accession_core, excluded, read_exclude
+
+    assert accession_core("GCF_000123456.2") == accession_core("GCA_000123456.1") == "000123456"
+    ex_f = tmp_path / "ex.tsv"
+    ex_f.write_text("accession\tspecies\nGCA_1.1\t\n\tAspergillus niger\n")
+    ex = read_exclude(ex_f)
+    g = pd.DataFrame({"genome": ["a", "b", "c", "d"], "accession": ["GCF_1.3", "GCF_2.1", "GCF_3.1", "GCF_4.1"],
+                      "species": ["", "", "", "[Aspergillus] Niger"],
+                      "lineage": ["", "kingdom__Fungi;species__Aspergillus niger", "s__Other sp", ""]})
+    assert excluded(g, ex).tolist() == [True, True, False, True]
+
+
+def test_dedup_cds_keeps_first_per_location():
+    from Bio.Seq import Seq
+    from Bio.SeqFeature import CompoundLocation, FeatureLocation, SeqFeature
+    from Bio.SeqRecord import SeqRecord
+
+    loc = CompoundLocation([FeatureLocation(10, 40, strand=-1), FeatureLocation(0, 6, strand=-1)])
+    rec = SeqRecord(Seq("A" * 100), id="c1")
+    rec.features = [SeqFeature(loc, type="CDS", qualifiers={"locus_tag": ["a"]}),
+                    SeqFeature(loc, type="CDS", qualifiers={"locus_tag": ["b"]}),
+                    SeqFeature(FeatureLocation(50, 80, strand=1), type="CDS", qualifiers={"locus_tag": ["c"]}),
+                    SeqFeature(FeatureLocation(50, 80, strand=1), type="gene"),
+                    SeqFeature(FeatureLocation(52, 80, strand=1), type="CDS", qualifiers={"locus_tag": ["c"]}),
+                    SeqFeature(FeatureLocation(85, 95, strand=1), type="CDS", qualifiers={"gene": ["cox1"]}),
+                    SeqFeature(FeatureLocation(88, 98, strand=1), type="CDS", qualifiers={"gene": ["cox1"]})]
+    out = B.dedup_cds(rec)
+    tags = [f.qualifiers["locus_tag"][0] for f in out.features if f.type == "CDS"]
+    assert tags == ["a", "c", "c1_cds1", "c1_cds2"]  # same location, then same locus_tag dropped; no tag → named
+    assert sum(f.type == "gene" for f in out.features) == 1
+
+
+def test_dedup_cds_drops_trans_spliced():
+    from Bio.Seq import Seq
+    from Bio.SeqFeature import CompoundLocation, FeatureLocation, SeqFeature
+    from Bio.SeqRecord import SeqRecord
+
+    rec = SeqRecord(Seq("A" * 3000), id="c1")
+    rec.features = [SeqFeature(CompoundLocation([FeatureLocation(2000, 2100, 1), FeatureLocation(100, 200, -1)]),
+                               type="CDS", qualifiers={"locus_tag": ["ts"]}),
+                    SeqFeature(CompoundLocation([FeatureLocation(500, 600, -1), FeatureLocation(300, 400, -1)]),
+                               type="CDS", qualifiers={"locus_tag": ["ok"]})]
+    assert [f.qualifiers["locus_tag"][0] for f in B.dedup_cds(rec).features] == ["ok"]
+
+
+def test_organelle_records():
+    from Bio.Seq import Seq
+    from Bio.SeqFeature import FeatureLocation, SeqFeature
+    from Bio.SeqRecord import SeqRecord
+
+    def rec(**q):
+        r = SeqRecord(Seq("A" * 100), id="r")
+        r.features = [SeqFeature(FeatureLocation(0, 100, 1), type="source", qualifiers=q)]
+        return r
+
+    assert B.organelle(rec(organelle=["mitochondrion"]))
+    assert not B.organelle(rec(chromosome=["1"]))

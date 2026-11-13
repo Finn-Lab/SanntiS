@@ -33,7 +33,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from safetensors.torch import save_file
+from safetensors.torch import load_file, save_file
 
 from sanntis.config import Recipe, load_recipe
 from sanntis.features.tokens import linearize
@@ -103,6 +103,33 @@ def decode_sweep(scores: list[np.ndarray], seqs: list[OrfSequence], pf: PostFilt
                                        "p_non_bgc"])
 
 
+def _score_oof(state_dict, sd: SplitData, vocab: Vocab, val_orf: list[OrfSequence], val_seqs, recipe: Recipe,
+               out: Path) -> None:
+    """OOF ORF scores (oof.npz) and the decoded + RF-filtered sweep regions (regions.parquet) of a split."""
+    model = Detector(len(vocab), recipe.detector)
+    model.load_state_dict(state_dict)
+    scores = val_orf_scores(model, val_seqs, recipe.detector.window, "cpu", recipe.decode.agg, recipe.decode.fill)
+    pf = fit_postfilter(sd.select, vocab, recipe)
+    regions = decode_sweep(scores, val_orf, pf, recipe)
+    np.savez_compressed(out / "oof.npz", **{f"{s.kingdom}_scores": x for s, x in zip(val_orf, scores, strict=True)},
+                        **{f"{s.kingdom}_label": s.orf_label for s in val_orf},
+                        **{f"{s.kingdom}_entity": s.orf_entity for s in val_orf})
+    regions.to_parquet(out / "regions.parquet", index=False)
+
+
+def redecode_cv_unit(table: pd.DataFrame, split: int, out: Path, *, recipe: Recipe | None = None) -> None:
+    """Re-score and re-decode a finished CV split with the current recipe's decode (aggregation, fill, hysteresis,
+    merge gap), reusing its detector and vocabulary: rewrites oof.npz and regions.parquet, so that ``tune`` can be
+    re-run after a decode-only change without retraining the split."""
+    recipe = recipe or load_recipe()
+    out = Path(out)
+    sd = split_data(table, split, recipe)
+    vocab = Vocab.load(out / "vocab.json")
+    val_orf = compose(sd.val, duplicate_positives=1, seed=recipe.compose.seed + 1)
+    _score_oof(load_file(out / "detector.safetensors"), sd, vocab, val_orf, linearized(val_orf, vocab, recipe),
+               recipe, out)
+
+
 def run_cv_unit(table: pd.DataFrame, split: int, seed: int, out: Path, *, recipe: Recipe | None = None,
                 device: str = "auto", max_epochs: int | None = None) -> dict:
     recipe = recipe or load_recipe()
@@ -111,7 +138,7 @@ def run_cv_unit(table: pd.DataFrame, split: int, seed: int, out: Path, *, recipe
     sd = split_data(table, split, recipe)
     vocab = fit_vocab(sd.select, recipe)
     c = recipe.compose
-    train_orf = compose(sd.train, duplicate_positives=c.duplicate_positives, seed=c.seed)
+    train_orf = compose(sd.train, duplicate_positives=c.duplicate_positives, seed=c.seed, clusters=c.clusters)
     val_orf = compose(sd.val, duplicate_positives=1, seed=c.seed + 1)
     train_seqs, val_seqs = linearized(train_orf, vocab, recipe), linearized(val_orf, vocab, recipe)
     n_tok = sum(len(s.tokens) for s in train_seqs)
@@ -120,19 +147,10 @@ def run_cv_unit(table: pd.DataFrame, split: int, seed: int, out: Path, *, recipe
     fit = fit_detector(train_seqs, len(vocab), recipe, seed=seed, val_seqs=val_seqs,
                        val_orf_labels=[s.orf_label for s in val_orf], device=device, epochs=max_epochs)
 
-    model = Detector(len(vocab), recipe.detector)
-    model.load_state_dict(fit.state_dict)
-    scores = val_orf_scores(model, val_seqs, recipe.detector.window, "cpu", recipe.decode.agg, recipe.decode.fill)
-    pf = fit_postfilter(sd.select, vocab, recipe)
-    regions = decode_sweep(scores, val_orf, pf, recipe)
-
     vocab.save(out / "vocab.json")
     save_file({k: v.contiguous() for k, v in sorted(fit.state_dict.items())}, out / "detector.safetensors")
     pd.DataFrame(fit.history).to_csv(out / "history.tsv", sep="\t", index=False)
-    np.savez_compressed(out / "oof.npz", **{f"{s.kingdom}_scores": x for s, x in zip(val_orf, scores, strict=True)},
-                        **{f"{s.kingdom}_label": s.orf_label for s in val_orf},
-                        **{f"{s.kingdom}_entity": s.orf_entity for s in val_orf})
-    regions.to_parquet(out / "regions.parquet", index=False)
+    _score_oof(fit.state_dict, sd, vocab, val_orf, val_seqs, recipe, out)
     metrics = {"split": split, "seed": seed, "vocab_size": len(vocab), "train_tokens": n_tok,
                "bgc_token_share": float(np.concatenate([s.labels for s in train_seqs]).mean()),
                "best_epoch": fit.best_epoch, "epochs_run": fit.epochs_run, "val_orf_aucpr": fit.val_orf_aucpr,

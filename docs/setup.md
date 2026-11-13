@@ -15,6 +15,18 @@ the data once before a series of runs.
 
 The InterProScan version, the InterPro release and the member databases are fixed: InterProScan 6.0.3.0, InterPro
 107.0 and the 14 applications Pfam, NCBIfam, SFLD, SUPERFAMILY, CATH-Gene3D, HAMAP, COILS, CDD, PRINTS, PIRSF,
-PROSITE profiles, PROSITE patterns, MobiDB-lite and SMART. Matches are computed locally with `--noMatchesApi`.
-An `--nf-args` value that would change any of these is refused. The online InterPro compatibility check is skipped
+PROSITE profiles, PROSITE patterns, MobiDB-lite and SMART. An `--nf-args` value that would change any of these
+(or the lookup and `--cpus` settings below) is refused. The online InterPro compatibility check is skipped
 with `--skipInterproVersionCheck`, as the pinned versions are compatible.
+
+## Precalculated matches
+
+InterProScan 6 can fetch the matches of proteins InterPro has already annotated from the Matches API instead of
+computing them. The API serves the current InterPro release, and InterProScan 6.0.3.0 does not compare that release
+with the one it runs: proteins found in the API would get matches of another release than the proteins computed
+locally. SanntiS therefore reads the API's `/info` before each annotation and uses the lookup only when the API
+serves the pinned release (`SANNTIS_IPS6_LOOKUP=auto`, the default); otherwise every protein is computed locally
+(`--noMatchesApi`). `SANNTIS_IPS6_LOOKUP=off` never uses it, and `SANNTIS_IPS6_MATCHES_API` points at another
+Matches API, e.g. a local service for the pinned release. The decision is written to `lookup.json` in the
+InterProScan run directory and, for negative pools, to the pool manifest.
+

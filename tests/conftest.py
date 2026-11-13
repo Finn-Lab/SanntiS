@@ -38,6 +38,12 @@ FIXTURE_TSVS = [Path(__file__).parent / "fixtures" / "ips576.tsv", Path(__file__
 CLASSES = ["NRPS", "PKS", "ribosomal", "terpene", "saccharide", "other"]
 
 
+@pytest.fixture(autouse=True)
+def _no_matches_api(monkeypatch):
+    """Tests never query the InterPro Matches API (the lookup guard reads its /info)."""
+    monkeypatch.setenv("SANNTIS_IPS6_LOOKUP", "off")
+
+
 def random_regions(rng: np.random.Generator, tokens: list[str], n: int) -> list[list[list[str]]]:
     return [[list(rng.choice(tokens, size=rng.integers(0, 4))) for _ in range(rng.integers(1, 8))] for _ in range(n)]
 

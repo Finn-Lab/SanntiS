@@ -50,7 +50,7 @@ train:
   optimizer: {lr: 0.001, weight_decay: 0.0, grad_clip: 1.0}
   scheduler: {factor: 0.1, patience: 5}
   # Early stopping / LR plateau read the validation ORF AUCPR computed with max token aggregation and neighbour
-  # fill (the training-time convention); every reported metric uses the shipped decode (mean / zero).
+  # fill (the training-time convention); every reported metric uses the shipped decode (mean / neighbours).
   early_stopping: {patience: 8, max_epochs: 60, orf_agg: max, orf_fill: neighbors}
   batch_size: 64
   token_dropout: 0.1
@@ -63,6 +63,10 @@ compose:
   chunks_per_positive: 3
   chunk_len_clip: [3, 200]
   background_min_cds: 5
+  # SanntiS supports fungi among eukaryotes: non-fungal euk positives and pool genomes are left out of training.
+  euk_lineages: [fungi]
+  # Multi-BGC compositions: a share of positives is placed in runs of 2-4 BGCs separated by 2-40 background CDS.
+  clusters: {share: 0.3, k: [2, 4], gap: [2, 40]}
 
 dedup:
   dice_threshold: 0.974
@@ -74,10 +78,12 @@ splits:
 
 decode:
   agg: mean
-  fill: zero
-  threshold: 0.5          # default only; the bundle's config.json carries the tuned t*
-  hysteresis_gap: 0.15
-  merge_gap: 3
+  # CDS without InterPro hits take the lower score of their nearest annotated neighbours; regions are not merged
+  # across gaps.
+  fill: neighbors
+  threshold: 0.5          # default only; the bundle's config.json carries t*
+  hysteresis_gap: 0.05
+  merge_gap: 0
   min_orfs: 1
 
 operating_point:
@@ -89,6 +95,8 @@ operating_point:
   # BGC-level metrics are blind to region size: at very low t whole contigs merge into a few regions that all hit a
   # BGC (BGC precision = macro recall = 1). Thresholds with fewer regions than min_pred_ratio x true BGCs are excluded.
   min_pred_ratio: 0.5
+  # Pinned t* (low threshold t* - hysteresis_gap); the floor rule above is reported, not applied.
+  threshold: 0.20
 
 postfilter:
   n_estimators: 100

@@ -33,11 +33,16 @@ log = logging.getLogger(__name__)
 
 GTDB_BASE = "https://data.gtdb.ecogenomic.org/releases/release{r}/{r}.0/"
 GTDB_TABLES = ("bac120_metadata_r{r}.tsv.gz", "ar53_metadata_r{r}.tsv.gz")
+GTDB_SHA256 = {  # released files are immutable: a mismatch is a corrupt download
+    "bac120_metadata_r226.tsv.gz": "45f1614aff80c19752860880b47b3cdeb66def8ff66dc106909b28bb2bd9bcbf",
+    "ar53_metadata_r226.tsv.gz": "f12310f223e6dd27dc942379de1cfbeec5ebd2b917786cf2ce28695555eab6e5",
+}
 REFSEQ_SUMMARY = "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/{group}/assembly_summary.txt"
 # group → (genomes per phylum, RefSeq directory): 2-3 per phylum (fungi, protozoa, plants)
 REFSEQ_GROUPS = {"fungi": (3, "fungi"), "protozoa": (2, "protozoa"), "plants": (2, "plant")}
 ASSEMBLY_LEVELS = ("Complete Genome", "Chromosome", "Scaffold")
-GENOME_COLUMNS = ["genome", "kingdom", "lineage", "source", "accession", "group", "taxon", "url", "path"]
+GENOME_COLUMNS = ["genome", "kingdom", "lineage", "source", "accession", "group", "taxon", "url", "path", "quota_cds",
+                  "species"]
 RANKS = {"d": "domain", "p": "phylum", "c": "class", "o": "order", "f": "family", "g": "genus", "s": "species"}
 
 
@@ -86,7 +91,8 @@ def split_gtdb_taxonomy(tax: pd.Series) -> pd.DataFrame:
 
 def gtdb_tables(release: str = "226", root: Path | None = None) -> list[Path]:
     root = root or cache_dir(f"gtdb/r{release}")
-    return [fetch(GTDB_BASE.format(r=release) + t.format(r=release), root / t.format(r=release)) for t in GTDB_TABLES]
+    names = [t.format(r=release) for t in GTDB_TABLES]
+    return [fetch(GTDB_BASE.format(r=release) + n, root / n, GTDB_SHA256.get(n)) for n in names]
 
 
 def sample_gtdb(tables: list[Path], n_samples: int = 205, seed: int = 42, rank: str = "phylum") -> pd.DataFrame:
@@ -134,7 +140,9 @@ def sample_refseq(summaries: dict[str, Path], lineages: dict[int, dict[str, str]
 
 
 def read_genomes(path: Path) -> pd.DataFrame:
-    """A user / pre-sampled genome table (TSV). Required: genome, kingdom; ``path`` skips the download."""
+    """A user / pre-sampled genome table (TSV). Required: genome, kingdom; ``path`` skips the download;
+    ``quota_cds`` (lineage-matched plans, :mod:`sanntis.negpool.plan`) makes the pool keep only that many BGC-free
+    CDS of the genome, as portions; ``species`` (else the species of ``lineage``) is what ``--exclude`` matches."""
     df = pd.read_csv(path, sep="\t", dtype=str, keep_default_na=False)
     for c in GENOME_COLUMNS:
         if c not in df.columns:

@@ -35,7 +35,7 @@ from sanntis.io.fasta import (
     read_nucleotide_fasta,
     read_protein_fasta,
 )
-from sanntis.io.genbank import read_genbank
+from sanntis.io.genbank import MAX_INTRON_BP, cds_extent, read_genbank
 from sanntis.io.gff_cds import read_faa_gff
 
 FIX = Path(__file__).parent / "fixtures"
@@ -84,6 +84,26 @@ def test_genbank_joined_pseudo_and_gzip(tmp_path):
     # a CDS without locus_tag / protein_id / gene is named by its genomic position
     assert cds[["locus_tag", "start", "end"]].values.tolist() == [["rec1_cds1", 10, 40], ["j1", 100, 400]]
     assert cds["protein"].tolist() == ["MAA", "MKV"]
+
+
+def test_cds_extent_long_gap():
+    assert cds_extent([(300, 400), (100, 200)]) == (100, 400, False)
+    gap = MAX_INTRON_BP + 1
+    # two exons > MAX_INTRON_BP apart: the CDS sits at the block with the most coding bp
+    assert cds_extent([(0, 100), (100 + gap, 100 + gap + 300)]) == (100 + gap, 100 + gap + 300, True)
+    assert cds_extent([(0, 100), (150, 400), (400 + gap, 400 + gap + 50)]) == (0, 400, True)
+
+
+def test_genbank_long_gap_cds(tmp_path):
+    r = SeqRecord(Seq("ATG" * 40_000), id="rec1", annotations={"molecule_type": "DNA"})
+    # complement(join(11..400,119001..119100)): Biopython keeps the parts in biological order (3' part first)
+    r.features = [SeqFeature(CompoundLocation([FeatureLocation(119_000, 119_100, -1), FeatureLocation(10, 400, -1)]),
+                             type="CDS", qualifiers={"locus_tag": ["e1"], "translation": ["MKV"]})]
+    p = tmp_path / "x.gbk"
+    seqio_write(r, p, "genbank")
+    cds, st = read_genbank(p)
+    assert st.compound == 1 and st.compound_split == 1
+    assert cds[["start", "end"]].values.tolist() == [[10, 400]]
 
 
 def test_genbank_missing_translation_fails(tmp_path):
@@ -142,6 +162,7 @@ def test_faa_gff_rules(tmp_path, caplog):
     assert cds[["locus_tag", "start", "end", "strand", "protein"]].values.tolist() == [
         ["a1", 0, 90, 1, "MKV"], ["b;1", 199, 290, -1, "MLL"]]
     assert st.compound == 1 and st.unmatched_proteins == 1 and "1 proteins have no CDS" in caplog.text
+    assert st.compound_split == 0
 
     for bad, match in [(["c1\tx\tCDS\t1\t30\t.\t.\t.\tID=a1"], "strand"),
                        (["c1\tx\tCDS\t30\t1\t.\t+\t.\tID=a1"], "coordinates"),

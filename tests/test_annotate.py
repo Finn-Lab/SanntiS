@@ -56,7 +56,7 @@ def test_app_names_and_pins():
                      "pirsf", "prositeprofiles", "prositepatterns", "mobidblite", "smart"]
     with pytest.raises(ips6.Ips6Error, match="interpro"):
         ips6.check_nf_args(NextflowOptions(nf_args="--interpro 108.0"))
-    ips6.check_nf_args(NextflowOptions(nf_args="-with-trace --cpus 4"))
+    ips6.check_nf_args(NextflowOptions(nf_args="-with-trace"))
 
 
 def test_command_is_pinned(tmp_path):

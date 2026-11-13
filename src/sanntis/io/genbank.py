@@ -43,6 +43,10 @@ from sanntis.io.fasta import md5 as protein_md5
 
 log = logging.getLogger(__name__)
 
+# Joined CDS locations with an internal gap above this are treated as gene-model artefacts (e.g. two exons 1.7 Mb apart
+# in a catalogue annotation): the CDS is placed at its block of parts with the most coding bp, not at the whole span.
+MAX_INTRON_BP = 50_000
+
 CDS_COLUMNS = ["contig", "cds_idx", "cds_id", "locus_tag", "protein_id", "start", "end", "strand", "md5", "length"]
 
 
@@ -59,6 +63,7 @@ class Cds:
     sequence: str  # cleaned as for inference (clean_protein); "" without /translation (missing_translation="empty")
     pseudo: bool = False  # /pseudo or /pseudogene
     joined: bool = False  # joined / order location, reported as its span
+    split: bool = False  # joined location with an internal gap > MAX_INTRON_BP (placed at its main block)
 
     @property
     def md5(self) -> str:
@@ -76,16 +81,32 @@ def _q(f: SeqFeature, key: str) -> str:
     return (f.qualifiers.get(key) or [""])[0].strip()
 
 
-def _span(f: SeqFeature) -> tuple[int, int, int]:
-    """(start, end, strand) of a CDS. A joined location is reported as its span (min start, max end); for a location
-    that wraps the origin of a circular record, the span of its longest part."""
+def cds_extent(parts: list[tuple[int, int]]) -> tuple[int, int, bool]:
+    """(start, end, split) of a CDS from its parts (0-based half-open, any order): the span of all parts, or, when
+    parts are separated by more than ``MAX_INTRON_BP``, the span of the block of parts with the most coding bp."""
+    iv = sorted(parts)
+    blocks = [[iv[0]]]
+    for s, e in iv[1:]:
+        if s - max(x for _, x in blocks[-1]) > MAX_INTRON_BP:
+            blocks.append([])
+        blocks[-1].append((s, e))
+    best = max(blocks, key=lambda b: sum(e - s for s, e in b)) if len(blocks) > 1 else blocks[0]
+    return best[0][0], max(e for _, e in best), len(blocks) > 1
+
+
+def _span(f: SeqFeature) -> tuple[int, int, int, bool]:
+    """(start, end, strand, split) of a CDS. A joined location is reported as its span (min start, max end); for a
+    location that wraps the origin of a circular record, the span of its longest part. Parts separated by more than
+    ``MAX_INTRON_BP`` are grouped into blocks and the CDS is reported as the span of the block with the most coding
+    bp (``split`` = True)."""
     parts = getattr(f.location, "parts", [f.location])
     strand = f.location.strand if f.location.strand in (1, -1) else 1
     if len(parts) > 1:
         starts = [int(p.start) for p in parts][::strand]
         if any(b < a for a, b in zip(starts, starts[1:], strict=False)):  # wraps the origin
             parts = [max(parts, key=len)]
-    return min(int(p.start) for p in parts), max(int(p.end) for p in parts), strand
+    start, end, split = cds_extent([(int(p.start), int(p.end)) for p in parts])
+    return start, end, strand, split
 
 
 def _translate(f: SeqFeature, rec: SeqRecord) -> str:
@@ -106,7 +127,7 @@ def iter_cds(rec: SeqRecord, *, missing_translation: Literal["translate", "error
     """
     feats = [f for f in rec.features if f.type == "CDS" and not (drop_pseudo and "pseudo" in f.qualifiers)]
     spans = sorted(((_span(f), f) for f in feats), key=lambda x: (x[0][0], x[0][1]))
-    for i, ((start, end, strand), f) in enumerate(spans):
+    for i, ((start, end, strand, split), f) in enumerate(spans):
         seq = _q(f, "translation")
         lt, pid = _q(f, "locus_tag"), _q(f, "protein_id")
         cid = lt or pid or _q(f, "gene") or f"{rec.id}_cds{i + 1}"
@@ -116,7 +137,7 @@ def iter_cds(rec: SeqRecord, *, missing_translation: Literal["translate", "error
             seq = _translate(f, rec)
         yield Cds(rec.id, i, cid, lt, pid, start, end, strand, clean_protein(seq) if seq else "",
                   pseudo="pseudo" in f.qualifiers or "pseudogene" in f.qualifiers,
-                  joined=len(getattr(f.location, "parts", [f.location])) > 1)
+                  joined=len(getattr(f.location, "parts", [f.location])) > 1, split=split)
 
 
 def cds_rows(cds: list[Cds]) -> list[dict]:
@@ -135,6 +156,7 @@ class GenbankStats:
     cds: int = 0
     pseudo_skipped: int = 0  # pseudo CDS without /translation
     compound: int = 0  # joined / order locations (reported as their span)
+    compound_split: int = 0  # joined locations with a gap > MAX_INTRON_BP (placed at their main block)
 
 
 def read_genbank(path: Path | str) -> tuple[pd.DataFrame, GenbankStats]:
@@ -159,6 +181,7 @@ def read_genbank(path: Path | str) -> tuple[pd.DataFrame, GenbankStats]:
                         missing.append(f"{rec.id}:{c.cds_id}")
                     continue
                 st.compound += c.joined
+                st.compound_split += c.split
                 rows.append({"record_id": rec.id, "locus_tag": c.cds_id, "start": c.start, "end": c.end,
                              "strand": c.strand, "protein": c.sequence})
     if st.records == 0:
@@ -171,6 +194,9 @@ def read_genbank(path: Path | str) -> tuple[pd.DataFrame, GenbankStats]:
         log.warning("%s: %d pseudo CDS without /translation skipped", path, st.pseudo_skipped)
     if st.compound:
         log.info("%s: %d CDS with joined locations (reported as their span)", path, st.compound)
+    if st.compound_split:
+        log.warning("%s: %d CDS with an internal gap > %d bp placed at their main block of exons", path,
+                    st.compound_split, MAX_INTRON_BP)
     cds = finish_cds_table(rows)
     st.cds = len(cds)
     return cds, st

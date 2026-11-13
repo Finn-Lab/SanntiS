@@ -86,7 +86,9 @@ def positive_entities(loci: pd.DataFrame, *, dice_threshold: float = 0.974,
 
 def sample_chunks(runs: pd.DataFrame, *, target: int, mu: float, sigma: float, min_cds: int = 3,
                   max_cds: int = 200, seed: int = 0) -> pd.DataFrame:
-    """``target`` chunks: length ~ N(mu, sigma) clipped to [min, max]; run chosen with p ∝ n_cds, start uniform."""
+    """``target`` chunks: length ~ N(mu, sigma) clipped to [min, max]; unit chosen with p ∝ n_cds, start uniform.
+
+    ``runs``: genome, run_id, n_cds and ``members`` (list of (contig, cds_idx)); a clean run or a portion."""
     rng = np.random.default_rng(seed)
     runs = runs[runs["n_cds"] >= min_cds].reset_index(drop=True)
     if runs.empty:
@@ -102,11 +104,31 @@ def sample_chunks(runs: pd.DataFrame, *, target: int, mu: float, sigma: float, m
         if r["n_cds"] < L:
             continue
         start = int(rng.integers(0, r["n_cds"] - L + 1))
-        rows.append({"chunk_id": f"neg_{len(rows):06d}", "genome": r["genome"], "contig": r["contig"],
-                     "run_id": r["run_id"], "cds_idx": list(r["cds_idx"][start : start + L]), "n_cds": L})
+        mem = list(r["members"][start : start + L])
+        rows.append({"chunk_id": f"neg_{len(rows):06d}", "genome": r["genome"], "contig": mem[0][0],
+                     "run_id": r["run_id"], "cds_idx": [i for _, i in mem], "n_cds": L, "members": mem})
     if len(rows) < target:
         log.warning("sampled only %d of %d chunks", len(rows), target)
-    return pd.DataFrame(rows, columns=["chunk_id", "genome", "contig", "run_id", "cds_idx", "n_cds"])
+    return pd.DataFrame(rows, columns=["chunk_id", "genome", "contig", "run_id", "cds_idx", "n_cds", "members"])
+
+
+def negative_units(pool: dict[str, pd.DataFrame]) -> pd.DataFrame:
+    """The units negatives are cut from: the pool's portions when it has them (lineage-matched pools), else its
+    clean runs. Columns: genome, run_id, n_cds, members (list of (contig, cds_idx)), backbone (a test-backbone run:
+    chunks may come from it, as in pool v1, but background pieces may not)."""
+    p = pool.get("portions")
+    if p is not None and len(p):
+        return pd.DataFrame({"genome": p["genome"], "run_id": p["run_id"], "n_cds": p["n_cds"],
+                             "members": [list(zip(map(str, c), map(int, i), strict=True))
+                                         for c, i in zip(p["contigs"], p["cds_idx"], strict=True)],
+                             "backbone": False})
+    r = pool["runs"]
+    bb = set(zip(pool["backbones"]["genome"], pool["backbones"]["run_id"], strict=True))
+    return pd.DataFrame({"genome": r["genome"].to_numpy(), "run_id": r["run_id"].to_numpy(),
+                         "n_cds": r["n_cds"].to_numpy(),
+                         "members": [[(str(c), int(i)) for i in idx]
+                                     for c, idx in zip(r["contig"], r["cds_idx"], strict=True)],
+                         "backbone": [(g, rid) in bb for g, rid in zip(r["genome"], r["run_id"], strict=True)]})
 
 
 def length_distribution(n_cds: np.ndarray) -> tuple[float, float]:
@@ -119,27 +141,43 @@ def length_distribution(n_cds: np.ndarray) -> tuple[float, float]:
 def pool_frames(pool: Path) -> dict[str, pd.DataFrame]:
     """The tables of a negative pool version that the entities are built from."""
     pool = Path(pool)
-    return {"genomes": pd.read_parquet(pool / "genomes.parquet"),
+    portions = pool / "portions.parquet"
+    return {"portions": pd.read_parquet(portions) if portions.is_file() else None,
+            "genomes": pd.read_parquet(pool / "genomes.parquet"),
             "cds": pd.read_parquet(pool / "cds_tokens.parquet", columns=["genome", "contig", "cds_idx", "tokens"]),
             "runs": pd.read_parquet(pool / "clean_runs.parquet"),
             "backbones": pd.read_parquet(pool / "test_backbones.parquet")}
 
 
+def euk_genome_ok(lineage: object, euk_lineages: tuple[str, ...] | None) -> bool:
+    """Pool lineage strings carry ``kingdom__<name>`` (RefSeq groups: fungi, protozoa, plants)."""
+    if not euk_lineages:
+        return True
+    lin = str(lineage or "").lower()
+    return any(f"kingdom__{x.lower()}" in lin for x in euk_lineages)
+
+
 def negative_entities(pool: dict[str, pd.DataFrame], positives: pd.DataFrame, *, chunks_per_positive: float = 3.0,
                       clip: tuple[int, int] = (3, 200), background_min_cds: int = 5,
-                      seed: int = 0) -> tuple[pd.DataFrame, dict]:
-    """Chunks (per kingdom, matched to that kingdom's positive lengths) and background pieces."""
-    kingdom_of = dict(zip(pool["genomes"]["genome"], pool["genomes"]["kingdom"], strict=True))
-    # tokens None = CDS without a feature row (dev pool): skipped inside chunks, breaks background pieces;
-    # [] = CDS without hits.
-    tok = {(g, c, i): (None if t is None else list(t))
-           for g, c, i, t in pool["cds"].itertuples(index=False, name=None)}
-    runs = pool["runs"].assign(kingdom=pool["runs"]["genome"].map(kingdom_of))
-    backbone_runs = set(zip(pool["backbones"]["genome"], pool["backbones"]["run_id"], strict=True))
+                      euk_lineages: tuple[str, ...] | None = None, seed: int = 0) -> tuple[pd.DataFrame, dict]:
+    """Chunks (per kingdom, matched to that kingdom's positive lengths) and background pieces, cut from the pool's
+    negative units (:func:`negative_units`). ``euk_lineages`` keeps only euk genomes of those RefSeq groups."""
+    g = pool["genomes"]
+    kingdom_of = dict(zip(g["genome"], g["kingdom"], strict=True))
+    lineage = g["lineage"] if "lineage" in g else pd.Series([""] * len(g), index=g.index)
+    euk_ok = {x for x, k, lin in zip(g["genome"], g["kingdom"], lineage, strict=True)
+              if k != "euk" or euk_genome_ok(lin, euk_lineages)}
+    # tokens None = CDS without a feature row (dev pool) or not annotated (portion pools): skipped inside chunks,
+    # breaks background pieces; [] = CDS without hits.
+    tok = {(g_, c, i): (None if t is None else list(t))
+           for g_, c, i, t in pool["cds"].itertuples(index=False, name=None)}
+    units = negative_units(pool)
+    units = units[units["genome"].isin(euk_ok)].assign(kingdom=lambda d: d["genome"].map(kingdom_of))
     rows: list[dict] = []
-    stats: dict = {}
+    stats: dict = {"negative_units": "portions" if pool.get("portions") is not None and len(pool["portions"])
+                   else "clean_runs"}
     for k in KINGDOMS:
-        kr = runs[runs["kingdom"] == k].reset_index(drop=True)
+        kr = units[units["kingdom"] == k].reset_index(drop=True)
         pos = positives[positives["kingdom"] == k]
         if kr.empty or pos.empty:
             continue
@@ -148,23 +186,25 @@ def negative_entities(pool: dict[str, pd.DataFrame], positives: pd.DataFrame, *,
         ch = sample_chunks(kr, target=target, mu=mu, sigma=sigma, min_cds=clip[0], max_cds=clip[1], seed=seed)
         stats[f"chunks_sampled_{k}"] = len(ch)
         stats[f"chunk_len_mu_sigma_{k}"] = (round(mu, 2), round(sigma, 2))
+        stats[f"genomes_{k}"] = int(kr["genome"].nunique())
         suffix = "" if k == "proka" else f"_{k}"
         for c in ch.itertuples(index=False):
-            cds = [t for t in (tok.get((c.genome, c.contig, i)) for i in c.cds_idx) if t is not None]
+            cds = [t for t in (tok.get((c.genome, ct, i)) for ct, i in c.members) if t is not None]
             if not cds:
                 continue
             rows.append({"entity_id": f"{c.chunk_id}{suffix}", "kind": "chunk", "label": 0, "class": NON_BGC,
                          "classes": (), "kingdom": k, "genome": c.genome, "n_cds": len(cds), "cds_tokens": cds})
-        # background: clean runs (not test backbones) minus chunk CDS, maximal pieces of >= min CDS
-        in_chunk = {(c.genome, c.contig, i) for c in ch.itertuples(index=False) for i in c.cds_idx}
+        # background: the units minus chunk CDS, maximal pieces of >= min CDS
+        in_chunk = {(c.genome, ct, i) for c in ch.itertuples(index=False) for ct, i in c.members}
         n_bg = n_bg_cds = 0
         for r in kr.itertuples(index=False):
-            if (r.genome, r.run_id) in backbone_runs:
+            if r.backbone:
                 continue
             piece: list[list[str]] = []
             pieces: list[list[list[str]]] = []
-            for i in [*list(r.cds_idx), None]:
-                t = None if i is None or (r.genome, r.contig, i) in in_chunk else tok.get((r.genome, r.contig, i))
+            for m in [*list(r.members), None]:
+                key = None if m is None else (r.genome, m[0], m[1])
+                t = None if key is None or key in in_chunk else tok.get(key)
                 if t is None:
                     if len(piece) >= background_min_cds:
                         pieces.append(piece)

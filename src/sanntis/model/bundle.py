@@ -51,7 +51,7 @@ log = logging.getLogger(__name__)
 
 SCHEMA_VERSION = 1
 DEFAULT_REPO = "microbiome-informatics/sanntis"
-DEFAULT_REVISION = "v1.1.0"  # Hub tag of the default model = git tag of this release; bump with _version.py
+DEFAULT_REVISION = "v1.2.0"  # Hub tag of the default model = git tag of this release; bump with _version.py
 SIGNATURE_MAP_COLUMNS = ["signature", "app", "entry"]
 
 
@@ -306,7 +306,13 @@ def model_card(manifest: dict, config: BundleConfig) -> str:
         f"| Vocabulary | {manifest.get('vocab_size', '')} tokens (incl. 3 specials) |",
         f"| Detector | {manifest.get('n_seeds', '')} seeds, {tuned.get('epochs', '')} epochs (median best CV epoch) |",
         f"| Operating point t\\* | {config.decode.threshold} (hysteresis low {config.decode.threshold_low}); "
-        f"highest F2_macro on validation with {_floor_text(tuned)} |",
+        + (f"set in the training recipe ({_floor_text(tuned)} on validation: "
+           f"{'met' if tuned.get('floor_met') else 'not met'}) |" if tuned.get("t_star_pinned")
+           else f"highest F2_macro on validation with {_floor_text(tuned)} |"),
+        f"| Decode | {config.decode.agg} token score per CDS; CDS without InterPro hits "
+        + ("take the lower score of their annotated neighbours" if config.decode.fill == "neighbors" else "score 0")
+        + (f"; regions merged across gaps of <= {config.decode.merge_gap} CDS |" if config.decode.merge_gap
+           else "; regions are not merged across gaps |"),
         f"| RF post-filter | drop regions with P(non-BGC) >= {config.postfilter_drop_threshold} |",
         f"| Heads | MIBiG class: {config.class_enabled}; NPClassifier: {config.npc_enabled} |",
         "", "## Training data", "",
@@ -316,8 +322,8 @@ def model_card(manifest: dict, config: BundleConfig) -> str:
          + (f"{sum(e.get('n', 0) for e in manifest['external'])} external BGCs (MIBiG format)"
             if manifest.get("external") else "")
          + ", deduplicated (composite Dice >= 0.974, longest kept); loci > 200 kb and loci without CDS excluded."),
-        f"- Negatives: genome pool {neg} (GTDB r226 and RefSeq eukaryote representatives; native "
-        "BGCs removed with antiSMASH 8.0.1): length-matched chunks and BGC-free background pieces.",
+        f"- Negatives: genome pool {neg} (prokaryotic and eukaryotic genomes listed in the pool's manifest; native "
+        "BGCs removed): length-matched chunks and BGC-free background pieces.",
         "- Entities: " + ", ".join(f"{k.replace('_', ' ')} {v}" for k, v in sorted(counts.items())) + ".",
         "",
     ]
@@ -333,7 +339,10 @@ def model_card(manifest: dict, config: BundleConfig) -> str:
         "## Limitations", "",
         "- Tokens come from InterProScan member-database hits; predictions on annotations from other InterProScan "
         "or InterPro releases drift (sanntis warns and reports coverage QC). Unannotated genes carry no signal.",
-        "- Eukaryotic negatives cover fungi and protists only (no plants); plant BGC estimates are anecdotal.",
+        (f"- Eukaryotic training data (positives and negatives) cover {', '.join(tuned['euk_lineages'])} only: "
+         "predictions on other eukaryotes (algae, plants, protists) are outside the training domain."
+         if tuned.get("euk_lineages") else
+         "- Eukaryotic negatives cover fungi and protists only (no plants); plant BGC estimates are anecdotal."),
         "- BGC families with low similarity to MIBiG are recalled less well than near-duplicates (novelty analysis in "
         "the sanntisv1-data-and-analysis repository).",
         "- `p_non_bgc` and the NPClassifier scores are model scores, not calibrated probabilities (the NPC "

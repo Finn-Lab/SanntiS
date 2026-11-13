@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Command-line interface: predict, setup, example, train, build-negatives, task."""
+"""Command-line interface: predict, setup, example, train, plan-negatives, build-negatives, task."""
 
 from __future__ import annotations
 
@@ -124,11 +124,50 @@ def train(**kw) -> None:
     run_cli(**kw)
 
 
+@main.command("plan-negatives")
+@click.option("--out", type=click.Path(dir_okay=False), required=True,
+              help="Genome table to write (TSV for build-negatives --genomes); stats next to it (.stats.json).")
+@click.option("--positives", type=click.Path(exists=True, file_okay=False), required=True,
+              help="Train run directory after `sanntis train ... --until annotate`: its production positives.")
+@click.option("--taxdump", required=True,
+              help="NCBI taxdump: taxdmp_<date>.zip (path or URL of the NCBI taxdump archive) or its directory.")
+@click.option("--taxdump-sha256", default=None, help="sha256 of a --taxdump URL.")
+@click.option("--candidates", multiple=True, type=click.Path(exists=True, dir_okay=False),
+              help="Candidate genomes (TSV: genome, kingdom, accession, taxid, source, priority, clean_cds[, url, "
+                   "taxon, species, phylum]; repeatable).")
+@click.option("--gtdb-release", default=None, help="Add the GTDB species representatives of this release, e.g. 226.")
+@click.option("--gtdb-priority", type=int, default=1, show_default=True)
+@click.option("--gtdb-min-completeness", type=float, default=90.0, show_default=True, help="CheckM2, %.")
+@click.option("--gtdb-max-contamination", type=float, default=5.0, show_default=True, help="CheckM2, %.")
+@click.option("--exclude", type=click.Path(exists=True, dir_okay=False),
+              help="Genomes never planned (TSV: accession, species), as build-negatives --exclude.")
+@click.option("--budget", multiple=True, required=True,
+              help="Negative CDS per track, floor + matched: proka=<n>, euk=<n> (repeatable; a track without a "
+                   "budget is not planned).")
+@click.option("--cap", type=int, default=1500, show_default=True, help="CDS per genome.")
+@click.option("--floor-cds", type=int, default=250, show_default=True,
+              help="CDS of the one genome per phylum without positives.")
+@click.option("--min-quota", type=int, default=100, show_default=True)
+@click.option("--seed", type=int, default=0, show_default=True)
+@click.option("--breadth", type=click.Path(exists=True, dir_okay=False),
+              help="Candidate table whose genomes are all added (when not planned or excluded) with --breadth-cds.")
+@click.option("--breadth-cds", type=int, default=500, show_default=True)
+def plan_negatives(**kw) -> None:
+    """Lineage-matched genome selection for build-negatives: per-genome CDS quotas that follow the positives."""
+    from sanntis.negpool.plan import run_cli
+
+    run_cli(**kw)
+
+
 @main.command("build-negatives")
 @click.option("--out", type=click.Path(file_okay=False), required=True, help="Build directory.")
 @click.option("--pool-version", default="v1", show_default=True, help="Name of the pool version written in --out.")
 @click.option("--genomes", type=click.Path(exists=True, dir_okay=False),
-              help="Genome table (TSV: genome, kingdom[, lineage, source, accession, path]); skips sampling.")
+              help="Genome table (TSV: genome, kingdom[, lineage, source, accession, path, quota_cds, species], e.g. "
+                   "from plan-negatives); skips sampling.")
+@click.option("--exclude", type=click.Path(exists=True, dir_okay=False),
+              help="Genomes that never enter the pool (TSV: accession, species; either may be empty): the assembly "
+                   "(GCA/GCF and version ignored) or, with a species, the whole species.")
 @click.option("--antismash-databases", type=click.Path(exists=True, file_okay=False),
               help="antiSMASH 8.0.1 databases directory (needed with the biocontainer image).")
 @click.option("--antismash-image", default=None, help="antiSMASH image for --runner inline with --container-engine.")

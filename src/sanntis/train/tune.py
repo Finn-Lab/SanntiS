@@ -16,7 +16,8 @@
 """``tune``: values re-decided per run from the pooled out-of-fold predictions.
 
 - epochs = median best epoch of the CV runs (integer part);
-- t* = the sweep threshold with the highest F2_macro among those with ``operating_point.floor_metric`` (BGC
+- t* = ``operating_point.threshold`` when pinned; otherwise the sweep threshold with the highest F2_macro among
+  those with ``operating_point.floor_metric`` (BGC
   precision) >= floor and enough regions (``min_pred_ratio``); ties → higher;
 - NPC thresholds: CV of the NPC members on loci + OOF regions at t*, thresholds fitted on the pooled predictions;
 - NPC pathway key-domain rules (:mod:`sanntis.train.key_domains`): per split fitted on the training loci and
@@ -155,8 +156,10 @@ def run_tune(run: Path, table: pd.DataFrame, *, recipe: Recipe | None = None, la
     sw.to_csv(out / "sweep.tsv", sep="\t", index=False)
     op = recipe.operating_point
     floor, metric, ratio = op.floor, op.floor_metric, op.min_pred_ratio
-    t_star, floor_met = M.operating_point(sw[sw["stratum"] == "all"], floor, metric, ratio)
-    if not floor_met:
+    t_star, floor_met = M.operating_point(sw[sw["stratum"] == "all"], floor, metric, ratio, pinned=op.threshold)
+    if op.threshold is not None:
+        log.info("t* pinned at %.2f (%s >= %.2f there: %s)", t_star, metric, floor, floor_met)
+    elif not floor_met:
         log.warning("no threshold reaches %s >= %.2f; t* = %.2f (highest %s)", metric, floor, t_star, metric)
     s = scored_at(oof, t_star, table)
     val = {"all": M.aggregate(s)}
@@ -168,6 +171,7 @@ def run_tune(run: Path, table: pd.DataFrame, *, recipe: Recipe | None = None, la
            "val_orf_aucpr": cvm["val_orf_aucpr"].tolist(), "t_star": t_star,
            "threshold_low": recipe.decode.model_copy(update={"threshold": t_star}).threshold_low,
            "floor_metric": metric, "floor": floor, "min_pred_ratio": ratio, "floor_met": floor_met,
+           "t_star_pinned": op.threshold is not None,
            "validation": val, "validation_ci": ci}
 
     regions = oof_region_tokens(table, oof, t_star, recipe)

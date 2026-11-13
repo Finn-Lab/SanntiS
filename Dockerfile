@@ -3,8 +3,8 @@
 # MGnify BGCs ETL runs it on compute nodes without Hub access). Managed
 # InterProScan 6 mode (Nextflow + a container engine) is not part of the image.
 #
-#   docker build --build-arg SANNTIS_REVISION=v1.1.0 -t quay.io/microbiome-informatics/sanntis:1.1.0 .
-#   docker run --rm quay.io/microbiome-informatics/sanntis:1.1.0 predict --help
+#   docker build --build-arg SANNTIS_REVISION=v1.2.0 -t quay.io/microbiome-informatics/sanntis:1.2.0 .
+#   docker run --rm quay.io/microbiome-informatics/sanntis:1.2.0 predict --help
 FROM python:3.12-slim AS runtime
 
 ARG SANNTIS_REVISION

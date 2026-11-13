@@ -21,7 +21,7 @@ pip install "sanntis[train]"     # with the training extras
 ```
 
 A specific tag or an unreleased branch can be installed from GitHub:
-`pip install "git+https://github.com/Finn-Lab/SanntiS@v1.1.0"`.
+`pip install "git+https://github.com/Finn-Lab/SanntiS@v1.2.0"`.
 
 ## Container
 
@@ -31,9 +31,9 @@ bundle of that release baked in, so `predict --ips-tsv` works offline
 InterProScan 6 mode is not part of the image.
 
 ```bash
-docker run --rm -v "$PWD:/data" quay.io/microbiome-informatics/sanntis:1.1.0 \
+docker run --rm -v "$PWD:/data" quay.io/microbiome-informatics/sanntis:1.2.0 \
     predict /data/genome.gbk --ips-tsv /data/genome.ips.tsv --ips-release 107.0 -o /data/out
-singularity exec docker://quay.io/microbiome-informatics/sanntis:1.1.0 \
+singularity exec docker://quay.io/microbiome-informatics/sanntis:1.2.0 \
     sanntis predict genome.gbk --ips-tsv genome.ips.tsv --ips-release 107.0 -o out
 ```
 
@@ -69,7 +69,11 @@ With a precomputed InterProScan TSV passed as `--ips-tsv`, Nextflow and a contai
 |---|---|
 | `SANNTIS_CACHE` | cache root, see above |
 | `SANNTIS_THREADS` | torch and BLAS threads of `sanntis train` and its units. Default: the CPUs available to the process. `predict` uses `--threads` |
-| `SANNTIS_IPS6_CHUNK` | maximum number of proteins per InterProScan 6 run, default 20000. Larger inputs run in sequential chunks |
+| `SANNTIS_IPS6_CHUNK` | maximum number of proteins per InterProScan 6 run, default 20000. Larger inputs run in chunks |
+| `SANNTIS_IPS6_PARALLEL` | InterProScan 6 chunks run at the same time, each its own `nextflow run`, default 1 |
+| `SANNTIS_IPS6_CPUS` | cores of each multi-threaded InterProScan 6 task (its `--cpus`), default 4 |
+| `SANNTIS_IPS6_QUEUE_SIZE`, `SANNTIS_IPS6_SUBMIT_RATE` | Nextflow `executor.queueSize` and `submitRateLimit` of each InterProScan 6 run, applied after `--nf-config`; at most `PARALLEL` x `QUEUE_SIZE` IPS6 tasks run at once. See [infrastructure](infrastructure.md) |
+| `SANNTIS_IPS6_LOOKUP`, `SANNTIS_IPS6_MATCHES_API` | precalculated-match lookup: `auto` (default) or `off`, and the Matches API URL. See [InterProScan setup](setup.md#precalculated-matches) |
 | `SANNTIS_DATA_REPO` | Hub dataset in which `--negatives <version>` is resolved, default `microbiome-informatics/sanntis-training-data` |
 | `NCBI_API_KEY`, `NCBI_EMAIL` | optional credentials for the NCBI taxonomy lookups of `train` and `build-negatives`, which raise the rate limit |
 | `SANNTIS_DEBUG_MAX_EPOCHS` | caps the detector epochs, for tests and smoke runs. The cap is recorded in the model manifest and the model card carries a warning |

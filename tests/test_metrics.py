@@ -62,6 +62,14 @@ def test_operating_point_rule():
     assert operating_point(sw, 0.95, "precision_t") == (0.6, False)
 
 
+def test_operating_point_pinned():
+    sw = pd.DataFrame({"threshold": [0.2, 0.3, 0.4], "precision_t": [0.7, 0.81, 0.9], "f2_macro": [0.9, 0.8, 0.7]})
+    assert operating_point(sw, 0.80, "precision_t", pinned=0.2) == (0.2, False)
+    assert operating_point(sw, 0.80, "precision_t", pinned=0.3) == (0.3, True)
+    with pytest.raises(ValueError):
+        operating_point(sw, 0.80, "precision_t", pinned=0.25)
+
+
 def test_operating_point_bgc_precision_floor_skips_degenerate():
     # 0.1: whole contigs merged into 10 regions, every BGC-level metric 1.0 → excluded, not chosen
     sw = pd.DataFrame({"threshold": [0.1, 0.2, 0.3, 0.4], "bgc_precision": [1.0, 0.75, 0.85, 0.9],

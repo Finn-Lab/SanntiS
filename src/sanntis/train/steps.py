@@ -162,7 +162,9 @@ def _annotate_run(ctx: RunContext) -> dict:
 # ── entities ─────────────────────────────────────────────────────────────────
 
 
-def _build(pos: pd.DataFrame, pool, recipe):
+def production_positives(pos: pd.DataFrame, recipe) -> tuple[pd.DataFrame, dict]:
+    """``annotate/positives.parquet`` → the positive entities a production fit trains on (dedup, then the recipe's
+    eukaryote lineages). Also the positives a lineage-matched negative pool is planned for."""
     r = recipe
     pe, ps = positive_entities(_lists(pos.copy()), dice_threshold=r.dedup.dice_threshold,
                                max_locus_bp=r.dedup.max_locus_bp)
@@ -170,8 +172,18 @@ def _build(pos: pd.DataFrame, pool, recipe):
     pe["lineage"] = pe["entity_id"].map(meta["lineage"])
     pe["pfam"] = pe["entity_id"].map(meta["pfam"]).map(list)
     c = r.compose
+    if c.euk_lineages:
+        drop = (pe["kingdom"] == "euk") & ~pe["lineage"].isin(c.euk_lineages)
+        ps["excluded_euk_lineage"] = int(drop.sum())
+        pe = pe[~drop].reset_index(drop=True)
+    return pe, ps
+
+
+def _build(pos: pd.DataFrame, pool, recipe):
+    c = recipe.compose
+    pe, ps = production_positives(pos, recipe)
     ne, ns = negative_entities(pool, pe, chunks_per_positive=c.chunks_per_positive, clip=c.chunk_len_clip,
-                               background_min_cds=c.background_min_cds, seed=c.seed)
+                               background_min_cds=c.background_min_cds, euk_lineages=c.euk_lineages, seed=c.seed)
     t = entity_table(pe, ne.assign(lineage=None, pfam=None))
     t["classes"] = t["classes"].map(list)
     return t, {**ps, **ns}
