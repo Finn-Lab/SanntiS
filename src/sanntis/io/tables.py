@@ -28,3 +28,8 @@ def write_orf_scores(orfs: pd.DataFrame, path: Path) -> None:
 
 def write_regions(regions: pd.DataFrame, path: Path) -> None:
     regions.to_csv(path, sep="\t", index=False, float_format="%.6g")
+
+
+def write_dropped_regions(dropped: pd.DataFrame, path: Path) -> None:
+    """Regions removed by the no-domain filter (region columns + ``drop_reason``); header only when none."""
+    dropped.to_csv(path, sep="\t", index=False, float_format="%.6g")
