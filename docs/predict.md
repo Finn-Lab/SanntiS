@@ -67,6 +67,7 @@ a warning is logged. Runs of the managed InterProScan 6 are always at the model'
 | `--write-faa` | off | also write the CDS proteins and their GFF3 |
 | `--ips-datadir` | `$SANNTIS_CACHE/ips6` | InterProScan 6 data |
 | `--keep-work` | off | keep the Nextflow work directory of the InterProScan 6 run |
+| `--domain-filter` / `--no-domain-filter` | on | drop regions without a protein-domain token, see [No-domain filter](#no-domain-filter); `--no-domain-filter` gives the regions of 1.2.0 |
 | `-o`, `--outdir` | `.` | output directory |
 | `--container-engine`, `--nf-config`, `--nf-profile`, `--nf-args` | | forwarded to Nextflow, see [infrastructure](infrastructure.md) |
 
@@ -80,12 +81,30 @@ a warning is logged. Runs of the managed InterProScan 6 are always at the model'
 | `<prefix>.sanntis.antismash.json` | the same regions as antiSMASH sideloader JSON, see below |
 | `<prefix>.orf_scores.tsv` | `record_id, cds_idx, locus_tag, score` |
 | `<prefix>.regions.tsv` | one row per region with every attribute |
-| `<prefix>.run.json` | run metadata: input, model, InterProScan mode, version and release, cache hits, join statistics, pinning to the model's InterPro release (`--ips-tsv`), QC, timings |
+| `<prefix>.dropped_regions.tsv` | the regions removed by the no-domain filter: the `regions.tsv` columns plus `drop_reason`; header only when none |
+| `<prefix>.run.json` | run metadata: input, model, InterProScan mode, version and release, cache hits, join statistics, pinning to the model's InterPro release (`--ips-tsv`), QC, the no-domain filter (`filters`, `counts.dropped_regions`), timings |
 | `<prefix>.cds.faa`, `<prefix>.cds.gff3` | written with `--write-faa` |
 
 GFF attributes: `ID`, `nearest_MiBIG_class` (equal to `bgc_class`), `bgc_class`, `p_non_bgc`, `n_orfs`,
 `npc_pathway`, `npc_pathway_score`, `npc_pathway_confident`, `npc_superclass`, `npc_superclass_top`,
 `npc_superclass_score`, `npc_pathway_key_domains_support`, `npc_pathway_key_domains_unsupported`.
+
+### No-domain filter
+
+COILS and MobiDB-lite predict coiled coils and intrinsic disorder, not protein domains, but their hits are
+model tokens (`Coil`, `mobidb-lite`). A region whose CDS have no other vocabulary token gives the post-filter and
+the NPClassifier almost no information: SanntiS 1.2.0 called such regions with fixed scores (`p_non_bgc` 0.7580
+for one MobiDB-lite hit, 0.7762 for three; class `PKS`, pathway `Polyketides`). On marine data they were mostly
+contigs of unannotated proteins and of phage structural proteins, about 13 % of the calls on metagenome assemblies
+and half of the calls on a eukaryotic MAG catalogue.
+
+From 1.2.1 these regions are dropped after the post-filter and the NPClassifier: a region is kept when at least one
+of its CDS has a token of the model vocabulary other than the COILS and MobiDB-lite ones (tokens outside the
+vocabulary are ignored, as by the model). Dropped regions are written to `<prefix>.dropped_regions.tsv` with
+`drop_reason` `no_domain_tokens`. The kept regions are numbered again from 1 per record, so `ID`s stay
+contiguous. `run.json` records the filter as `"filters": {"domain_filter": true, "regions_before": n,
+"no_domain_tokens": k}` and the GFF3 header as `##domain-filter on dropped=k/n (no_domain_tokens)`.
+`--no-domain-filter` turns it off (`##domain-filter off`); the ORF scores are the same either way.
 
 ### NPC pathway key-domain support
 
@@ -137,7 +156,7 @@ antismash --sideload genome.sanntis.antismash.json genome.gbk
   analysis on them.
 
 ```json
-{"tool": {"name": "SanntiS", "version": "1.2.0", "description": "...", "configuration": {"kingdom": "proka", "...": "..."}},
+{"tool": {"name": "SanntiS", "version": "1.2.1", "description": "...", "configuration": {"kingdom": "proka", "...": "..."}},
  "records": [{"name": "BGC0002981",
               "subregions": [{"start": 117, "end": 27635, "label": "ribosomal",
                               "details": {"score": "0.8118", "ID": "BGC0002981_sanntis_1", "bgc_class": "ribosomal",

@@ -47,7 +47,7 @@ from sanntis.io.ips_tsv import (
     read_ips_tsv,
     tokens_by_key,
 )
-from sanntis.io.tables import write_orf_scores, write_regions
+from sanntis.io.tables import write_dropped_regions, write_orf_scores, write_regions
 from sanntis.model.bundle import SanntisModel, default_model_id
 from sanntis.predict import Predictor
 from sanntis.qc import coverage, flags
@@ -208,6 +208,13 @@ def gff_header(s: Sample, m: SanntisModel, qc: dict, qc_flags: list[str], kingdo
     }
 
 
+def filter_header(filters: dict) -> str:
+    """GFF header value of the no-domain filter, e.g. ``on dropped=12/80 (no_domain_tokens)``."""
+    if not filters.get("domain_filter"):
+        return "off"
+    return f"on dropped={filters['no_domain_tokens']}/{filters['regions_before']} (no_domain_tokens)"
+
+
 def predict_sample(s: Sample, m: SanntisModel, predictor: Predictor, out: Path, *, kingdom: str, npc_precision: str,
                    write_faa: bool, timings: dict[str, float], t0: float) -> Path:
     """Predict one input and write its outputs; returns the GFF3 path."""
@@ -222,14 +229,17 @@ def predict_sample(s: Sample, m: SanntisModel, predictor: Predictor, out: Path, 
         log.warning("%s: QC flags %s", s.id, qc_flags)
     log.info("%s: %d/%d CDS with tokens (%.1f%%), <unk> share %.3f, %d regions", s.id, qc["n_cds_with_tokens"],
              qc["n_cds"], 100 * qc["frac_cds_with_tokens"], qc["frac_unk_tokens"], len(pred.regions))
-    header = gff_header(s, m, qc, qc_flags, kingdom, npc_precision)
+    header = {**gff_header(s, m, qc, qc_flags, kingdom, npc_precision),
+              "domain-filter": filter_header(pred.filters)}
+    # dropped_regions (not .regions): consumers glob *.regions.tsv for the kept regions
     files = {"gff": out / f"{s.id}.sanntis.gff3", "orf_scores": out / f"{s.id}.orf_scores.tsv",
-             "regions": out / f"{s.id}.regions.tsv", "antismash": out / f"{s.id}.sanntis.antismash.json",
-             "run": out / f"{s.id}.run.json"}
+             "regions": out / f"{s.id}.regions.tsv", "dropped_regions": out / f"{s.id}.dropped_regions.tsv",
+             "antismash": out / f"{s.id}.sanntis.antismash.json", "run": out / f"{s.id}.run.json"}
     write_gff(pred.regions, files["gff"], header=header)
     write_sideload(pred.regions, cds["record_id"].unique(), files["antismash"], configuration=header)
     write_orf_scores(pred.orf_scores, files["orf_scores"])
     write_regions(pred.regions, files["regions"])
+    write_dropped_regions(pred.dropped, files["dropped_regions"])
     if write_faa:
         files["faa"] = out / f"{s.id}.cds.faa"
         files["cds_gff"] = out / f"{s.id}.cds.gff3"
@@ -242,7 +252,8 @@ def predict_sample(s: Sample, m: SanntisModel, predictor: Predictor, out: Path, 
                   "created": m.manifest.get("created"), "ips": m.manifest.get("ips", {}),
                   "decode_threshold": m.config.decode.threshold},
         "kingdom": kingdom, "npc_precision": float(npc_precision), "ips": s.ips,
-        "counts": {"cds": len(cds), "regions": len(pred.regions)}, "qc": qc, "qc_flags": qc_flags,
+        "counts": {"cds": len(cds), "regions": len(pred.regions), "dropped_regions": len(pred.dropped)},
+        "filters": pred.filters, "qc": qc, "qc_flags": qc_flags,
         "outputs": {k: str(v.resolve()) for k, v in files.items()},
         "timings_s": {**{k: round(v, 2) for k, v in timings.items()}, "predict": round(time.time() - t, 2),
                       "total_elapsed": round(time.time() - t0, 2)},
@@ -254,7 +265,7 @@ def predict_sample(s: Sample, m: SanntisModel, predictor: Predictor, out: Path, 
 def run_cli(inputs=(), gff=None, model=None, outdir=".", ips_tsv=None, ips_release=None, kingdom="proka",
             genecall="meta", npc_precision="0.9", threads=1, allow_ips_mismatch=False, allow_incomplete_ips=False,
             write_faa=False, container_engine=None, nf_config=(), nf_profile=(), nf_args="", ips_datadir=None,
-            keep_work=False) -> list[Path]:
+            keep_work=False, domain_filter=True) -> list[Path]:
     t0 = time.time()
     timings: dict[str, float] = {}
     out = Path(outdir)
@@ -283,7 +294,8 @@ def run_cli(inputs=(), gff=None, model=None, outdir=".", ips_tsv=None, ips_relea
                  allow_incomplete_ips=allow_incomplete_ips)
     timings["annotation"] = time.time() - t
 
-    predictor = Predictor(m, kingdom=kingdom, npc_precision=float(npc_precision), threads=threads)
+    predictor = Predictor(m, kingdom=kingdom, npc_precision=float(npc_precision), threads=threads,
+                          domain_filter=domain_filter)
     written = [predict_sample(s, m, predictor, out, kingdom=kingdom, npc_precision=npc_precision, write_faa=write_faa,
                               timings=timings, t0=t0) for s in samples]
     log.info("done: %d inputs in %.1f s → %s", len(samples), time.time() - t0, out)

@@ -70,6 +70,9 @@ def main(verbose: int) -> None:
 @click.option("--ips-datadir", type=click.Path(file_okay=False), default=None,
               help="InterProScan 6 data directory (default: $SANNTIS_CACHE/ips6).")
 @click.option("--keep-work", is_flag=True, help="Keep the Nextflow work directory of the IPS6 run.")
+@click.option("--domain-filter/--no-domain-filter", default=True, show_default=True,
+              help="Drop regions without a protein-domain token (only COILS / MobiDB-lite hits or none); they go to "
+                   "<id>.dropped_regions.tsv. --no-domain-filter gives the 1.2.0 regions.")
 @_nextflow_options
 def predict(**kw) -> None:
     """Predict BGCs in .fna / .gbk inputs, or a .faa with its --gff (optionally with a precomputed IPS TSV)."""

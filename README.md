@@ -51,7 +51,7 @@ pip install sanntis      # Python >= 3.11
 Or the release image, with the model bundle baked in (precomputed-InterProScan mode only):
 
 ```bash
-docker run --rm -v "$PWD:/data" quay.io/microbiome-informatics/sanntis:1.2.0 predict /data/genome.gbk --ips-tsv /data/genome.ips.tsv -o /data/out
+docker run --rm -v "$PWD:/data" quay.io/microbiome-informatics/sanntis:1.2.1 predict /data/genome.gbk --ips-tsv /data/genome.ips.tsv -o /data/out
 ```
 
 On a machine without a GPU, install the CPU build of PyTorch first:
@@ -178,6 +178,7 @@ Output files are named after the input file. `<prefix>` is the file name without
 | `<prefix>.sanntis.gff3` | one `CLUSTER` feature per BGC |
 | `<prefix>.sanntis.antismash.json` | the same regions as antiSMASH sideloader JSON |
 | `<prefix>.regions.tsv` | one row per region with every attribute |
+| `<prefix>.dropped_regions.tsv` | regions without a protein-domain token (only COILS / MobiDB-lite hits), removed from the other outputs; `--no-domain-filter` keeps them |
 | `<prefix>.orf_scores.tsv` | the detector score of every CDS |
 | `<prefix>.run.json` | run metadata: input, model, InterProScan version, annotation QC flags, timings |
 
@@ -209,7 +210,7 @@ Example line, with illustrative values:
 
 ```
 ##gff-version 3
-##sanntis-version 1.2.0
+##sanntis-version 1.2.1
 BGC0002981	SanntiS	CLUSTER	118	27635	0.8118	.	.	ID=BGC0002981_sanntis_1;nearest_MiBIG_class=ribosomal;bgc_class=ribosomal;p_non_bgc=0.0312;n_orfs=22;npc_pathway=Amino acids and Peptides;npc_pathway_score=0.9134;npc_pathway_confident=true;npc_superclass=Oligopeptides;npc_superclass_top=Oligopeptides;npc_superclass_score=0.8710;npc_pathway_key_domains_support=Amino acids and Peptides:IPR003776;npc_pathway_key_domains_unsupported=false
 ```
 
@@ -233,11 +234,11 @@ SanntiS regions appear as subregions next to the antiSMASH detections.
 ## Models
 
 The default model is the Hugging Face Hub release whose tag matches the installed SanntiS version, currently
-`microbiome-informatics/sanntis@v1.2.0`. `--model` selects another Hub revision or a local model directory,
+`microbiome-informatics/sanntis@v1.2.1`. `--model` selects another Hub revision or a local model directory,
 for example one produced by `sanntis train`.
 
 ```bash
-sanntis predict genome.fna --model microbiome-informatics/sanntis@v1.2.0   # explicit Hub revision
+sanntis predict genome.fna --model microbiome-informatics/sanntis@v1.2.1   # explicit Hub revision
 sanntis predict genome.fna --model runs/my_run/bundle                             # a retrained local model
 HF_HUB_OFFLINE=1 sanntis predict ...                                              # offline, once cached
 ```
